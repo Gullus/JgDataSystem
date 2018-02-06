@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="JgDienstScannerMaschine.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Craddel_0" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">IpAdresse=;Port=;TextAnmeldungOk=</Value>
+    </Setting>
+    <Setting Name="Craddel_1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">IpAdresse=;Port=;TextAnmeldungOk=</Value>
+    </Setting>
+    <Setting Name="Craddel_2" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">IpAdresse=;Port=;TextAnmeldungOk=</Value>
+    </Setting>
+    <Setting Name="Craddel_3" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">IpAdresse=;Port=;TextAnmeldungOk=</Value>
+    </Setting>
+    <Setting Name="Craddel_4" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">IpAdresse=;Port=;TextAnmeldungOk=</Value>
+    </Setting>
+    <Setting Name="EvgPfadProduktionsListe" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="EvgDateiProduktionsAuftrag" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ProgressPfadProduktionsListe" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IdStandort" Type="System.Guid" Scope="User">
+      <Value Profile="(Default)">69eb2a93-8bbf-4870-af12-40c65cd8032e</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

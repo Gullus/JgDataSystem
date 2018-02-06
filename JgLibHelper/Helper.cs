@@ -19,18 +19,21 @@ namespace JgLibHelper
                 if (arWerte.Length == 2)
                     Werte.Add(arWerte[0].Trim().ToUpper(), arWerte[1].Trim());
             }
-            
-            foreach(var info in type.GetProperties())
+
+            foreach (var info in type.GetProperties())
             {
                 var key = info.Name.ToUpper();
                 if (Werte.ContainsKey(key))
                 {
-                    if (info.PropertyType == typeof(int))
-                        info.SetValue(InObject, Convert.ToInt32(Werte[key]));
-                    else
-                        info.SetValue(InObject, Werte[key].ToString());                   
+                    var wert = Werte[key].ToString();
+                    if (wert != "")
+                    {
+                        if (info.PropertyType == typeof(int))
+                            info.SetValue(InObject, Convert.ToInt32(wert));
+                        else
+                            info.SetValue(InObject, wert);
+                    }
                 }
-
             }
         }
 
@@ -39,10 +42,15 @@ namespace JgLibHelper
             var typeVon = typeof(T);
             var typeIn = InObject.GetType();
 
+            var propertiesIn = typeIn.GetProperties().Select(s => s.Name).ToList();
+
             foreach (var propVon in typeVon.GetProperties())
             {
-                var propIn = typeIn.GetProperty(propVon.Name);
-                propIn.SetValue(InObject, propVon.GetValue(VonObject));
+                if (propertiesIn.Contains(propVon.Name))
+                {
+                    var propIn = typeIn.GetProperty(propVon.Name);
+                    propIn.SetValue(InObject, propVon.GetValue(VonObject));
+                }
             }
         }
     }

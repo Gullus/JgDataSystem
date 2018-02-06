@@ -26,19 +26,22 @@ namespace JgTestConsole.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SqlExpress;Initial Catalog=master;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SqlExpress;Initial Catalog=JgDataSystem;Integrated Security=True")]
         public string SqlVerbindung {
             get {
                 return ((string)(this["SqlVerbindung"]));
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        public string Einstellung {
+        [global::System.Configuration.DefaultSettingValueAttribute("69eb2a93-8bbf-4870-af12-40c65cd8032e")]
+        public global::System.Guid IdStandort {
             get {
-                return ((string)(this["Einstellung"]));
+                return ((global::System.Guid)(this["IdStandort"]));
+            }
+            set {
+                this["IdStandort"] = value;
             }
         }
     }

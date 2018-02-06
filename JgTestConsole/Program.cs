@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JgLibDataModel;
+using JgTestConsole.Temp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,15 +12,12 @@ namespace JgTestConsole
     {
         static void Main(string[] args)
         {
-            var s = "MyProperty1 = 59; MyProperty2 = 138";
-            var t = new Test1();
+            Console.WriteLine("Start");
 
-            JgLibHelper.Helper.PropStringInOnjekt<Test1>(t, s);
+            var ein = new StandortMaschineEintragen();
 
-            Console.WriteLine(t.MyProperty1 + "   " + t.MyProperty2);
-
+            Console.WriteLine("Fertig");
             Console.ReadKey();
-
         }
     }
 

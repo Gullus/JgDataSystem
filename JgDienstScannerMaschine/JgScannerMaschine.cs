@@ -1,5 +1,4 @@
 ﻿using JgLibHelper;
-using JgWcfServiceLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,17 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace JgScannerMaschineLib
+namespace JgDienstScannerMaschine
 {
     public class JgScannerMaschinen
     {
         private bool _StatusServerOk = false;
-        private JgMaschineStamm[] arSpeichern;
-
-        private const string _PathQueue = ".\\Private$\\JgMaschineVonScanner";
-
-        private Dictionary<Guid, JgMaschineStamm> _ListeMaschinen = new Dictionary<Guid, JgMaschineStamm>();
-        private Dictionary<Guid, JgDbBediener> _ListeDbBediener = new Dictionary<Guid, JgDbBediener>();
+        private JgOptionen _JgOpt;
 
         public CancellationTokenSource Cts { get; set; } = new CancellationTokenSource();
         private Task TaskScannerMaschine;
@@ -28,8 +22,10 @@ namespace JgScannerMaschineLib
         public string FileSetupMaschinen = null;
         public Guid? IdStandort = null;
 
-        public JgScannerMaschinen()
-        { }
+        public JgScannerMaschinen(JgOptionen JgOptionen)
+        {
+            _JgOpt = JgOptionen;
+        }
 
         public void Init()
         {
@@ -47,17 +43,11 @@ namespace JgScannerMaschineLib
 
         public void TaskScannerMaschineStarten()
         {
-            var optScannerMaschine = new StructOptionenScannerMaschine()
-            {
-                PathQueue = _PathQueue,
-                ListeBediener = _ListeDbBediener,
-                ListeMaschinen = _ListeMaschinen
-            };
             var ctScannerMaschine = Cts.Token;
 
             TaskScannerMaschine = new Task((optScanner) =>
             {
-                var opt = (StructOptionenScannerMaschine)optScanner;
+                var opt = (JgOptionen)optScanner;
                 while (true)
                 {
                     opt.ListeMaschinen.First().Value.Id = Guid.NewGuid();
@@ -68,23 +58,18 @@ namespace JgScannerMaschineLib
 
                 //var sm = new ScannerMaschine(opt);
 
-            }, optScannerMaschine, ctScannerMaschine, TaskCreationOptions.LongRunning);
+            }, _JgOpt, ctScannerMaschine, TaskCreationOptions.LongRunning);
 
             TaskScannerMaschine.Start();
         }
 
         public void TaskClientServerStarten()
         {
-            var optClientServer = new StructOptionenClientServer()
-            {
-                PathQueue = _PathQueue,
-                ListeMaschinen = _ListeMaschinen
-            };
             var ctClientServer = Cts.Token;
 
             TaskClientServer = new Task((optClient) =>
             {
-                var opt = (StructOptionenClientServer)optClient;
+                var opt = (JgOptionen)optClient;
                 while (true)
                 {
                     //opt.ListeMaschinen.First().Value.Id = Guid.NewGuid();
@@ -92,7 +77,7 @@ namespace JgScannerMaschineLib
                     //Thread.Sleep(5);
                 }
 
-            }, optClientServer, ctClientServer, TaskCreationOptions.LongRunning);
+            }, _JgOpt, ctClientServer, TaskCreationOptions.LongRunning);
 
 
             TaskClientServer.Start();
@@ -102,31 +87,8 @@ namespace JgScannerMaschineLib
         {
             #region Erstellung Maschine aus Datenbank laden simulieren
 
-            var listeMaschinenVonServer = new List<JgWcfMaschine>()
-            {
-                new JgWcfMaschine()
-                {
-                    Id = Guid.NewGuid(),
-                    MaschineName = "Maschine Elg",
-                    MaschineArt = JgWcfMaschine.EnumArtMaschine.Elg,
-                    MaschinePort = 100,
-                    MaschineIp = "192.168.15.1",
-                },
-                new JgWcfMaschine()
-                {
-                    Id = Guid.NewGuid(),
-                    MaschineName = "Maschine Arsch",
-                    MaschineArt = JgWcfMaschine.EnumArtMaschine.Arsch,
-                    MaschinePort = 200
-                },
-                new JgWcfMaschine()
-                {
-                    Id = Guid.NewGuid(),
-                    MaschineName = "Hand",
-                    MaschineArt = JgWcfMaschine.EnumArtMaschine.Hand,
-                    MaschinePort = 300
-                }
-            };
+            var listeMaschinenVonServer = new List<JgMaschineStamm>();
+         
 
             #endregion
 
@@ -134,13 +96,13 @@ namespace JgScannerMaschineLib
 
             foreach (var maschineDb in listeMaschinenVonServer)
             {
-                if (_ListeMaschinen.ContainsKey(maschineDb.Id))
+                if (_JgOpt.ListeMaschinen.ContainsKey(maschineDb.Id))
                 {
-                    var maVorhanden = _ListeMaschinen[maschineDb.Id];
-                    if (maschineDb.Datum != maVorhanden.Datum)
+                    var maVorhanden = _JgOpt.ListeMaschinen[maschineDb.Id];
+                    if (maschineDb.Aenderung != maVorhanden.Aenderung)
                     {
                         speichern = true;
-                        Helper.CopyObject<JgDbMaschine>(maVorhanden, maschineDb);
+                        // Helper.CopyObject<JgMaschineStamm>(maVorhanden, maschineDb);
                     }
                 }
                 else
@@ -150,35 +112,35 @@ namespace JgScannerMaschineLib
                     JgMaschineStamm maschineNeu = null;
                     switch (maschineDb.MaschineArt)
                     {
-                        case JgDbMaschine.EnumArtMaschine.Hand:
+                        case MaschinenArten.Hand:
                             maschineNeu = new JgMaschineHand();
 
                             #region Bediener und Helfer hinzufügen
 
-                            maschineNeu.Bediener = new JgDbBediener()
+                            maschineNeu.Bediener = new JgBediener()
                             {
                                 BedienerName = "Hallo",
                                 Id = Guid.NewGuid()
                             };
-                            maschineNeu.Helfer = new List<JgDbBediener>()
+                            maschineNeu.Helfer = new List<JgBediener>()
                             {
-                                new JgDbBediener() { Id = Guid.NewGuid(), BedienerName = "Juhu" },
-                                new JgDbBediener() { Id = Guid.NewGuid(), BedienerName = "Schule" }
+                                new JgBediener() { Id = Guid.NewGuid(), BedienerName = "Juhu" },
+                                new JgBediener() { Id = Guid.NewGuid(), BedienerName = "Schule" }
                             };
 
                             #endregion
 
                             break;
-                        case JgDbMaschine.EnumArtMaschine.Arsch:
+                        case MaschinenArten.Arsch:
                             maschineNeu = new JgMaschineArsch();
                             break;
-                        case JgDbMaschine.EnumArtMaschine.Elg:
+                        case MaschinenArten.Evg:
                             maschineNeu = new JgMaschineEvg();
                             break;
                     }
 
-                    Helper.CopyObject<JgDbMaschine>(maschineNeu, maschineDb);
-                    _ListeMaschinen.Add(maschineDb.Id, maschineNeu);
+                    Helper.CopyObject<JgMaschineStamm>(maschineNeu, maschineDb);
+                    _JgOpt.ListeMaschinen.Add(maschineDb.Id, maschineNeu);
                 }
 
             }
@@ -199,11 +161,11 @@ namespace JgScannerMaschineLib
                     arMaschineStamm = (JgMaschineStamm[])serializer.Deserialize(reader);
                 }
 
-                _ListeMaschinen.Clear();
+                _JgOpt.ListeMaschinen.Clear();
                 foreach (var ma in arMaschineStamm)
-                    _ListeMaschinen.Add(ma.Id, ma);
+                    _JgOpt.ListeMaschinen.Add(ma.Id, ma);
             }
-            catch (Exception ex)
+            catch
             {
 
             }
@@ -211,8 +173,8 @@ namespace JgScannerMaschineLib
 
         private void MaschinenLocalSpeichern()
         {
-            arSpeichern = new JgMaschineStamm[_ListeMaschinen.Count];
-            _ListeMaschinen.Values.CopyTo(arSpeichern, 0);
+            var arSpeichern = new JgMaschineStamm[_JgOpt.ListeMaschinen.Count];
+            _JgOpt.ListeMaschinen.Values.CopyTo(arSpeichern, 0);
 
             using (var writer = new StreamWriter(FileSetupMaschinen))
             {

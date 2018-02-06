@@ -1,9 +1,11 @@
-﻿using System;
+﻿using JgLibHelper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace JgWcfServiceLib
@@ -12,41 +14,28 @@ namespace JgWcfServiceLib
     public interface IWcfService
     {
         [OperationContract]
-        string SendeTest(String value);
+        string WcfTest(String TestString);
 
         [OperationContract]
-        bool SendeBauteil(JgWcfBauteil Bauteil);
+        Task<bool> SendeBauteil(JgWcfBauteil Bauteil);
 
         [OperationContract]
-        bool SendeMeldung(JgWcfMeldung Meldung);
+        Task<bool> SendeMeldung(JgWcfMeldung Meldung);
 
         [OperationContract]
-        bool SendeMaschinenanmeldung(JgWcfMaschinenanmeldung Anmeldung);
+        Task<bool> SendeMaschinenanmeldung(JgWcfMaschinenanmeldung Anmeldung);
 
         [OperationContract]
-        JgWcfOptionen GetOptionen(Guid IdStanort);
+        Task<List<JgDbBediener>> GetBediener();
 
         [OperationContract]
-        List<JgDbBediener> GetBediener();
+        Task<List<JgDbMaschine>> GetMaschinen(Guid IdStandort);
 
         [OperationContract]
-        List<JgDbMaschine> GetMaschinen();
-
-        [OperationContract]
-        bool SendeMaschinenStatus(JgWcfMaschine Maschine);
+        Task<bool> SendeMaschinenStatus(JgWcfMaschine Maschine);
     }
 
     #region WCF Klassen ***************************
-
-    [DataContract]
-    public class JgWcfOptionen
-    {
-        [DataMember]
-        public Guid IdStandort { get; set; }
-
-        [DataMember]
-        public string NameStanort { get; set; }
-    }
 
     [DataContract]
     public class JgWcfStamm
@@ -111,24 +100,17 @@ namespace JgWcfServiceLib
         public Guid Id { get; set; }
 
         [DataMember]
-        public DateTime Datum { get; set; } = DateTime.Now;
+        public DateTime Aenderung { get; set; } = DateTime.Now;
     }
 
     [DataContract]
     public class JgDbMaschine : JgDbStamm
     {
-        public enum EnumArtMaschine
-        {
-            Hand,
-            Elg,
-            Arsch
-        }
-
         [DataMember]
         public string MaschineName;
 
         [DataMember]
-        public EnumArtMaschine MaschineArt = EnumArtMaschine.Hand;
+        public MaschinenArten MaschineArt = MaschinenArten.Hand;
 
         [DataMember]
         public string MaschineIp { get; set; }
@@ -151,17 +133,6 @@ namespace JgWcfServiceLib
     [DataContract]
     public class JgWcfMaschine : JgDbMaschine
     {
-        public enum EnumStatusMaschine
-        {
-            Unbekannt,
-            Frei,
-            InArbeit,
-            InPause,
-            InReparatur,
-            InWartung,
-            InCoilwechsel
-        }
-
         [DataMember]
         public Guid? IdBediener { get; set; } = null;
 
@@ -172,7 +143,7 @@ namespace JgWcfServiceLib
         public List<Guid> IdisBauteile { get; set; } = new List<Guid>();
 
         [DataMember]
-        public EnumStatusMaschine Status { get; set; } = EnumStatusMaschine.Unbekannt;
+        public StatusMaschine Status { get; set; } = StatusMaschine.Frei;
 
         // wird nur für die Anzeige der Maschine verwendet
         [XmlIgnore]

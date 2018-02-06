@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="WcfService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" />
+      <xsd:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/JgLibHelper" />
+      <xsd:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IWcfService_WcfTest_InputMessage">
+    <wsdl:part name="parameters" element="tns:WcfTest" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_WcfTest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WcfTestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeBauteil_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendeBauteil" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeBauteil_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendeBauteilResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeMeldung_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendeMeldung" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeMeldung_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendeMeldungResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeMaschinenanmeldung_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendeMaschinenanmeldung" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeMaschinenanmeldung_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendeMaschinenanmeldungResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetBediener_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBediener" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetBediener_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBedienerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetMaschinen_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaschinen" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_GetMaschinen_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaschinenResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeMaschinenStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendeMaschinenStatus" />
+  </wsdl:message>
+  <wsdl:message name="IWcfService_SendeMaschinenStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendeMaschinenStatusResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IWcfService">
+    <wsdl:operation name="WcfTest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/WcfTest" message="tns:IWcfService_WcfTest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/WcfTestResponse" message="tns:IWcfService_WcfTest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendeBauteil">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SendeBauteil" message="tns:IWcfService_SendeBauteil_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SendeBauteilResponse" message="tns:IWcfService_SendeBauteil_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendeMeldung">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SendeMeldung" message="tns:IWcfService_SendeMeldung_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SendeMeldungResponse" message="tns:IWcfService_SendeMeldung_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendeMaschinenanmeldung">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SendeMaschinenanmeldung" message="tns:IWcfService_SendeMaschinenanmeldung_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SendeMaschinenanmeldungResponse" message="tns:IWcfService_SendeMaschinenanmeldung_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBediener">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetBediener" message="tns:IWcfService_GetBediener_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetBedienerResponse" message="tns:IWcfService_GetBediener_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMaschinen">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetMaschinen" message="tns:IWcfService_GetMaschinen_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetMaschinenResponse" message="tns:IWcfService_GetMaschinen_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendeMaschinenStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SendeMaschinenStatus" message="tns:IWcfService_SendeMaschinenStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SendeMaschinenStatusResponse" message="tns:IWcfService_SendeMaschinenStatus_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="httpEndpoint" type="tns:IWcfService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WcfTest">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/WcfTest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendeBauteil">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/SendeBauteil" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendeMeldung">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/SendeMeldung" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendeMaschinenanmeldung">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/SendeMaschinenanmeldung" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBediener">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/GetBediener" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMaschinen">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/GetMaschinen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendeMaschinenStatus">
+      <soap:operation soapAction="http://tempuri.org/IWcfService/SendeMaschinenStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WcfService">
+    <wsdl:port name="httpEndpoint" binding="tns:httpEndpoint">
+      <soap:address location="http://localhost:58115/WcfService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

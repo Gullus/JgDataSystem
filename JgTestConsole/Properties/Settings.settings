@@ -2,22 +2,16 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="JgTestConsole.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Einstellungtere" Type="JgLibHelper.SettingKlasseCraddle" Scope="User">
-      <Value Profile="(Default)">dsf
-dfsd
-</Value>
-    </Setting>
     <Setting Name="SqlVerbindung" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=.\SqlExpress;Initial Catalog=master;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=.\SqlExpress;Initial Catalog=JgDataSystem;Integrated Security=True&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=.\SqlExpress;Initial Catalog=master;Integrated Security=True</Value>
+      <Value Profile="(Default)">Data Source=.\SqlExpress;Initial Catalog=JgDataSystem;Integrated Security=True</Value>
     </Setting>
-    <Setting Name="Einstellung" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)" />
-      <Value Profile="(Default)" />
+    <Setting Name="IdStandort" Type="System.Guid" Scope="User">
+      <Value Profile="(Default)">69eb2a93-8bbf-4870-af12-40c65cd8032e</Value>
     </Setting>
   </Settings>
 </SettingsFile>

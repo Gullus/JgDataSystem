@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/JgLibHelper" />
+  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="JgWcfBauteil">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:JgWcfStamm">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Anzahl" type="xs:int" />
+          <xs:element minOccurs="0" name="Gewicht" type="xs:double" />
+          <xs:element minOccurs="0" name="IdBauteil" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="JgWcfBauteil" nillable="true" type="tns:JgWcfBauteil" />
+  <xs:complexType name="JgWcfStamm">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IdMaschine" type="xs:int" />
+      <xs:element minOccurs="0" name="Zeit" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JgWcfStamm" nillable="true" type="tns:JgWcfStamm" />
+  <xs:complexType name="JgWcfMeldung">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:JgWcfStamm">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Anzahl" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Meldung" type="tns:JgWcfMeldung.EnumMeldungen" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="JgWcfMeldung" nillable="true" type="tns:JgWcfMeldung" />
+  <xs:simpleType name="JgWcfMeldung.EnumMeldungen">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ReparaturStart" />
+      <xs:enumeration value="ReparaturEnde" />
+      <xs:enumeration value="CoilwechselStart" />
+      <xs:enumeration value="CoilwechselEnde" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="JgWcfMeldung.EnumMeldungen" nillable="true" type="tns:JgWcfMeldung.EnumMeldungen" />
+  <xs:complexType name="JgWcfMaschinenanmeldung">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:JgWcfStamm">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Anmeldung" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IdBenutzer" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="JgWcfMaschinenanmeldung" nillable="true" type="tns:JgWcfMaschinenanmeldung" />
+  <xs:complexType name="ArrayOfJgDbBediener">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="JgDbBediener" nillable="true" type="tns:JgDbBediener" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfJgDbBediener" nillable="true" type="tns:ArrayOfJgDbBediener" />
+  <xs:complexType name="JgDbBediener">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:JgDbStamm">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BedienerName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="JgDbBediener" nillable="true" type="tns:JgDbBediener" />
+  <xs:complexType name="JgDbStamm">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Aenderung" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JgDbStamm" nillable="true" type="tns:JgDbStamm" />
+  <xs:complexType name="ArrayOfJgDbMaschine">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="JgDbMaschine" nillable="true" type="tns:JgDbMaschine" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfJgDbMaschine" nillable="true" type="tns:ArrayOfJgDbMaschine" />
+  <xs:complexType name="JgDbMaschine">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:JgDbStamm">
+        <xs:sequence>
+          <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="MaschineArt" type="q1:MaschinenArten" />
+          <xs:element minOccurs="0" name="MaschineIp" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MaschineName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MaschinePort" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="JgDbMaschine" nillable="true" type="tns:JgDbMaschine" />
+  <xs:complexType name="JgWcfMaschine">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:JgDbMaschine">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Bauteile" nillable="true" type="tns:ArrayOfJgWcfBauteil" />
+          <xs:element minOccurs="0" name="Bediener" nillable="true" type="tns:JgDbBediener" />
+          <xs:element minOccurs="0" name="Helfer" nillable="true" type="tns:ArrayOfJgDbBediener" />
+          <xs:element minOccurs="0" name="IdBediener" nillable="true" type="ser:guid" />
+          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IdisBauteile" nillable="true" type="q2:ArrayOfguid" />
+          <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="IdisHelfer" nillable="true" type="q3:ArrayOfguid" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="Status" type="q4:StatusMaschine" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="JgWcfMaschine" nillable="true" type="tns:JgWcfMaschine" />
+  <xs:complexType name="ArrayOfJgWcfBauteil">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="JgWcfBauteil" nillable="true" type="tns:JgWcfBauteil" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfJgWcfBauteil" nillable="true" type="tns:ArrayOfJgWcfBauteil" />
+</xs:schema>
