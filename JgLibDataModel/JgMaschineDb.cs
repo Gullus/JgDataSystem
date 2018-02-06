@@ -9,13 +9,12 @@ namespace JgLibDataModel.Tabellen
 {
     public class JgMaschineDb : DbContext
     {
-        public string SqlVerbindung { get; set; }
+        public string SqlVerbindung { get; set; } = @"Data Source=.\SqlExpress;Initial Catalog = JgDataSystem; Integrated Security = True";
 
         public DbSet<tabBediener> TabBedienerSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             optionsBuilder.UseSqlServer(SqlVerbindung);
         }
     }

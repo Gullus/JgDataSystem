@@ -33,5 +33,17 @@ namespace JgLibHelper
 
             }
         }
+
+        public static void CopyObject<T>(object InObject, T VonObject)
+        {
+            var typeVon = typeof(T);
+            var typeIn = InObject.GetType();
+
+            foreach (var propVon in typeVon.GetProperties())
+            {
+                var propIn = typeIn.GetProperty(propVon.Name);
+                propIn.SetValue(InObject, propVon.GetValue(VonObject));
+            }
+        }
     }
 }

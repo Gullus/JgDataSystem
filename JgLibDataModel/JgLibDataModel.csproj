@@ -129,6 +129,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\20180206085554_DbErstellt.cs" />
+    <Compile Include="Migrations\20180206085554_DbErstellt.designer.cs">
+      <DependentUpon>20180206085554_DbErstellt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabellen\Bediener.cs" />
     <Compile Include="JgMaschineDb.cs" />
