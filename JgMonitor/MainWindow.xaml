@@ -1,0 +1,49 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prop="clr-namespace:JgMonitor.Properties"
+        x:Class="JgMonitor.MainWindow"
+        mc:Ignorable="d"
+        Title="JgData - Queue Monitor" Closing="Window_Closing" Width="600" Height="800">
+
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="Adresse Queue:" FontWeight="Bold" />
+
+        <TextBox Grid.Column="1" Text="{Binding AdresseMessageQueue, Source={x:Static prop:Settings.Default}}" Margin="3"/>
+
+        <Button Content="Start" Margin="3" x:Name="BtnStart" Grid.Column="2" Click="BtnStart_Click"/>
+        <Button Content="Stop" Margin="3" x:Name="BtnStop" Grid.Column="3" Click="BtnStop_Click">
+            <Button.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="720"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.LayoutTransform>
+        </Button>
+        <Button Content="Clear" Margin="3" x:Name="BtnClear" Grid.Column="4" Click="BtnClear_Click">
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.5" BlurRadius="10"/>
+            </Button.Effect>
+        </Button>
+
+        <ScrollViewer x:Name="SbView" Grid.Row="1" Grid.ColumnSpan="6" HorizontalScrollBarVisibility="Visible">
+            <TextBox x:Name="TxtBlock" Text="Zur Abfrage Start betätigen" Margin="3" IsReadOnly="True"/>
+        </ScrollViewer>
+    </Grid>
+</Window>

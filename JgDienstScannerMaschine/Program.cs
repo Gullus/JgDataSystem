@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+﻿using JgLibHelper;
+using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using Microsoft.Practices.EnterpriseLibrary.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,6 @@ namespace JgDienstScannerMaschine
             Logger.SetLogWriter(new LogWriterFactory().Create());
             ExceptionPolicy.SetExceptionManager(new ExceptionPolicyFactory().CreateManager(), false);
 
-            var listeCraddle = new List<JgOptionenScanner>();
-            for (int i = 0; i < 5; i++)
-            {
-                var s = Properties.Settings.Default["Craddel_" + i.ToString()].ToString();
-                var crad = new JgOptionenScanner();
-                JgLibHelper.Helper.PropStringInOnjekt<JgOptionenScanner>(crad, s);
-            }
-
             var pr = Properties.Settings.Default;
 
             var JgOpt = new JgOptionen()
@@ -41,12 +34,29 @@ namespace JgDienstScannerMaschine
             if (init.MaschinenVonServer())
                 init.MaschinenLocalSpeichern();
 
+            var listeCraddleOpt = new List<JgOptionenCraddle>();
+            for (int i = 0; i < 5; i++)
+            {
+                var s = Properties.Settings.Default["Craddel_" + i.ToString()].ToString();
+                var crad = new JgOptionenCraddle(JgOpt);
+                Helper.PropStringInOnjekt<JgOptionenCraddle>(crad, s);
+                if (crad.CraddleIpAdresse != "")
+                    listeCraddleOpt.Add(crad);
+            }
+
 #if DEBUG
 
+            var lTaskMaschine = new List<JgScannerMaschinen>();
+
+            foreach (var crad in listeCraddleOpt)
+            {
+                var sm = new JgScannerMaschinen();
+                sm.TaskScannerMaschineStarten(crad);
+                lTaskMaschine.Add(sm);
+            }
 
             Console.WriteLine("Fertig");
             Console.ReadKey();
-          
 
 #else
 

@@ -25,7 +25,8 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IpAdresse=;Port=;TextAnmeldungOk=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=192.168.1.59;CraddlePort=51000;TextVerbinungOk=Welcome to Socket" +
+            " Channel")]
         public string Craddel_0 {
             get {
                 return ((string)(this["Craddel_0"]));
@@ -34,7 +35,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IpAdresse=;Port=;TextAnmeldungOk=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=;CraddlePort=;TextVerbinungOk=")]
         public string Craddel_1 {
             get {
                 return ((string)(this["Craddel_1"]));
@@ -43,7 +44,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IpAdresse=;Port=;TextAnmeldungOk=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=;CraddlePort=;TextVerbinungOk=")]
         public string Craddel_2 {
             get {
                 return ((string)(this["Craddel_2"]));
@@ -52,7 +53,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IpAdresse=;Port=;TextAnmeldungOk=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=;CraddlePort=;TextVerbinungOk=")]
         public string Craddel_3 {
             get {
                 return ((string)(this["Craddel_3"]));
@@ -61,7 +62,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IpAdresse=;Port=;TextAnmeldungOk=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=;CraddlePort=;TextVerbinungOk=")]
         public string Craddel_4 {
             get {
                 return ((string)(this["Craddel_4"]));
@@ -70,7 +71,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EVG\\EINGABE\\PROD\\")]
         public string EvgPfadProduktionsListe {
             get {
                 return ((string)(this["EvgPfadProduktionsListe"]));
@@ -79,7 +80,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EVG\\EINGABE\\HOST\\PB.H_M")]
         public string EvgDateiProduktionsAuftrag {
             get {
                 return ((string)(this["EvgDateiProduktionsAuftrag"]));
@@ -88,7 +89,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("c\\Progress\\Pro2\\impdata")]
         public string ProgressPfadProduktionsListe {
             get {
                 return ((string)(this["ProgressPfadProduktionsListe"]));

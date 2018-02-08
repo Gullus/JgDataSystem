@@ -11,12 +11,28 @@ namespace JgLibHelper
 
     public enum StatusMaschine
     {
-        Unbekannt,
+        Stillgelegt,
         Frei,
         InArbeit,
         InPause,
         InReparatur,
         InWartung,
         InCoilwechsel
+    }
+
+    public enum VorgangProgram
+    {
+        CRADDLEANMELDUNG,
+        FEHLER,
+        BAUTEIL,
+        ANMELDUNG,
+        ABMELDUNG,
+        COILSTART,
+        REPASTART,
+        WARTSTART,
+        REPA_ENDE,
+        SCHALTER,
+        VERBUNDEN,
+        TEST
     }
 }

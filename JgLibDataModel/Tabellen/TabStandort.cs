@@ -9,7 +9,12 @@ namespace JgLibDataModel
         [Required]
         public string StandortName { get; set; }
 
-        [InverseProperty("EStandort")]
-        public ICollection<TabMaschine> SKfzEinsatz { get; set; }
+        [InverseProperty("EMaschine")]
+        public ICollection<TabMaschine> SMaschinen { get; set; }
+
+        public TabStandort()
+        {
+            SMaschinen = new HashSet<TabMaschine>();
+        }
     }
 }

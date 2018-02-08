@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.NetworkInformation;
 
 namespace JgLibHelper
 {
@@ -37,21 +36,45 @@ namespace JgLibHelper
             }
         }
 
-        public static void CopyObject<T>(object InObject, T VonObject)
+        public static void CopyObject<T>(object InObject, object VonObject)
         {
             var typeVon = typeof(T);
             var typeIn = InObject.GetType();
 
-            var propertiesIn = typeIn.GetProperties().Select(s => s.Name).ToList();
-
             foreach (var propVon in typeVon.GetProperties())
             {
-                if (propertiesIn.Contains(propVon.Name))
+                var propIn = typeIn.GetProperty(propVon.Name);
+                propIn.SetValue(InObject, propVon.GetValue(VonObject));
+            }
+        }
+
+        public static bool IstPingOk(string IpAdresse, out string Fehlertext)
+        {
+            Fehlertext = "Ping Ok";
+
+            if (string.IsNullOrWhiteSpace(IpAdresse))
+            {
+                Fehlertext = "Ip Adresse ist leer!";
+            }
+            else
+            {
+                var sender = new Ping();
+                PingReply result = null;
+                try
                 {
-                    var propIn = typeIn.GetProperty(propVon.Name);
-                    propIn.SetValue(InObject, propVon.GetValue(VonObject));
+                    result = sender.Send(IpAdresse);
+
+                    if (result.Status == IPStatus.Success)
+                        return true;
+                    else
+                        Fehlertext = $"Bing {IpAdresse} mit Status {result.Status}  fehlgeschlagen!";
+                }
+                catch (Exception f)
+                {
+                    Fehlertext = $"Fehler bei Pingabfrage zu Adresse {IpAdresse}!\nGrund: {f.Message}";
                 }
             }
+            return false;
         }
     }
 }

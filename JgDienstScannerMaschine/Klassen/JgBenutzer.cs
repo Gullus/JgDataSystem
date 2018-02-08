@@ -1,7 +1,12 @@
-﻿namespace JgDienstScannerMaschine
+﻿using JgLibHelper;
+
+namespace JgDienstScannerMaschine
 {
-    public class JgBediener : JgBasisKlasse
+    public class JgBediener : JgBaseClass, IJgBediener
     {
-        public string BedienerName { get; set; } = "Kein Name";
+        public string Vorname { get; set; } = "";
+        public string Nachname { get; set; }
+
+        public string BedienerName { get => $"{Nachname}, {Vorname}"; }
     }
 }

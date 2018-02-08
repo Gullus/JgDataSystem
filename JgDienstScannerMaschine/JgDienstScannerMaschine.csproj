@@ -85,7 +85,7 @@
     </Compile>
     <Compile Include="JgInit.cs" />
     <Compile Include="Klassen\JgBasisKlasse.cs" />
-    <Compile Include="JgScanner.cs" />
+    <Compile Include="JgScannerAuswertung.cs" />
     <Compile Include="JgScannerMaschine.cs" />
     <Compile Include="Klassen\JgBenutzer.cs" />
     <Compile Include="Klassen\JgMaschine.cs" />

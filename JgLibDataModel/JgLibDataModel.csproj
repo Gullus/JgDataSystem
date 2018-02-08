@@ -151,10 +151,12 @@
     </Compile>
     <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tabellen\TabBauteil.cs" />
     <Compile Include="Tabellen\TabBediener.cs" />
     <Compile Include="JgMaschineDb.cs" />
     <Compile Include="Tabellen\TabMaschine.cs" />
-    <Compile Include="Tabellen\TabStamm.cs" />
+    <Compile Include="Tabellen\TabBase.cs" />
+    <Compile Include="Tabellen\TabMeldung.cs" />
     <Compile Include="Tabellen\TabStandort.cs" />
   </ItemGroup>
   <ItemGroup>

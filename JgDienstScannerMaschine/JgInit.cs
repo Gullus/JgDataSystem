@@ -8,18 +8,13 @@ namespace JgDienstScannerMaschine
     public class JgInit
     {
         public JgOptionen _JgOpt;
-        public string _PfadDateien; 
 
-        private string _FileMaschinen { get => _PfadDateien + "JgMaschinen.xml"; }
-        private string _FileBediener { get => _PfadDateien + "JgBediener.xml"; }
+        private string _FileMaschinen { get => _JgOpt.PfadDaten + "JgMaschinen.xml"; }
+        private string _FileBediener { get => _JgOpt.PfadDaten + "JgBediener.xml"; }
 
         public JgInit(JgOptionen MyOptionen)
         {
             _JgOpt = MyOptionen;
-            _PfadDateien = _JgOpt.PfadExe + @"\Daten\";
-
-            if (!Directory.Exists(_PfadDateien))
-                Directory.CreateDirectory(_PfadDateien);
         }
 
         public bool BedienerVonServer()
