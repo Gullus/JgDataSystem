@@ -1,12 +1,9 @@
 ﻿using JgLibHelper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace JgWcfServiceLib
 {
@@ -23,143 +20,125 @@ namespace JgWcfServiceLib
         Task<bool> SendeMeldung(JgWcfMeldung Meldung);
 
         [OperationContract]
-        Task<bool> SendeMaschinenanmeldung(JgWcfMaschinenanmeldung Anmeldung);
+        Task<List<JgWcfBediener>> GetBediener();
 
         [OperationContract]
-        Task<List<JgDbBediener>> GetBediener();
-
-        [OperationContract]
-        Task<List<JgDbMaschine>> GetMaschinen(Guid IdStandort);
+        Task<List<JgWcfMaschine>> GetMaschinen(Guid IdStandort);
 
         [OperationContract]
         Task<bool> SendeMaschinenStatus(JgWcfMaschine Maschine);
     }
 
-    #region WCF Klassen ***************************
-
     [DataContract]
-    public class JgWcfStamm
-    {
-        [DataMember]
-        public DateTime Zeit { get; set; }
-
-        [DataMember]
-        public int IdMaschine { get; set; }
-    }
-
-
-    [DataContract]
-    public class JgWcfBauteil : JgWcfStamm
-    {
-        [DataMember]
-        public int IdBauteil { get; set; }
-
-        [DataMember]
-        public int Anzahl { get; set; }
-
-        [DataMember]
-        public double Gewicht { get; set; }
-    }
-
-    [DataContract]
-    public class JgWcfMaschinenanmeldung : JgWcfStamm
-    {
-        [DataMember]
-        public int IdBenutzer { get; set; }
-
-        [DataMember]
-        public bool Anmeldung { get; set; }
-    }
-
-    [DataContract]
-    public class JgWcfMeldung : JgWcfStamm
-    {
-        public enum EnumMeldungen
-        {
-            ReparaturStart,
-            ReparaturEnde,
-            CoilwechselStart,
-            CoilwechselEnde
-        }
-
-        [DataMember]
-        public EnumMeldungen Meldung { get; set; }
-
-        [DataMember]
-        public bool Anzahl { get; set; }
-    }
-
-    #endregion
-
-    #region Db Klassen ****************************
-
-    [DataContract]
-    public class JgDbStamm
+    public class JgWcfBase : IJgBase
     {
         [DataMember]
         public Guid Id { get; set; }
 
         [DataMember]
-        public DateTime Aenderung { get; set; } = DateTime.Now;
+        public DateTime Aenderung { get; set; }
     }
 
     [DataContract]
-    public class JgDbMaschine : JgDbStamm
+    public class JgWcfBauteil : JgWcfBase, IJgMaschineBauteil
     {
         [DataMember]
-        public string MaschineName;
+        public DateTime StartFertigung { get; set; }
 
         [DataMember]
-        public MaschinenArten MaschineArt = MaschinenArten.Hand;
+        public DateTime? EndeFertigung { get; set; }
+
+        [DataMember]
+        public int DuchmesserInMm { get; set; }
+
+        [DataMember]
+        public double GewichtInKg { get; set; }
+
+        [DataMember]
+        public int LaengeInCm { get; set; }
+
+        [DataMember]
+        public int AnzahlBiegungen { get; set; }
+
+        [DataMember]
+        public Guid IdMaschine { get; set; }
+
+        [DataMember]
+        public Guid Bediener { get; set; }
+
+        [DataMember]
+        public List<Guid> ListeHelfer { get; set; }
+
+        [DataMember]
+        public string IdBauteilJgData { get; set; }
+    }
+
+    [DataContract]
+    public class JgWcfMeldung : JgWcfBase, IJgMaschineProgram
+    {
+        [DataMember]
+        public ScannerProgram Program { get; set; }
+
+        [DataMember]
+        public DateTime ZeitMeldung { get; set; }
+
+        [DataMember]
+        public int? Anzahl { get; set; }
+
+        [DataMember]
+        public string Bemerkung { get; set; }
+
+        [DataMember]
+        public Guid IdMaschine { get; set; }
+
+        [DataMember]
+        public Guid IdBediener { get; set; }
+    }
+
+    [DataContract]
+    public class JgWcfMaschine : JgWcfBase, IJgMaschine
+    {
+        [DataMember]
+        public string MaschineName { get; set; }
+
+        [DataMember]
+        public MaschinenArten MaschineArt { get; set; }
 
         [DataMember]
         public string MaschineIp { get; set; }
 
         [DataMember]
         public int MaschinePort { get; set; }
+
+        [DataMember]
+        public bool SammelScannung { get; set; }
+
+        [DataMember]
+        public int VorschubProMeterInSek { get; set; }
+
+        [DataMember]
+        public int ZeitProBiegungInSek { get; set; }
+
+        [DataMember]
+        public int ZeitProBauteilInSek { get; set; }
+
+        [DataMember]
+        public string NummerScanner { get; set; }
+
+        [DataMember]
+        public bool ScannerMitDisplay { get; set; }
+
+        [DataMember]
+        public string Bemerkung { get; set; }
     }
 
     [DataContract]
-    public class JgDbBediener : JgDbStamm
+    public class JgWcfBediener : JgWcfBase, IJgBediener
     {
         [DataMember]
-        public string BedienerName;
+        public string Vorname { get; set; }
+
+        [DataMember]
+        public string Nachname { get; set; }
     }
-
-    #endregion
-
-    #region MaschinenStatus ***********************
-
-    [DataContract]
-    public class JgWcfMaschine : JgDbMaschine
-    {
-        [DataMember]
-        public Guid? IdBediener { get; set; } = null;
-
-        [DataMember]
-        public List<Guid> IdisHelfer { get; set; } = new List<Guid>();
-
-        [DataMember]
-        public List<Guid> IdisBauteile { get; set; } = new List<Guid>();
-
-        [DataMember]
-        public StatusMaschine Status { get; set; } = StatusMaschine.Frei;
-
-        // wird nur für die Anzeige der Maschine verwendet
-        [XmlIgnore]
-        [DataMember]
-        public JgDbBediener Bediener { get; set; } = null;
-
-        // wird nur für die Anzeige der Maschine verwendet
-        [XmlIgnore]
-        [DataMember]
-        public List<JgDbBediener> Helfer { get; set; } = null;
-
-        // wird nur für die Anzeige der Maschine verwendet
-        [XmlIgnore]
-        [DataMember]
-        public List<JgWcfBauteil> Bauteile { get; set; } = new List<JgWcfBauteil>();
-    }
-
-    #endregion
 }

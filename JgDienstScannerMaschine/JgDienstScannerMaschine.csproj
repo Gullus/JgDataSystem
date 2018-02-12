@@ -84,10 +84,15 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="JgInit.cs" />
+    <Compile Include="Klassen\BvbsDaten.cs" />
+    <Compile Include="Klassen\JgMaschineBauteil.cs" />
+    <Compile Include="Klassen\JgMaschineProgramm.cs" />
+    <Compile Include="Klassen\JgScannerAusgabe.cs" />
     <Compile Include="Klassen\JgBasisKlasse.cs" />
     <Compile Include="JgScannerAuswertung.cs" />
     <Compile Include="JgScannerMaschine.cs" />
     <Compile Include="Klassen\JgBenutzer.cs" />
+    <Compile Include="Klassen\JgLogger.cs" />
     <Compile Include="Klassen\JgMaschine.cs" />
     <Compile Include="Klassen\JgOptionenScanner.cs" />
     <Compile Include="Klassen\JgOptionen.cs" />
@@ -101,10 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Connected Services\ServiceRef\JgDienstScannerMaschine.ServiceRef.JgDbBediener.datasource">
+    <None Include="Connected Services\ServiceRef\JgDienstScannerMaschine.ServiceRef.JgWcfBediener.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServiceRef\JgDienstScannerMaschine.ServiceRef.JgDbMaschine.datasource">
+    <None Include="Connected Services\ServiceRef\JgDienstScannerMaschine.ServiceRef.JgWcfMaschine.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\ServiceRef\WcfService.wsdl" />

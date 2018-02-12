@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/JgLibHelper" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/JgLibHelper" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:simpleType name="MaschinenArten">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Hand" />
-      <xs:enumeration value="Evg" />
-      <xs:enumeration value="Arsch" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="MaschinenArten" nillable="true" type="tns:MaschinenArten" />
-  <xs:simpleType name="StatusMaschine">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Unbekannt" />
-      <xs:enumeration value="Frei" />
-      <xs:enumeration value="InArbeit" />
-      <xs:enumeration value="InPause" />
-      <xs:enumeration value="InReparatur" />
-      <xs:enumeration value="InWartung" />
-      <xs:enumeration value="InCoilwechsel" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="StatusMaschine" nillable="true" type="tns:StatusMaschine" />
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfguid">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="guid" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfguid" nillable="true" type="tns:ArrayOfguid" />
 </xs:schema>

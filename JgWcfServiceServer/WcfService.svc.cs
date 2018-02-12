@@ -1,4 +1,5 @@
 ﻿using JgLibDataModel;
+using JgLibHelper;
 using JgWcfServiceLib;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,37 +14,28 @@ namespace JgWcfServiceServer
     {
         private string _SqlVerbindung = ConfigurationManager.AppSettings["SqlVerbindung"];
 
-        public async Task<List<JgDbMaschine>> GetMaschinen(Guid IdStandort)
+        public async Task<List<JgWcfMaschine>> GetMaschinen(Guid IdStandort)
         {
+            var lWcfMaschien = new List<JgWcfMaschine>();
             using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
             {
-                var maschinenDb = await db.TabMaschineSet.Where(w => w.FStandort == IdStandort).ToListAsync();
-                return (from z in maschinenDb
-                        select new JgDbMaschine()
-                        {
-                            Id = z.Id,
-                            Aenderung = z.Aenderung,
-                            MaschineArt = z.MaschinenArt,
-                            MaschineName = z.MaschineName,
-                            MaschineIp = z.IpAdresse,
-                            MaschinePort = z.Port,
-                        }).ToList();
+                var lMaschinenDb = await db.TabMaschineSet.Where(w => (w.IdStandort == IdStandort) && w.IstAktiv).ToListAsync();
+                foreach (var ma in lMaschinenDb)
+                    lWcfMaschien.Add(Helper.CopyObject<IJgMaschine, JgWcfMaschine>(new JgWcfMaschine(), ma));
             }
+            return lWcfMaschien;
         }
 
-        public async Task<List<JgDbBediener>> GetBediener()
+        public async Task<List<JgWcfBediener>> GetBediener()
         {
+            var lWcfBenutzer = new List<JgWcfBediener>();
             using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
             {
-                var bedienerDb = await db.TabBedienerSet.ToListAsync();
-                return (from z in bedienerDb
-                        select new JgDbBediener()
-                        {
-                            Id = z.Id,
-                            Aenderung = z.Aenderung,
-                            BedienerName = $"{z.Nachname}, {z.Vorname}"
-                        }).ToList();
+                var lBedienerDb = await db.TabBedienerSet.ToListAsync();
+                foreach (var bed in lBedienerDb)
+                    lWcfBenutzer.Add(Helper.CopyObject<IJgMaschineBauteil, JgWcfBediener>(new JgWcfBediener(), bed));
             }
+            return lWcfBenutzer;
         }
 
         public string WcfTest(string TestString)
@@ -57,11 +49,6 @@ namespace JgWcfServiceServer
         }
 
         public Task<bool> SendeMeldung(JgWcfMeldung Meldung)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SendeMaschinenanmeldung(JgWcfMaschinenanmeldung Anmeldung)
         {
             throw new NotImplementedException();
         }

@@ -9,7 +9,7 @@ namespace JgLibDataModel
         [Required]
         public string StandortName { get; set; }
 
-        [InverseProperty("EMaschine")]
+        [InverseProperty("EStandort")]
         public ICollection<TabMaschine> SMaschinen { get; set; }
 
         public TabStandort()

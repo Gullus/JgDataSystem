@@ -1,5 +1,4 @@
 ﻿using JgLibHelper;
-using Microsoft.Practices.EnterpriseLibrary.Logging;
 using System;
 using System.Net.Sockets;
 using System.Text;
@@ -30,11 +29,11 @@ namespace JgDienstScannerMaschine
 
                 while (true)
                 {
-                    Logger.Write($"Verbindungsaufbau {optCrad.Info}", "Service", 0, 0, System.Diagnostics.TraceEventType.Information);
+                    JgLog.Set($"Verbindungsaufbau {optCrad.Info}", JgLog.LogArt.Info);
 
                     if (!Helper.IstPingOk(optCrad.CraddleIpAdresse, out msg))
                     {
-                        Logger.Write($"Ping Fehler {optCrad.Info}\nGrund: {msg}", "Service", 0, 0, System.Diagnostics.TraceEventType.Information);
+                        JgLog.Set($"Ping Fehler {optCrad.Info}\nGrund: {msg}", JgLog.LogArt.Info);
                         Thread.Sleep(20000);
                         continue;
                     }
@@ -45,12 +44,12 @@ namespace JgDienstScannerMaschine
                     }
                     catch (Exception ex)
                     {
-                        Logger.Write($"Fehler Verbindungsaufbau {optCrad.Info}\nGrund: {ex.Message}", "Service", 0, 0, System.Diagnostics.TraceEventType.Information);
+                        JgLog.Set($"Fehler Verbindungsaufbau {optCrad.Info}\nGrund: {ex.Message}", JgLog.LogArt.Info);
                         Thread.Sleep(30000);
                         continue;
                     }
 
-                    Logger.Write($"Verbindung Ok {optCrad.Info}", "Service", 0, 0, System.Diagnostics.TraceEventType.Information);
+                    JgLog.Set($"Verbindung Ok {optCrad.Info}", JgLog.LogArt.Info);
                     netStream = client.GetStream();
 
                     while (true)
@@ -95,7 +94,7 @@ namespace JgDienstScannerMaschine
                                 if (!ctScanner.IsCancellationRequested)
                                 {
                                     var letzteZeichen = Encoding.ASCII.GetString(bufferEmpfang, 0, anzZeichen);
-                                    Logger.Write($"Fehler Datenempfang {optCrad.Info}!\nLetzter Text: {letzteZeichen}\nGrund: {ex.Message}", "Service", 1, 0, System.Diagnostics.TraceEventType.Warning);
+                                    JgLog.Set($"Fehler Datenempfang {optCrad.Info}!\nLetzter Text: {letzteZeichen}\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
                                     return optCrad.TextBeiFehler;
                                 }
                             }
@@ -109,17 +108,24 @@ namespace JgDienstScannerMaschine
 
                         if (taskScannen.IsCompleted)
                         {
-                            auswertScanner.TextEmpfangen(taskScannen.Result);
-                            if (auswertScanner.CraddeFehler)
+                            var textEmpfangen = taskScannen.Result;
+
+                            if (textEmpfangen == optCrad.TextBeiFehler)
+                                JgLog.Set($"{optCrad.Info} -> Fehlertext angesprochen.", JgLog.LogArt.Warnung);
+                            else if (textEmpfangen.Length == 1)
+                                JgLog.Set($"{optCrad.Info} -> Ein Zeichen Empfangen: {Convert.ToByte(textEmpfangen[0])}", JgLog.LogArt.Warnung);
+                            else if (textEmpfangen.Length < 1)
+                                JgLog.Set($"{optCrad.Info} -> Leeres Zeichen Empfangen!", JgLog.LogArt.Warnung);
+                            else
                             {
-                                byte[] senden = auswertScanner.PufferSendeText();
-                                netStream.Write(senden, 0, senden.Length);
+                                var ergScanner = auswertScanner.TextEmpfangen(taskScannen.Result);
+                                netStream.Write(ergScanner.AusgabeAufCraddle, 0, ergScanner.AusgabeAufCraddle.Length);
                                 continue;
                             }
                         }
                         try
                         {
-                            Logger.Write($"Abbruch {optCrad.Info}!", "Service", 1, 0, System.Diagnostics.TraceEventType.Warning);
+                            JgLog.Set($"Abbruch {optCrad.Info}!", JgLog.LogArt.Warnung);
 
                             if (client != null)
                             {
@@ -145,5 +151,6 @@ namespace JgDienstScannerMaschine
 
             TaskScannerMaschine.Start();
         }
+
     }
 }

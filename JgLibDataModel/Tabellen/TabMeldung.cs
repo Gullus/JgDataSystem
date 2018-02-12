@@ -1,19 +1,15 @@
 ﻿using JgLibHelper;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JgLibDataModel
 {
-    public class TabMeldung : TabBase, IJgMeldung
+    public class TabMeldung : TabBase, IJgMaschineProgram
     {
         public DateTime ZeitMeldung { get; set; }
-        public VorgangProgram Vorgang { get; set; } = VorgangProgram.FEHLER;
+        public ScannerProgram Program { get; set; } = ScannerProgram.SCVORGANG;
 
-        public int Anzahl { get; set; } = 0;
+        public int? Anzahl { get; set; } = 0;
 
         public string Bemerkung { get; set; }
 

@@ -14,6 +14,9 @@ namespace JgLibDataModel
         public DbSet<TabStandort> TabStandortSet { get; set; }
         public DbSet<TabBediener> TabBedienerSet { get; set; }
         public DbSet<TabMaschine> TabMaschineSet { get; set; }
+        public DbSet<TabBauteil> TabBauteilSet { get; set; }
+        public DbSet<TabMeldung> TabMeldungSet { get; set; }
+        public DbSet<TabBedienerBauteil> TabBedienerBauteilSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

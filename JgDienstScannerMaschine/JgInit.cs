@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JgLibHelper;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -25,24 +26,23 @@ namespace JgDienstScannerMaschine
             {
                 using (var dienst = new ServiceRef.WcfServiceClient())
                 {
-                    var lBediener = dienst.GetBediener();
-                    foreach(var bediener in lBediener)
+                    var lWcfBediener = dienst.GetBediener();
+                    foreach(var bedWcf in lWcfBediener)
                     {
-                        if (_JgOpt.ListeBediener.ContainsKey(bediener.Id))
+                        if (_JgOpt.ListeBediener.ContainsKey(bedWcf.Id))
                         {
-                            var bed = _JgOpt.ListeBediener[bediener.Id];
-                            if (bed.Aenderung != bediener.Aenderung)
+                            var bedMaschine = _JgOpt.ListeBediener[bedWcf.Id];
+                            if (bedMaschine.Aenderung != bedWcf.Aenderung)
                             {
                                 speichern = true;
-                                JgLibHelper.Helper.CopyObject<ServiceRef.JgDbBediener>(bed, bediener);
+                                Helper.CopyObject<IJgMaschineBauteil, JgBediener>(bedMaschine, bedWcf);
                             }
                         }
                         else
                         {
                             speichern = true;
-                            var bed = new JgBediener();
-                            JgLibHelper.Helper.CopyObject<ServiceRef.JgDbBediener>(bed, bediener);
-                            _JgOpt.ListeBediener.Add(bediener.Id, bed);
+                            var bedMaschine = Helper.CopyObject<IJgMaschineBauteil, JgBediener>(new JgBediener(), bedWcf);
+                            _JgOpt.ListeBediener.Add(bedMaschine.Id, bedMaschine);
                         }
                     }
                 }
@@ -98,40 +98,41 @@ namespace JgDienstScannerMaschine
             {
                 using (var dienst = new ServiceRef.WcfServiceClient())
                 {
-                    var lMaschinen = dienst.GetMaschinen(_JgOpt.IdStandort);
-                    foreach (var maschine in lMaschinen)
+                    var lWcfMaschinen = dienst.GetMaschinen(_JgOpt.IdStandort);
+                    foreach (var maWcf in lWcfMaschinen)
                     {
-                        if (_JgOpt.ListeMaschinen.ContainsKey(maschine.Id))
+                        if (_JgOpt.ListeMaschinen.ContainsKey(maWcf.Id))
                         {
-                            var ma = _JgOpt.ListeMaschinen[maschine.Id];
-                            if (ma.Aenderung != maschine.Aenderung)
+                            var maMaschine = _JgOpt.ListeMaschinen[maWcf.Id];
+                            if (maMaschine.Aenderung != maWcf.Aenderung)
                             {
                                 speichern = true;
-                                JgLibHelper.Helper.CopyObject<ServiceRef.JgDbMaschine>(ma, maschine);
+                                Helper.CopyObject<IJgMaschine, JgMaschineStamm>(maMaschine, maWcf);
                             }
                         }
                         else
                         {
                             speichern = true;
  
-                            JgMaschineStamm ma = null;
-                            switch (maschine.MaschineArt)
+                            JgMaschineStamm maMaschine = null;
+                            switch (maWcf.MaschineArt)
                             {
                                 case JgLibHelper.MaschinenArten.Hand:
-                                    ma = new JgMaschineHand();
+                                    maMaschine = new JgMaschineHand();
                                     break;
                                 case JgLibHelper.MaschinenArten.Evg:
-                                    ma = new JgMaschineEvg();
+                                    maMaschine = new JgMaschineEvg();
                                     break;
-                                case JgLibHelper.MaschinenArten.Arsch:
-                                    ma = new JgMaschineArsch();
+                                case JgLibHelper.MaschinenArten.Schnell:
+                                    maMaschine = new JgMaschineSchnell();
                                     break;
-                                default:
+                                case JgLibHelper.MaschinenArten.Progress:
+                                    maMaschine = new JgMaschineProgress();
                                     break;
                             }
 
-                            JgLibHelper.Helper.CopyObject<ServiceRef.JgDbMaschine>(ma, maschine);
-                            _JgOpt.ListeMaschinen.Add(maschine.Id, ma);
+                            Helper.CopyObject<IJgMaschine, JgMaschineStamm>(maMaschine, maWcf);
+                            _JgOpt.ListeMaschinen.Add(maMaschine.Id, maMaschine);
                         }
                     }
                 }
@@ -154,7 +155,7 @@ namespace JgDienstScannerMaschine
                 JgMaschineStamm[] arMaschineStamm = null;
                 using (var reader = new StreamReader(_FileMaschinen))
                 {
-                    var maschinenTypes = new Type[] { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineArsch) };
+                    var maschinenTypes = new Type[] { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell) };
                     var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), maschinenTypes);
                     arMaschineStamm = (JgMaschineStamm[])serializer.Deserialize(reader);
                 }
@@ -176,7 +177,7 @@ namespace JgDienstScannerMaschine
 
             using (var writer = new StreamWriter(_FileMaschinen))
             {
-                Type[] personTypes = { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineArsch) };
+                Type[] personTypes = { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell) };
                 var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), personTypes);
                 serializer.Serialize(writer, arSpeichern);
             }

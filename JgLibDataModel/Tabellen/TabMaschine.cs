@@ -10,30 +10,32 @@ namespace JgLibDataModel
         public string MaschineName { get; set; }
 
         public MaschinenArten MaschineArt { get; set; } = MaschinenArten.Hand;
-        public StatusMaschine Status { get; set; } = StatusMaschine.InArbeit;
 
         public string MaschineIp { get; set; }
         public int MaschinePort { get; set; }
         public bool SammelScannung { get; set; }
 
-        public int VorschubProMeterinSek { get; set; }
-        public int ZeitProBiegunginSek { get; set; }
-        public int ZeitProBauteilinSek { get; set; }
+        public int VorschubProMeterInSek { get; set; }
+        public int ZeitProBiegungInSek { get; set; }
+        public int ZeitProBauteilInSek { get; set; }
 
         public bool ScannerMitDisplay { get; set; }
         public string NummerScanner { get; set; }
 
-        public Guid? Bediener { get; set; }
-        public List<Guid> ListHelfer { get; set; }
-        public List<Guid> ListeBauteile { get; set; }
+        public bool IstAktiv { get; set; }
 
         public string Bemerkung { get; set; }
 
-        public Guid FStandort { get; set; }
-        [ForeignKey("FStandort")]
+        public Guid IdStandort { get; set; }
+        [ForeignKey("IdStandort")]
         public TabStandort EStandort { get; set; }
 
         [InverseProperty("EMaschine")]
         public ICollection<TabMeldung> SMeldungen { get; set; }
+
+        public TabMaschine()
+        {
+            SMeldungen = new HashSet<TabMeldung>();
+        }
     }
 }

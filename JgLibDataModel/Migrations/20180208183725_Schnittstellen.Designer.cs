@@ -12,9 +12,10 @@ using System;
 namespace JgLibDataModel.Migrations
 {
     [DbContext(typeof(JgMaschineDb))]
-    partial class JgMaschineDbModelSnapshot : ModelSnapshot
+    [Migration("20180208183725_Schnittstellen")]
+    partial class Schnittstellen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,15 +31,13 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<int>("AnzahlBiegungen");
 
-                    b.Property<Guid>("Bediener");
-
                     b.Property<int>("DuchmesserInMm");
 
                     b.Property<DateTime?>("EndeFertigung");
 
                     b.Property<double>("GewichtInKg");
 
-                    b.Property<string>("IdBauteilJgData");
+                    b.Property<int>("IdBauteilJgData");
 
                     b.Property<Guid>("IdMaschine");
 
@@ -152,7 +151,7 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<DateTime>("Aenderung");
 
-                    b.Property<int?>("Anzahl");
+                    b.Property<int>("Anzahl");
 
                     b.Property<string>("Bemerkung");
 
@@ -164,7 +163,7 @@ namespace JgLibDataModel.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int>("Program");
+                    b.Property<int>("Vorgang");
 
                     b.Property<DateTime>("ZeitMeldung");
 

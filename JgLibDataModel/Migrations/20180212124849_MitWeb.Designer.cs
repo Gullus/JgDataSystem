@@ -12,9 +12,10 @@ using System;
 namespace JgLibDataModel.Migrations
 {
     [DbContext(typeof(JgMaschineDb))]
-    partial class JgMaschineDbModelSnapshot : ModelSnapshot
+    [Migration("20180212124849_MitWeb")]
+    partial class MitWeb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

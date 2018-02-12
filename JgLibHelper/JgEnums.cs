@@ -6,33 +6,43 @@ namespace JgLibHelper
     {
         Hand,
         Evg,
-        Arsch
+        Progress,
+        Schnell
     }
 
-    public enum StatusMaschine
+    public enum StatusProduktion
     {
-        Stillgelegt,
         Frei,
         InArbeit,
-        InPause,
         InReparatur,
         InWartung,
         InCoilwechsel
     }
 
-    public enum VorgangProgram
+    public enum ScannerVorgang
     {
         CRADDLEANMELDUNG,
         FEHLER,
-        BAUTEIL,
+        PROG,
+        MITA,       // Mitarbeiter Anmeldung an Maschine  
+        BF2D,
+        BF3D,
+        TEST,
+        SCHALTER,
+        VERBUNDEN
+    }
+
+    public enum ScannerProgram
+    {
+        SCVORGANG,  // Wenn kein Programm ausgelöst wurde
         ANMELDUNG,
         ABMELDUNG,
         COILSTART,
+        COIL_ENDE,
         REPASTART,
-        WARTSTART,
         REPA_ENDE,
-        SCHALTER,
-        VERBUNDEN,
-        TEST
+        WARTSTART,
+        WART_ENDE,
+        SCHALTER
     }
 }

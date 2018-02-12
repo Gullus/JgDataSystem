@@ -9,9 +9,6 @@ namespace JgDienstScannerMaschine
         public DateTime Aenderung { get; set; }
 
         public JgBaseClass()
-        {
-            Id = Guid.NewGuid();
-            Aenderung = DateTime.Now;
-        }
+        { }
     }
 }

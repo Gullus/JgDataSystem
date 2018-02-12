@@ -36,16 +36,33 @@ namespace JgLibHelper
             }
         }
 
-        public static void CopyObject<T>(object InObject, object VonObject)
+        public static K CopyObject<T, K>(K InObject, object VonObject)
         {
-            var typeVon = typeof(T);
+            // typeSchnitt.GetInterfaces()[0]
+
+            var typeSchnitt = typeof(T);
+            var lTypeSchnitt = new List<Type>(typeSchnitt.GetInterfaces());
+            lTypeSchnitt.Add(typeSchnitt);
+
+            var arType = new Type[] { typeof(DateTime), typeof(DateTime?), typeof(Guid), typeof(Guid) }; 
+
+            var typeVon = VonObject.GetType();
             var typeIn = InObject.GetType();
 
-            foreach (var propVon in typeVon.GetProperties())
+            foreach (var tSchnitt in lTypeSchnitt)
             {
-                var propIn = typeIn.GetProperty(propVon.Name);
-                propIn.SetValue(InObject, propVon.GetValue(VonObject));
+                foreach (var propSchnitt in tSchnitt.GetProperties())
+                {
+                    if (propSchnitt.PropertyType.IsPrimitive || propSchnitt.PropertyType.IsEnum || arType.Contains(propSchnitt.PropertyType))
+                    {
+                        var propVon = typeVon.GetProperty(propSchnitt.Name);
+                        var propIn = typeIn.GetProperty(propSchnitt.Name);
+                        propIn.SetValue(InObject, propVon.GetValue(VonObject));
+                    }
+                }
             }
+
+            return InObject;
         }
 
         public static bool IstPingOk(string IpAdresse, out string Fehlertext)
