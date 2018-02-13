@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.NetworkInformation;
+using System.Reflection;
 
 namespace JgLibHelper
 {
@@ -34,35 +36,6 @@ namespace JgLibHelper
                     }
                 }
             }
-        }
-
-        public static K CopyObject<T, K>(K InObject, object VonObject)
-        {
-            // typeSchnitt.GetInterfaces()[0]
-
-            var typeSchnitt = typeof(T);
-            var lTypeSchnitt = new List<Type>(typeSchnitt.GetInterfaces());
-            lTypeSchnitt.Add(typeSchnitt);
-
-            var arType = new Type[] { typeof(DateTime), typeof(DateTime?), typeof(Guid), typeof(Guid) }; 
-
-            var typeVon = VonObject.GetType();
-            var typeIn = InObject.GetType();
-
-            foreach (var tSchnitt in lTypeSchnitt)
-            {
-                foreach (var propSchnitt in tSchnitt.GetProperties())
-                {
-                    if (propSchnitt.PropertyType.IsPrimitive || propSchnitt.PropertyType.IsEnum || arType.Contains(propSchnitt.PropertyType))
-                    {
-                        var propVon = typeVon.GetProperty(propSchnitt.Name);
-                        var propIn = typeIn.GetProperty(propSchnitt.Name);
-                        propIn.SetValue(InObject, propVon.GetValue(VonObject));
-                    }
-                }
-            }
-
-            return InObject;
         }
 
         public static bool IstPingOk(string IpAdresse, out string Fehlertext)

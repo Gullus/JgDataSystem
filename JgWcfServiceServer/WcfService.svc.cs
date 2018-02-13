@@ -17,24 +17,32 @@ namespace JgWcfServiceServer
         public async Task<List<JgWcfMaschine>> GetMaschinen(Guid IdStandort)
         {
             var lWcfMaschien = new List<JgWcfMaschine>();
+            var copyMaschine = new JgCopyProperty<IJgMaschine>();
+
             using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
             {
                 var lMaschinenDb = await db.TabMaschineSet.Where(w => (w.IdStandort == IdStandort) && w.IstAktiv).ToListAsync();
-                foreach (var ma in lMaschinenDb)
-                    lWcfMaschien.Add(Helper.CopyObject<IJgMaschine, JgWcfMaschine>(new JgWcfMaschine(), ma));
+
+                foreach (var maDb in lMaschinenDb)
+                    lWcfMaschien.Add((JgWcfMaschine)copyMaschine.CopyProperties(maDb, new JgWcfMaschine()));
             }
+
             return lWcfMaschien;
         }
 
         public async Task<List<JgWcfBediener>> GetBediener()
         {
             var lWcfBenutzer = new List<JgWcfBediener>();
+            var copyBediener = new JgCopyProperty<IJgBediener>();
+            
             using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
             {
-                var lBedienerDb = await db.TabBedienerSet.ToListAsync();
-                foreach (var bed in lBedienerDb)
-                    lWcfBenutzer.Add(Helper.CopyObject<IJgMaschineBauteil, JgWcfBediener>(new JgWcfBediener(), bed));
+                var tempDb = await db.TabBedienerSet.ToListAsync();
+
+                foreach (var bediener in tempDb)
+                    lWcfBenutzer.Add((JgWcfBediener)copyBediener.CopyProperties(bediener, new JgWcfBediener()));
             }
+
             return lWcfBenutzer;
         }
 

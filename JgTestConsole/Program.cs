@@ -1,5 +1,9 @@
-﻿using JgTestConsole.Temp;
+﻿using AutoMapper;
+using JgTestConsole.Temp;
 using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace JgTestConsole
 {
@@ -7,21 +11,22 @@ namespace JgTestConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Start");
 
-            var zk = new ZweiteKlasse();
+            var k1 = new C1();
 
-            Console.WriteLine(zk.WertString);
+            var k2 = new C2();
 
-            zk.WertString = "Arsch";
+            var copy = new JgLibHelper.JgCopyProperty<I1>();
+            copy.CopyProperties(k1, k2);
 
-            Console.WriteLine(zk.WertString);
+            Console.WriteLine(k1.feld1);
+            Console.WriteLine(k2.feld1);
+
 
             Console.WriteLine("Fertig");
             Console.ReadKey();
         }
     }
-
 
     public interface I1
     {
@@ -33,9 +38,30 @@ namespace JgTestConsole
         int feld2 { get; set; } 
     }
 
-    class Test1 : I1
+    public class C1 : I1, ICloneable
+    {
+        public int feld1 { get; set; } = 300;
+
+        public object Clone()
+        {
+            return (I1)this.MemberwiseClone();
+        }
+    }
+
+    public class C2 : I1
+    {
+        public int feld1 { get; set; } = 500;
+    }
+
+
+    class Test1 : I1, ICloneable
     {
         public int feld1 { get; set; }
+
+        public object Clone()
+        {
+            return (I1)this.MemberwiseClone();
+        }
     }
 
     class Test2 : Test1, I2
@@ -45,20 +71,4 @@ namespace JgTestConsole
         public int MyProperty1 { get; set; }
         public int MyProperty2 { get; set; }
     }
-
-    public class ErsteKlasse
-    {
-        public int Wert1 = 500;
-    }
-
-    public class ZweiteKlasse : ErsteKlasse
-    {
-        public string WertString = "Hallo";
-
-        public ZweiteKlasse()
-        {
-            WertString = Wert1.ToString();
-        }
-    }
-
 }

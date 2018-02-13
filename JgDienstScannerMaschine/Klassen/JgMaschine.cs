@@ -21,11 +21,6 @@ namespace JgDienstScannerMaschine
         public bool SammelScannung { get; set; } = false;
         public bool ScannerMitDisplay { get; set; } = true;
 
-        public int VorschubProMeterInSek { get; set; } = 0;
-        public int ZeitProBiegungInSek { get; set; } = 0;
-        public int ZeitProBauteilInSek { get; set; } = 0;
-
-        public string Bemerkung { get; set; }
         public Guid? Bediener { get; set; } = null;
         public List<Guid> ListeHelfer { get; set; } = new List<Guid>();
 

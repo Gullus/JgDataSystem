@@ -77,7 +77,7 @@ namespace JgDienstScannerMaschine
 
                     sb.Append(_Esc + "[2J");
                     foreach (var eintr in lAusgabe)
-                        sb.Append(_Esc + "[0K" + (eintr.Length > 22 ? eintr.Substring(0, 22) : eintr) + _Esc + "[G");
+                        sb.Append(_Esc + "[0K" + ScannerTextCenter(eintr) + _Esc + "[G");
                 }
 
                 if (IstFehler)
@@ -108,12 +108,12 @@ namespace JgDienstScannerMaschine
 
         private string ScannerTextCenter(string Text)
         {
-            if (Text.Length > 24)
-                Text = Text.Substring(0, 24);
+            if (Text.Length > 21)
+                Text = Text.Substring(0, 21);
 
-            if (Text.Length < 23)
+            if (Text.Length < 21)
             {
-                var anz = Convert.ToInt32((22 - Text.Length) / 2);
+                var anz = Convert.ToInt32((21 - Text.Length) / 2);
                 return "".PadLeft(anz) + Text;
             }
             return Text;

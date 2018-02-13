@@ -1,7 +1,5 @@
-﻿using JgLibHelper;
-using System;
+﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace JgDienstScannerMaschine
@@ -27,29 +25,35 @@ namespace JgDienstScannerMaschine
                 using (var dienst = new ServiceRef.WcfServiceClient())
                 {
                     var lWcfBediener = dienst.GetBediener();
-                    foreach(var bedWcf in lWcfBediener)
+
+                    foreach (var bedWcf in lWcfBediener)
                     {
+                        JgBediener bedMaschine = null;
+
                         if (_JgOpt.ListeBediener.ContainsKey(bedWcf.Id))
-                        {
-                            var bedMaschine = _JgOpt.ListeBediener[bedWcf.Id];
-                            if (bedMaschine.Aenderung != bedWcf.Aenderung)
-                            {
-                                speichern = true;
-                                Helper.CopyObject<IJgMaschineBauteil, JgBediener>(bedMaschine, bedWcf);
-                            }
-                        }
+                            bedMaschine = _JgOpt.ListeBediener[bedWcf.Id];
                         else
                         {
-                            speichern = true;
-                            var bedMaschine = Helper.CopyObject<IJgMaschineBauteil, JgBediener>(new JgBediener(), bedWcf);
-                            _JgOpt.ListeBediener.Add(bedMaschine.Id, bedMaschine);
+                            bedMaschine = new JgBediener() { Id = bedWcf.Id, Aenderung = DateTime.Now };
+                            _JgOpt.ListeBediener.Add(bedWcf.Id, bedMaschine);
                         }
+
+                        if (bedMaschine.Aenderung != bedWcf.Aenderung)
+                        {
+                            speichern = true;
+
+                            bedMaschine.Vorname = bedWcf.Vorname;
+                            bedMaschine.Nachname = bedWcf.Nachname;
+                            bedMaschine.NummerAusweis = bedWcf.NummerAusweis;
+
+                            bedMaschine.Aenderung = bedWcf.Aenderung;
+                        };
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                JgLog.Set($"Fehler Wcf Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
 
             return speichern;
@@ -72,9 +76,9 @@ namespace JgDienstScannerMaschine
                 foreach (var ma in arBediener)
                     _JgOpt.ListeBediener.Add(ma.Id, ma);
             }
-            catch
+            catch (Exception ex)
             {
-
+                JgLog.Set($"Fehler beim localen laden Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 
@@ -83,10 +87,17 @@ namespace JgDienstScannerMaschine
             var arSpeichern = new JgBediener[_JgOpt.ListeBediener.Count];
             _JgOpt.ListeBediener.Values.CopyTo(arSpeichern, 0);
 
-            using (var writer = new StreamWriter(_FileBediener))
+            try
             {
-                var serializer = new XmlSerializer(typeof(JgBediener[]));
-                serializer.Serialize(writer, arSpeichern);
+                using (var writer = new StreamWriter(_FileBediener))
+                {
+                    var serializer = new XmlSerializer(typeof(JgBediener[]));
+                    serializer.Serialize(writer, arSpeichern);
+                }
+            }
+            catch (Exception ex)
+            {
+                JgLog.Set($"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 
@@ -101,20 +112,12 @@ namespace JgDienstScannerMaschine
                     var lWcfMaschinen = dienst.GetMaschinen(_JgOpt.IdStandort);
                     foreach (var maWcf in lWcfMaschinen)
                     {
+                        JgMaschineStamm maMaschine = null;
+
                         if (_JgOpt.ListeMaschinen.ContainsKey(maWcf.Id))
-                        {
-                            var maMaschine = _JgOpt.ListeMaschinen[maWcf.Id];
-                            if (maMaschine.Aenderung != maWcf.Aenderung)
-                            {
-                                speichern = true;
-                                Helper.CopyObject<IJgMaschine, JgMaschineStamm>(maMaschine, maWcf);
-                            }
-                        }
+                            maMaschine = _JgOpt.ListeMaschinen[maWcf.Id];
                         else
                         {
-                            speichern = true;
- 
-                            JgMaschineStamm maMaschine = null;
                             switch (maWcf.MaschineArt)
                             {
                                 case JgLibHelper.MaschinenArten.Hand:
@@ -131,15 +134,34 @@ namespace JgDienstScannerMaschine
                                     break;
                             }
 
-                            Helper.CopyObject<IJgMaschine, JgMaschineStamm>(maMaschine, maWcf);
+                            maMaschine.Id = maWcf.Id;
+                            maMaschine.Aenderung = DateTime.Now;
+
                             _JgOpt.ListeMaschinen.Add(maMaschine.Id, maMaschine);
+                        }
+
+                        if (maMaschine.Aenderung != maWcf.Aenderung)
+                        {
+                            speichern = true;
+
+                            maMaschine.MaschineName = maWcf.MaschineName;
+                            maMaschine.MaschineArt = maWcf.MaschineArt;
+
+                            maMaschine.MaschineIp = maWcf.MaschineIp;
+                            maMaschine.MaschinePort = maWcf.MaschinePort;
+
+                            maMaschine.NummerScanner = maWcf.NummerScanner;
+                            maMaschine.ScannerMitDisplay = maWcf.ScannerMitDisplay;
+                            maMaschine.SammelScannung = maWcf.SammelScannung;
+
+                            maMaschine.Aenderung = maWcf.Aenderung;
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                JgLog.Set($"Fehler beim Wcf Maschien laden!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
 
             return speichern;
@@ -155,7 +177,7 @@ namespace JgDienstScannerMaschine
                 JgMaschineStamm[] arMaschineStamm = null;
                 using (var reader = new StreamReader(_FileMaschinen))
                 {
-                    var maschinenTypes = new Type[] { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell) };
+                    var maschinenTypes = new Type[] { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress) };
                     var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), maschinenTypes);
                     arMaschineStamm = (JgMaschineStamm[])serializer.Deserialize(reader);
                 }
@@ -164,9 +186,9 @@ namespace JgDienstScannerMaschine
                 foreach (var ma in arMaschineStamm)
                     _JgOpt.ListeMaschinen.Add(ma.Id, ma);
             }
-            catch
+            catch (Exception ex)
             {
-
+                JgLog.Set($"Fehler locales laden XML Daten Maschine!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 
@@ -175,11 +197,18 @@ namespace JgDienstScannerMaschine
             var arSpeichern = new JgMaschineStamm[_JgOpt.ListeMaschinen.Count];
             _JgOpt.ListeMaschinen.Values.CopyTo(arSpeichern, 0);
 
-            using (var writer = new StreamWriter(_FileMaschinen))
+            try
             {
-                Type[] personTypes = { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell) };
-                var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), personTypes);
-                serializer.Serialize(writer, arSpeichern);
+                using (var writer = new StreamWriter(_FileMaschinen))
+                {
+                    Type[] maschinenTypes = { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress) };
+                    var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), maschinenTypes);
+                    serializer.Serialize(writer, arSpeichern);
+                }
+            }
+            catch (Exception ex)
+            {
+                JgLog.Set($"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
     }

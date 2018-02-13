@@ -7,6 +7,8 @@ namespace JgDienstScannerMaschine
         public string Vorname { get; set; } = "";
         public string Nachname { get; set; }
 
+        public string NummerAusweis { get; set; }
+
         public string BedienerName { get => $"{Nachname}, {Vorname}"; }
     }
 }

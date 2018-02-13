@@ -1,3 +1,7 @@
-﻿Add-Migration EinNeuerName
+﻿install-package microsoft.entityframeworkcore.sqlserver
+install-package microsoft.entityframeworkcore.tools
+
+
+Add-Migration EinNeuerName
 
 Update-Database

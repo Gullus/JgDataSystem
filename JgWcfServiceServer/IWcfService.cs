@@ -114,22 +114,10 @@ namespace JgWcfServiceLib
         public bool SammelScannung { get; set; }
 
         [DataMember]
-        public int VorschubProMeterInSek { get; set; }
-
-        [DataMember]
-        public int ZeitProBiegungInSek { get; set; }
-
-        [DataMember]
-        public int ZeitProBauteilInSek { get; set; }
-
-        [DataMember]
         public string NummerScanner { get; set; }
 
         [DataMember]
         public bool ScannerMitDisplay { get; set; }
-
-        [DataMember]
-        public string Bemerkung { get; set; }
     }
 
     [DataContract]
@@ -140,5 +128,8 @@ namespace JgWcfServiceLib
 
         [DataMember]
         public string Nachname { get; set; }
+
+        [DataMember]
+        public string NummerAusweis { get; set; }
     }
 }

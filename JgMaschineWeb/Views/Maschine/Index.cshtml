@@ -1,0 +1,69 @@
+﻿@model IEnumerable<JgLibDataModel.TabMaschine>
+
+@{
+    ViewBag.Title = "Index";
+    string standort = "##";
+}
+
+<br />
+<h2>Übersicht Maschinen</h2>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Maschine</th>
+            <th>Art</th>
+            <th>ID</th>
+            <th>IP Adresse</th>
+            <th>Port</th>
+            <th>Scanner</th>
+            <th>Aktiv</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        var standortNeu = (item?.EStandort == null) ? "Unbekannt" : item.EStandort.StandortName;
+
+
+        if (standort != standortNeu)
+        {
+            standort = standortNeu;
+
+            <tr style="color:red">
+                <td><strong>Standort @standort</strong></td>
+            </tr>
+        }
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaschineName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaschineArt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaschineIp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaschinePort)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NummerScanner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IstAktiv)
+            </td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", new { id = item.Id })">Bearbeiten</a>
+            </td>
+        </tr>
+
+    }
+
+</table>

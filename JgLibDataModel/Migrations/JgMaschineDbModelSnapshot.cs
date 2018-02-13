@@ -70,6 +70,8 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<string>("Nachname");
 
+                    b.Property<string>("NummerAusweis");
+
                     b.Property<string>("Vorname");
 
                     b.HasKey("Id");

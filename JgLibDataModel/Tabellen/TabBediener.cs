@@ -9,6 +9,8 @@ namespace JgLibDataModel
         public string Vorname { get; set; }
         public string Nachname { get; set; }
 
+        public string NummerAusweis { get; set; }
+  
         [InverseProperty("EBediener")]
         public ICollection<TabMeldung> SMeldungen { get; set; }
 

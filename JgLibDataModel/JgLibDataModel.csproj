@@ -157,6 +157,10 @@
     <Compile Include="Migrations\20180212125333_Test.designer.cs">
       <DependentUpon>20180212125333_Test.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20180213113702_Ausweisnummer.cs" />
+    <Compile Include="Migrations\20180213113702_Ausweisnummer.designer.cs">
+      <DependentUpon>20180213113702_Ausweisnummer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabellen\TabBauteil.cs" />

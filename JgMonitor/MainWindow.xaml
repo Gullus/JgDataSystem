@@ -25,8 +25,15 @@
 
         <TextBox Grid.Column="1" Text="{Binding AdresseMessageQueue, Source={x:Static prop:Settings.Default}}" Margin="3"/>
 
-        <Button Content="Start" Margin="3" x:Name="BtnStart" Grid.Column="2" Click="BtnStart_Click"/>
+        <Button Content="Start" Margin="3" x:Name="BtnStart" Grid.Column="2" Click="BtnStart_Click">
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.5" ShadowDepth="3"/>
+            </Button.Effect>
+        </Button>
         <Button Content="Stop" Margin="3" x:Name="BtnStop" Grid.Column="3" Click="BtnStop_Click">
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.5" ShadowDepth="3"/>
+            </Button.Effect>
             <Button.LayoutTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -38,7 +45,7 @@
         </Button>
         <Button Content="Clear" Margin="3" x:Name="BtnClear" Grid.Column="4" Click="BtnClear_Click">
             <Button.Effect>
-                <DropShadowEffect Opacity="0.5" BlurRadius="10"/>
+                <DropShadowEffect Opacity="0.5" BlurRadius="10" ShadowDepth="3"/>
             </Button.Effect>
         </Button>
 

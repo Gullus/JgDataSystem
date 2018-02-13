@@ -191,6 +191,9 @@ namespace JgDienstScannerMaschine.ServiceRef {
         private string NachnameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NummerAusweisField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string VornameField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
@@ -202,6 +205,19 @@ namespace JgDienstScannerMaschine.ServiceRef {
                 if ((object.ReferenceEquals(this.NachnameField, value) != true)) {
                     this.NachnameField = value;
                     this.RaisePropertyChanged("Nachname");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NummerAusweis {
+            get {
+                return this.NummerAusweisField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NummerAusweisField, value) != true)) {
+                    this.NummerAusweisField = value;
+                    this.RaisePropertyChanged("NummerAusweis");
                 }
             }
         }

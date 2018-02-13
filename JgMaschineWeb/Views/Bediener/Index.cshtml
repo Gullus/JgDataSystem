@@ -1,0 +1,42 @@
+﻿@model IEnumerable<JgLibDataModel.TabBediener>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+<h2>Übersicht Bediner</h2>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Ausweisnummr</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vorname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nachname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NummerAusweis)
+            </td>
+            <td>
+                <a class="btn-primary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"> Bearbeiten</a>
+        </tr>
+    }
+
+</table>

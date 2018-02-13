@@ -148,7 +148,7 @@ namespace JgDienstScannerMaschine
 
         private void MaschineAnmeldungEintragen(JgScannerAusgabe ScanAusgabe, JgMaschineStamm Maschine)
         {
-            var bediener = _JgOpt.JgOpt.ListeBediener[Guid.Parse(ScanAusgabe.ScannKoerper)];
+            var bediener = _JgOpt.JgOpt.ListeBediener.FirstOrDefault(f => (f.Value.NummerAusweis == ScanAusgabe.ScannKoerper)).Value;
 
             if (bediener == null)
             {
@@ -173,65 +173,71 @@ namespace JgDienstScannerMaschine
                     }
                 }
 
-                // In anderen Maschinen nach einer Anmeldung suchen
+                // In allen Maschinen nach einer Anmeldung suchen und abmelden
 
-                foreach (var ma in _JgOpt.JgOpt.ListeMaschinen.Values)
+                var abmeldungBediener = false;
+                var abmeldungHelfer = false;
+
+                foreach (var maschineAbmeldung in _JgOpt.JgOpt.ListeMaschinen.Values)
                 {
-
-                    // Bei der Anmeldung den aktuellen Datensatz ausschließen
-                    if ((ScanAusgabe.Program == ScannerProgram.ANMELDUNG) && (ma.Id == Maschine.Id))
-                        continue;
-
-                    if (ma.Bediener == bediener.Id)
+                    if (maschineAbmeldung.Bediener == bediener.Id)
                     {
-                        ma.Bediener = null;
-                        var prog = new JgMaschineProgramm(ma.Id, bediener.Id, ScannerProgram.ABMELDUNG);
-                        _JgOpt.QueueSend($"Bediener {bediener.BedienerName} von Maschine {ma.MaschineName} abgemeldet", prog);
+                        abmeldungBediener = true;
+                        maschineAbmeldung.Bediener = null;
 
-                        if (ScanAusgabe.Program == ScannerProgram.ABMELDUNG)
-                            ScanAusgabe.Set(false, false, "Bediener", bediener.BedienerName, "u. Helfer abgemeldet!");
+                        var prog = new JgMaschineProgramm(maschineAbmeldung.Id, bediener.Id, ScannerProgram.ABMELDUNG);
+                        _JgOpt.QueueSend($"Bediener {bediener.BedienerName} von Maschine {maschineAbmeldung.MaschineName} abgemeldet", prog);
 
-                        JgLog.Set($"Bediener {bediener.BedienerName} von Maschine {ma.MaschineName}  abgemeldet!", JgLog.LogArt.Unbedeutend);
+                        JgLog.Set($"Bediener {bediener.BedienerName} von Maschine {maschineAbmeldung.MaschineName}  abgemeldet!", JgLog.LogArt.Unbedeutend);
 
-                        foreach (var guidHelfer in Maschine.ListeHelfer)
+                        foreach (var idHelfer in Maschine.ListeHelfer)
                         {
-                            prog = new JgMaschineProgramm(ma.Id, guidHelfer, ScannerProgram.ABMELDUNG);
-                            JgLog.Set($"Helfer {bediener.BedienerName} von Maschine {ma.MaschineName} abgemeldet!", JgLog.LogArt.Unbedeutend);
-                            _JgOpt.QueueSend($"Helder {bediener.BedienerName} abgemeldet", prog);
+                            prog = new JgMaschineProgramm(maschineAbmeldung.Id, idHelfer, ScannerProgram.ABMELDUNG);
+                            if (_JgOpt.JgOpt.ListeBediener.ContainsKey(idHelfer))
+                            {
+                                _JgOpt.QueueSend($"Helfer {_JgOpt.JgOpt.ListeBediener[idHelfer]} abgemeldet", prog);
+                                JgLog.Set($"Helfer {_JgOpt.JgOpt.ListeBediener[idHelfer].BedienerName} von Maschine {maschineAbmeldung.MaschineName} abgemeldet!", JgLog.LogArt.Unbedeutend);
+                            }
                         }
 
                         Maschine.ListeHelfer.Clear();
                     }
                     else
                     {
-                        if (ma.ListeHelfer.Contains(bediener.Id))
+                        if (maschineAbmeldung.ListeHelfer.Contains(bediener.Id))
                         {
-                            foreach (var helf in ma.ListeHelfer)
+                            abmeldungHelfer = true;
+
+                            var lHelferAbmeldung = maschineAbmeldung.ListeHelfer.Where(w => w == bediener.Id).ToArray();
+                            foreach(var idHelfer in lHelferAbmeldung)
                             {
-                                var prog = new JgMaschineProgramm(ma.Id, bediener.Id, ScannerProgram.ABMELDUNG);
-                                _JgOpt.QueueSend($"Helder {bediener.BedienerName} von Maschine {ma.MaschineName} abgemeldet", prog);
-
-                                if (ScanAusgabe.Program == ScannerProgram.ABMELDUNG)
-                                    ScanAusgabe.Set(false, false, "Helfer", bediener.BedienerName, "abgemeldet!");
-
-
-                                Maschine.ListeHelfer.Remove(bediener.Id);
-                                JgLog.Set($"Helfer {bediener.BedienerName} abgemeldet!", JgLog.LogArt.Unbedeutend);
+                                var prog = new JgMaschineProgramm(maschineAbmeldung.Id, bediener.Id, ScannerProgram.ABMELDUNG);
+                                _JgOpt.QueueSend($"Helfer {bediener.BedienerName} von Maschine {maschineAbmeldung.MaschineName} abgemeldet", prog);
+                                JgLog.Set($"Helfer {bediener.BedienerName} von Maschine {maschineAbmeldung.MaschineName} abgemeldet!", JgLog.LogArt.Unbedeutend);
+                                maschineAbmeldung.ListeHelfer.Remove(idHelfer);
                             }
                         }
                     }
                 }
 
-                // Anmeldung eintragen
-
-                if (ScanAusgabe.Program == ScannerProgram.ANMELDUNG)
+                if (ScanAusgabe.Program == ScannerProgram.ABMELDUNG)
                 {
-                    if ((Maschine.Bediener == null) || (Maschine.Bediener != bediener.Id))
+                    if (abmeldungBediener)
+                        ScanAusgabe.Set(false, false, "Bediener", bediener.BedienerName, "abgemeldet!");
+                    else if (abmeldungHelfer)
+                        ScanAusgabe.Set(false, false, "Helfer", bediener.BedienerName, "abgemeldet!");
+                    else
+                        ScanAusgabe.Set(false, true, "Keine Anmeldung", bediener.BedienerName, "registriert!");
+                }
+                else   // Anmeldung eintragen
+                {
+                    if (Maschine.Bediener == null)
                     {
                         var prog = new JgMaschineProgramm(Maschine.Id, bediener.Id, ScannerProgram.ANMELDUNG);
                         _JgOpt.QueueSend($"Bediener {bediener.BedienerName} angemeldet", prog);
                         ScanAusgabe.Set(false, false, "Bediener", bediener.BedienerName, "angemeldet!");
-                        JgLog.Set($"Bediener {bediener.BedienerName} angemeldet!", JgLog.LogArt.Unbedeutend);
+                        Maschine.Bediener = bediener.Id;
+                        JgLog.Set($"Bediener {bediener.BedienerName} an Maschine {Maschine.MaschineName} angemeldet!", JgLog.LogArt.Unbedeutend);
                     }
                     else
                     {
@@ -239,7 +245,7 @@ namespace JgDienstScannerMaschine
                         _JgOpt.QueueSend($"Helfer {bediener.BedienerName} angemeldet", prog);
                         ScanAusgabe.Set(false, false, "Helfer", bediener.BedienerName, "angemeldet!");
                         Maschine.ListeHelfer.Add(bediener.Id);
-                        JgLog.Set($"Bediener {bediener.BedienerName} angemeldet!", JgLog.LogArt.Unbedeutend);
+                        JgLog.Set($"Helfer {bediener.BedienerName} an Maschine {Maschine.MaschineName} angemeldet!", JgLog.LogArt.Unbedeutend);
                     }
                 }
             }

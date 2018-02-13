@@ -55,6 +55,7 @@
       <xs:extension base="tns:JgWcfBase">
         <xs:sequence>
           <xs:element minOccurs="0" name="Nachname" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NummerAusweis" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Vorname" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>

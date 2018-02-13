@@ -13,6 +13,8 @@ namespace JgLibHelper
     {
         string Vorname { get; set; }
         string Nachname { get; set; }
+
+        string NummerAusweis { get; set; }
     }
 
     public interface IJgMaschineBauteil : IJgBase
@@ -52,12 +54,8 @@ namespace JgLibHelper
 
         string MaschineIp { get; set; }
         int MaschinePort { get; set; }
+
         bool SammelScannung { get; set; }
-
-        int VorschubProMeterInSek { get; set; }
-        int ZeitProBiegungInSek { get; set; }
-        int ZeitProBauteilInSek { get; set; }
-
         string NummerScanner { get; set; }
         bool ScannerMitDisplay { get; set; }
     }

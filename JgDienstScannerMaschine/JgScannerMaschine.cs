@@ -72,7 +72,7 @@ namespace JgDienstScannerMaschine
                                 if (!Helper.IstPingOk(ipCraddle, out msg))
                                     break;
 
-                                if (ctsScanner.IsCancellationRequested) break;
+                                JgLog.Set($"Ping {ipCraddle} Ok.", JgLog.LogArt.Unbedeutend);
                             }
                         }, optCrad.CraddleIpAdresse, ctPing);
 
@@ -115,11 +115,16 @@ namespace JgDienstScannerMaschine
                             else if (textEmpfangen.Length == 1)
                                 JgLog.Set($"{optCrad.Info} -> Ein Zeichen Empfangen: {Convert.ToByte(textEmpfangen[0])}", JgLog.LogArt.Warnung);
                             else if (textEmpfangen.Length < 1)
-                                JgLog.Set($"{optCrad.Info} -> Leeres Zeichen Empfangen!", JgLog.LogArt.Warnung);
+                                JgLog.Set($"{optCrad.Info} -> Leeres Zeichen Empfangen!", JgLog.LogArt.Warnung);                   
                             else
                             {
-                                var ergScanner = auswertScanner.TextEmpfangen(taskScannen.Result);
-                                netStream.Write(ergScanner.AusgabeAufCraddle, 0, ergScanner.AusgabeAufCraddle.Length);
+                                if (textEmpfangen.Contains(optCrad.TextVerbinungOk))
+                                    JgLog.Set($"Verbindung Craddle OK ! {textEmpfangen}", JgLog.LogArt.Info);
+                                else
+                                {
+                                    var ergScanner = auswertScanner.TextEmpfangen(taskScannen.Result);
+                                    netStream.Write(ergScanner.AusgabeAufCraddle, 0, ergScanner.AusgabeAufCraddle.Length);
+                                }
                                 continue;
                             }
                         }
