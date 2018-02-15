@@ -19,7 +19,7 @@ namespace JgDienstScannerMaschine
 
         public bool ScannerMitDisplay { get; set; } = true;
 
-        public ScannerProgram Program = ScannerProgram.SCVORGANG;
+        public ScannerMeldung Meldung = ScannerMeldung.Fehler;
 
         public ScannerVorgang VorgangScan
         {

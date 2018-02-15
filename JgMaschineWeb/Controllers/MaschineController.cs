@@ -1,4 +1,5 @@
 ﻿using JgLibDataModel;
+using JgLibHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data;
@@ -13,12 +14,14 @@ namespace JgMaschineWeb.Controllers
     {
         private JgMaschineDb db = new JgMaschineDb();
 
+        [Authorize]
         public async Task<ActionResult> Index()
         {
             var maschine = db.TabMaschineSet.Include(i => i.EStandort).OrderBy(o => o.EStandort.StandortName).OrderBy(o => o.MaschineName);
             return View(await maschine.ToListAsync());
         }
 
+        [Authorize]
         public ActionResult Details(Guid? id)
         {
             if (id == null)
@@ -33,6 +36,7 @@ namespace JgMaschineWeb.Controllers
             return View(tabMaschine);
         }
 
+        [Authorize]
         public async Task<ActionResult> Edit(Guid? Id)
         {
             if (Id == null)
@@ -62,6 +66,28 @@ namespace JgMaschineWeb.Controllers
             TryUpdateModel(ma);
             ViewBag.Standort = new SelectList(await db.TabStandortSet.ToListAsync(), "Id", "StandortName", ma.Id);
             return View(ma);
+        }
+
+        [Authorize]
+        public async Task<ActionResult> IndexMeldungProdokoll()
+        {
+            var auswahlBis = DateTime.Now.Date.AddDays(-5);
+            var meldungen = new ScannerMeldung[] { ScannerMeldung.WARTSTART, ScannerMeldung.REPASTART };
+            var lMeldungen = db.TabMeldungSet
+                .Include(i => i.EBediener)
+                .Include(m => m.EMaschine)
+                .Include(s => s.EMaschine.EStandort)
+                .Where(w => (w.ZeitMeldung >= auswahlBis) && (meldungen.Contains(w.Meldung)))
+                .OrderBy(o => o.EMaschine.EStandort.StandortName).ThenBy(o => o.EMaschine.MaschineName);
+
+            return View(await lMeldungen.ToListAsync());
+        }
+
+        [Authorize]
+        public async Task<ActionResult> IndexMeldungProdokollEdit(Guid? Id)
+        {
+
+            return View();
         }
 
         protected override void Dispose(bool disposing)

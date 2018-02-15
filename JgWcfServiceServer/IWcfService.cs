@@ -17,16 +17,13 @@ namespace JgWcfServiceLib
         Task<bool> SendeBauteil(JgWcfBauteil Bauteil);
 
         [OperationContract]
-        Task<bool> SendeMeldung(JgWcfMeldung Meldung);
+        Task<bool> SendeMeldung(JgWcfMaschineStatus Maschine, JgWcfMeldung Meldung);
 
         [OperationContract]
         Task<List<JgWcfBediener>> GetBediener();
 
         [OperationContract]
         Task<List<JgWcfMaschine>> GetMaschinen(Guid IdStandort);
-
-        [OperationContract]
-        Task<bool> SendeMaschinenStatus(JgWcfMaschine Maschine);
     }
 
     [DataContract]
@@ -74,19 +71,16 @@ namespace JgWcfServiceLib
     }
 
     [DataContract]
-    public class JgWcfMeldung : JgWcfBase, IJgMaschineProgram
+    public class JgWcfMeldung : JgWcfBase, IJgMaschineMeldung
     {
         [DataMember]
-        public ScannerProgram Program { get; set; }
+        public ScannerMeldung Meldung { get; set; }
 
         [DataMember]
         public DateTime ZeitMeldung { get; set; }
 
         [DataMember]
         public int? Anzahl { get; set; }
-
-        [DataMember]
-        public string Bemerkung { get; set; }
 
         [DataMember]
         public Guid IdMaschine { get; set; }
@@ -131,5 +125,18 @@ namespace JgWcfServiceLib
 
         [DataMember]
         public string NummerAusweis { get; set; }
+    }
+
+    [DataContract]
+    public class JgWcfMaschineStatus : JgWcfBase, IJgMaschineStatus
+    {
+        [DataMember]
+        public Guid? IdMeldungBediener { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        [DataMember]
+        public List<Guid> ListeIdMeldungHelfer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        [DataMember]
+        public Guid? IdMeldungMeldung { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

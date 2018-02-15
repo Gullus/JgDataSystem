@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/JgLibHelper" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/JgLibHelper" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:simpleType name="ScannerProgram">
+  <xs:simpleType name="ScannerMeldung">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="SCVORGANG" />
       <xs:enumeration value="ANMELDUNG" />
       <xs:enumeration value="ABMELDUNG" />
       <xs:enumeration value="COILSTART" />
@@ -12,9 +11,10 @@
       <xs:enumeration value="WARTSTART" />
       <xs:enumeration value="WART_ENDE" />
       <xs:enumeration value="SCHALTER" />
+      <xs:enumeration value="Test" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:element name="ScannerProgram" nillable="true" type="tns:ScannerProgram" />
+  <xs:element name="ScannerMeldung" nillable="true" type="tns:ScannerMeldung" />
   <xs:simpleType name="MaschinenArten">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Hand" />

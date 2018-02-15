@@ -35,13 +35,12 @@ namespace JgLibHelper
         string IdBauteilJgData { get; set; }
     }
 
-    public interface IJgMaschineProgram : IJgBase
+    public interface IJgMaschineMeldung : IJgBase
     {
-        ScannerProgram Program { get; set; }
+        ScannerMeldung Meldung { get; set; }
         DateTime ZeitMeldung { get; set; }
 
         int? Anzahl { get; set; }
-        string Bemerkung { get; set; }
 
         Guid IdMaschine { get; set; }
         Guid IdBediener { get; set; }
@@ -62,10 +61,9 @@ namespace JgLibHelper
 
     public interface IJgMaschineStatus
     {
-        Guid? Bediener { get; set; }
-        List<Guid> ListeHelfer { get; set; }
-        List<Guid> ListeBauteile { get; set; }
-        StatusProduktion ProdStatus { get; set; }
+        Guid? IdMeldungBediener { get; set; }
+        List<Guid> ListeIdMeldungHelfer { get; set; }
+        Guid? IdMeldungMeldung { get; set; } 
     }
 
 }

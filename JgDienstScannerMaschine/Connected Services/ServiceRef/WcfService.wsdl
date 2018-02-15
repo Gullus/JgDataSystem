@@ -39,12 +39,6 @@
   <wsdl:message name="IWcfService_GetMaschinen_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetMaschinenResponse" />
   </wsdl:message>
-  <wsdl:message name="IWcfService_SendeMaschinenStatus_InputMessage">
-    <wsdl:part name="parameters" element="tns:SendeMaschinenStatus" />
-  </wsdl:message>
-  <wsdl:message name="IWcfService_SendeMaschinenStatus_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SendeMaschinenStatusResponse" />
-  </wsdl:message>
   <wsdl:portType name="IWcfService">
     <wsdl:operation name="WcfTest">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/WcfTest" message="tns:IWcfService_WcfTest_InputMessage" />
@@ -65,10 +59,6 @@
     <wsdl:operation name="GetMaschinen">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/GetMaschinen" message="tns:IWcfService_GetMaschinen_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/GetMaschinenResponse" message="tns:IWcfService_GetMaschinen_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SendeMaschinenStatus">
-      <wsdl:input wsaw:Action="http://tempuri.org/IWcfService/SendeMaschinenStatus" message="tns:IWcfService_SendeMaschinenStatus_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IWcfService/SendeMaschinenStatusResponse" message="tns:IWcfService_SendeMaschinenStatus_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="httpEndpoint" type="tns:IWcfService">
@@ -111,15 +101,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetMaschinen">
       <soap:operation soapAction="http://tempuri.org/IWcfService/GetMaschinen" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SendeMaschinenStatus">
-      <soap:operation soapAction="http://tempuri.org/IWcfService/SendeMaschinenStatus" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

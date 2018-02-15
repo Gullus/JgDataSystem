@@ -23,7 +23,17 @@ namespace JgDienstScannerMaschine
             _Queue = new MessageQueue(JgOpt.PathQueue, QueueAccessMode.Send);
         }
 
-        public void QueueSend(string MyLabel, object SendObjekt)
+        public void QueueSend(string MyLabel, ServiceRef.JgWcfMeldung Meldung)
+        {
+            QueueSendAusfuehren(MyLabel, (ServiceRef.JgWcfMeldung)Meldung);
+        }
+
+        public void QueueSend(string MyLabel, JgMaschineBauteil Bauteil)
+        {
+            QueueSendAusfuehren(MyLabel, (ServiceRef.JgWcfBauteil)Bauteil);
+        }
+
+        public void QueueSendAusfuehren(string MyLabel, object SendObjekt)
         {
             try
             {

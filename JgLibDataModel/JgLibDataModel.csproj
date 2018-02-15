@@ -161,6 +161,30 @@
     <Compile Include="Migrations\20180213113702_Ausweisnummer.designer.cs">
       <DependentUpon>20180213113702_Ausweisnummer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20180214154107_VorgangMeldung.cs" />
+    <Compile Include="Migrations\20180214154107_VorgangMeldung.designer.cs">
+      <DependentUpon>20180214154107_VorgangMeldung.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180214154458_VorgangMeldung1.cs" />
+    <Compile Include="Migrations\20180214154458_VorgangMeldung1.designer.cs">
+      <DependentUpon>20180214154458_VorgangMeldung1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180214155147_AnzahlAufNull.cs" />
+    <Compile Include="Migrations\20180214155147_AnzahlAufNull.designer.cs">
+      <DependentUpon>20180214155147_AnzahlAufNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180215064951_MaschinenStatus.cs" />
+    <Compile Include="Migrations\20180215064951_MaschinenStatus.designer.cs">
+      <DependentUpon>20180215064951_MaschinenStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180215125458_MeldungNeu.cs" />
+    <Compile Include="Migrations\20180215125458_MeldungNeu.designer.cs">
+      <DependentUpon>20180215125458_MeldungNeu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180215130308_MeldungNeu1.cs" />
+    <Compile Include="Migrations\20180215130308_MeldungNeu1.designer.cs">
+      <DependentUpon>20180215130308_MeldungNeu1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabellen\TabBauteil.cs" />

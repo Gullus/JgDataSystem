@@ -68,11 +68,17 @@ namespace JgLibDataModel.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("Nachname");
+                    b.Property<string>("Nachname")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
-                    b.Property<string>("NummerAusweis");
+                    b.Property<string>("NummerAusweis")
+                        .IsRequired()
+                        .HasMaxLength(3);
 
-                    b.Property<string>("Vorname");
+                    b.Property<string>("Vorname")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -120,7 +126,9 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<string>("MaschineIp");
 
-                    b.Property<string>("MaschineName");
+                    b.Property<string>("MaschineName")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<int>("MaschinePort");
 
@@ -128,11 +136,15 @@ namespace JgLibDataModel.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("NummerScanner");
+                    b.Property<string>("NummerScanner")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<bool>("SammelScannung");
 
                     b.Property<bool>("ScannerMitDisplay");
+
+                    b.Property<byte[]>("StatusMaschine");
 
                     b.Property<int>("VorschubProMeterInSek");
 
@@ -162,11 +174,13 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<Guid>("IdMaschine");
 
+                    b.Property<int>("Meldung");
+
                     b.Property<byte[]>("Modifikation")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int>("Program");
+                    b.Property<DateTime?>("ZeitAbmeldung");
 
                     b.Property<DateTime>("ZeitMeldung");
 
@@ -191,7 +205,8 @@ namespace JgLibDataModel.Migrations
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<string>("StandortName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 

@@ -9,33 +9,20 @@ using System.Threading.Tasks;
 
 namespace JgDienstScannerMaschine
 {
-    public abstract class JgMaschineStamm : JgBaseClass, IJgMaschine, IJgMaschineStatus
+    public abstract class JgMaschineStamm : ServiceRef.JgWcfMaschine
     {
-        public string MaschineName { get; set; }
-        public MaschinenArten MaschineArt { get; set; } = MaschinenArten.Hand;
-
-        public string MaschineIp { get; set; } = "";
-        public int MaschinePort { get; set; } = 5100;
-
-        public string NummerScanner { get; set; } = "";
-        public bool SammelScannung { get; set; } = false;
-        public bool ScannerMitDisplay { get; set; } = true;
-
-        public Guid? Bediener { get; set; } = null;
-        public List<Guid> ListeHelfer { get; set; } = new List<Guid>();
-
-        public List<Guid> ListeBauteile { get; set; } = new List<Guid>();
-        public StatusProduktion ProdStatus { get; set; }
-
         // Ohne Schnittstelle ************
 
+        public List<Guid> ListeBauteile { get; set; } = new List<Guid>();
         public JgMaschineBauteil AktivBauteil { get; set; } = null;
 
-        public List<JgBediener> GetHelfer(Dictionary<Guid, JgBediener> DicBediener)
-        {
-            return DicBediener.Where(w => ListeHelfer.Contains(w.Key)).Select(s => s.Value).ToList();
-        }
+        public JgMeldung MeldBediener { get; set; }
+        public List<JgMeldung> MeldListeHelfer { get; set; } = new List<JgMeldung>();
 
+        public JgMeldung MeldMeldung { get; set; }
+
+        // Programme *********************
+        
         public abstract void SendeDatenZurMaschine(string BvBsCode);
 
         public override string ToString()
@@ -44,7 +31,7 @@ namespace JgDienstScannerMaschine
         }
     }
 
-    class DatenTaskMaschine
+    public class DatenTaskMaschine
     {
         public JgMaschineStamm Maschine;
         public string BvbsString;

@@ -33,7 +33,8 @@
   <xs:element name="SendeMeldung">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="Meldung" nillable="true" type="q2:JgWcfMeldung" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="Maschine" nillable="true" type="q2:JgWcfMaschineStatus" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="Meldung" nillable="true" type="q3:JgWcfMeldung" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -52,35 +53,21 @@
   <xs:element name="GetBedienerResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="GetBedienerResult" nillable="true" type="q3:ArrayOfJgWcfBediener" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="GetBedienerResult" nillable="true" type="q4:ArrayOfJgWcfBediener" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetMaschinen">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="IdStandort" type="q4:guid" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="IdStandort" type="q5:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetMaschinenResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="GetMaschinenResult" nillable="true" type="q5:ArrayOfJgWcfMaschine" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SendeMaschinenStatus">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="Maschine" nillable="true" type="q6:JgWcfMaschine" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SendeMaschinenStatusResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="SendeMaschinenStatusResult" type="xs:boolean" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" minOccurs="0" name="GetMaschinenResult" nillable="true" type="q6:ArrayOfJgWcfMaschine" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

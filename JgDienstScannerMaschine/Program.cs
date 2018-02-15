@@ -17,15 +17,17 @@ namespace JgDienstScannerMaschine
 
             Logger.SetLogWriter(new LogWriterFactory().Create());
             ExceptionPolicy.SetExceptionManager(new ExceptionPolicyFactory().CreateManager(), false);
+            // ExceptionPolicy.HandleException(ex, "Policy");
+
 
             var pr = Properties.Settings.Default;
 
-            var JgOpt = new JgOptionen()
+            var jgOpt = new JgOptionen()
             {
                 IdStandort = pr.IdStandort,
             };
 
-            var init = new JgInit(JgOpt);
+            var init = new JgInit(jgOpt);
             init.BedienerLocalLaden();
             if (init.BedienerVonServer())
                 init.BedienerLocalSpeichern();
@@ -38,7 +40,7 @@ namespace JgDienstScannerMaschine
             for (int i = 0; i < 5; i++)
             {
                 var s = Properties.Settings.Default["Craddel_" + i.ToString()].ToString();
-                var crad = new JgOptionenCraddle(JgOpt);
+                var crad = new JgOptionenCraddle(jgOpt);
                 Helper.PropStringInOnjekt<JgOptionenCraddle>(crad, s);
                 if (crad.CraddleIpAdresse != "")
                     listeCraddleOpt.Add(crad);
@@ -54,6 +56,9 @@ namespace JgDienstScannerMaschine
                 sm.TaskScannerMaschineStarten(crad);
                 lTaskMaschine.Add(sm);
             }
+
+            var datenZumServer = new JgDatenZumServer(jgOpt);
+            datenZumServer.DatenabgleichStarten();
 
             Console.WriteLine("Fertig");
             Console.ReadKey();

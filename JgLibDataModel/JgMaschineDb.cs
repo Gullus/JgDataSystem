@@ -28,17 +28,17 @@ namespace JgLibDataModel
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
-            ChangeTracker.DetectChanges();
+            //ChangeTracker.DetectChanges();
 
-            var listeSpeichern = ChangeTracker
-              .Entries()
-              .Where(e => e.State == EntityState.Modified);
+            //var listeSpeichern = ChangeTracker
+            //  .Entries()
+            //  .Where(e => e.State == EntityState.Modified);
 
-            foreach (var item in listeSpeichern)
-            {
-                if (item.Entity is JgLibHelper.IJgBase)
-                    (item.Entity as JgLibHelper.IJgBase).Aenderung = DateTime.Now;
-            }
+            //foreach (var item in listeSpeichern)
+            //{
+            //    if (item.Entity is JgLibHelper.IJgBase tabBase)
+            //        tabBase.Aenderung = DateTime.Now;
+            //}
 
             // http://www.bricelam.net/2016/12/13/validation-in-efcore.html
 

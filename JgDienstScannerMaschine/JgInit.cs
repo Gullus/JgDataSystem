@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -19,6 +20,7 @@ namespace JgDienstScannerMaschine
         public bool BedienerVonServer()
         {
             var speichern = false;
+            var copyBenutzer = new JgLibHelper.JgCopyProperty<ServiceRef.JgWcfBediener>();
 
             try
             {
@@ -41,12 +43,7 @@ namespace JgDienstScannerMaschine
                         if (bedMaschine.Aenderung != bedWcf.Aenderung)
                         {
                             speichern = true;
-
-                            bedMaschine.Vorname = bedWcf.Vorname;
-                            bedMaschine.Nachname = bedWcf.Nachname;
-                            bedMaschine.NummerAusweis = bedWcf.NummerAusweis;
-
-                            bedMaschine.Aenderung = bedWcf.Aenderung;
+                            copyBenutzer.CopyProperties(bedWcf, bedMaschine);
                         };
                     }
                 }
@@ -104,6 +101,7 @@ namespace JgDienstScannerMaschine
         public bool MaschinenVonServer()
         {
             var speichern = false;
+            var copyMaschine = new JgLibHelper.JgCopyProperty<ServiceRef.JgWcfMaschine>();
 
             try
             {
@@ -143,25 +141,14 @@ namespace JgDienstScannerMaschine
                         if (maMaschine.Aenderung != maWcf.Aenderung)
                         {
                             speichern = true;
-
-                            maMaschine.MaschineName = maWcf.MaschineName;
-                            maMaschine.MaschineArt = maWcf.MaschineArt;
-
-                            maMaschine.MaschineIp = maWcf.MaschineIp;
-                            maMaschine.MaschinePort = maWcf.MaschinePort;
-
-                            maMaschine.NummerScanner = maWcf.NummerScanner;
-                            maMaschine.ScannerMitDisplay = maWcf.ScannerMitDisplay;
-                            maMaschine.SammelScannung = maWcf.SammelScannung;
-
-                            maMaschine.Aenderung = maWcf.Aenderung;
+                            copyMaschine.CopyProperties(maWcf, maMaschine);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Fehler beim Wcf Maschien laden!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                ExceptionPolicy.HandleException(new Exception("Fehler beim Wcf Maschine laden!", ex), "Policy");
             }
 
             return speichern;

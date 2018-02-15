@@ -12,15 +12,13 @@ namespace JgTestConsole
         static void Main(string[] args)
         {
 
-            var k1 = new C1();
+            using (var verb = new ServiceReference1.WcfServiceClient())
+            {
+                var erg = verb.WcfTest("HalloBallo");
 
-            var k2 = new C2();
+                Console.WriteLine(erg);
 
-            var copy = new JgLibHelper.JgCopyProperty<I1>();
-            copy.CopyProperties(k1, k2);
-
-            Console.WriteLine(k1.feld1);
-            Console.WriteLine(k2.feld1);
+            }
 
 
             Console.WriteLine("Fertig");

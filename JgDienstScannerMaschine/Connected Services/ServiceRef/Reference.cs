@@ -17,6 +17,7 @@ namespace JgDienstScannerMaschine.ServiceRef {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="JgWcfBase", Namespace="http://schemas.datacontract.org/2004/07/JgWcfServiceLib")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(JgDienstScannerMaschine.ServiceRef.JgWcfBediener))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(JgDienstScannerMaschine.ServiceRef.JgWcfMaschine))]
@@ -80,6 +81,61 @@ namespace JgDienstScannerMaschine.ServiceRef {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="JgWcfMaschineStatus", Namespace="http://schemas.datacontract.org/2004/07/JgWcfServiceLib")]
+    [System.SerializableAttribute()]
+    public partial class JgWcfMaschineStatus : JgDienstScannerMaschine.ServiceRef.JgWcfBase {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> IdMeldungBedienerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> IdMeldungMeldungField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<System.Guid> ListeIdMeldungHelferField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> IdMeldungBediener {
+            get {
+                return this.IdMeldungBedienerField;
+            }
+            set {
+                if ((this.IdMeldungBedienerField.Equals(value) != true)) {
+                    this.IdMeldungBedienerField = value;
+                    this.RaisePropertyChanged("IdMeldungBediener");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> IdMeldungMeldung {
+            get {
+                return this.IdMeldungMeldungField;
+            }
+            set {
+                if ((this.IdMeldungMeldungField.Equals(value) != true)) {
+                    this.IdMeldungMeldungField = value;
+                    this.RaisePropertyChanged("IdMeldungMeldung");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<System.Guid> ListeIdMeldungHelfer {
+            get {
+                return this.ListeIdMeldungHelferField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ListeIdMeldungHelferField, value) != true)) {
+                    this.ListeIdMeldungHelferField = value;
+                    this.RaisePropertyChanged("ListeIdMeldungHelfer");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="JgWcfMeldung", Namespace="http://schemas.datacontract.org/2004/07/JgWcfServiceLib")]
     [System.SerializableAttribute()]
     public partial class JgWcfMeldung : JgDienstScannerMaschine.ServiceRef.JgWcfBase {
@@ -88,16 +144,13 @@ namespace JgDienstScannerMaschine.ServiceRef {
         private System.Nullable<int> AnzahlField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string BemerkungField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid IdBedienerField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid IdMaschineField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private JgLibHelper.ScannerProgram ProgramField;
+        private JgLibHelper.ScannerMeldung MeldungField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime ZeitMeldungField;
@@ -111,19 +164,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
                 if ((this.AnzahlField.Equals(value) != true)) {
                     this.AnzahlField = value;
                     this.RaisePropertyChanged("Anzahl");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Bemerkung {
-            get {
-                return this.BemerkungField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.BemerkungField, value) != true)) {
-                    this.BemerkungField = value;
-                    this.RaisePropertyChanged("Bemerkung");
                 }
             }
         }
@@ -155,14 +195,14 @@ namespace JgDienstScannerMaschine.ServiceRef {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public JgLibHelper.ScannerProgram Program {
+        public JgLibHelper.ScannerMeldung Meldung {
             get {
-                return this.ProgramField;
+                return this.MeldungField;
             }
             set {
-                if ((this.ProgramField.Equals(value) != true)) {
-                    this.ProgramField = value;
-                    this.RaisePropertyChanged("Program");
+                if ((this.MeldungField.Equals(value) != true)) {
+                    this.MeldungField = value;
+                    this.RaisePropertyChanged("Meldung");
                 }
             }
         }
@@ -243,9 +283,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
     public partial class JgWcfMaschine : JgDienstScannerMaschine.ServiceRef.JgWcfBase {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string BemerkungField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private JgLibHelper.MaschinenArten MaschineArtField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -265,28 +302,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool ScannerMitDisplayField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int VorschubProMeterInSekField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ZeitProBauteilInSekField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ZeitProBiegungInSekField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Bemerkung {
-            get {
-                return this.BemerkungField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.BemerkungField, value) != true)) {
-                    this.BemerkungField = value;
-                    this.RaisePropertyChanged("Bemerkung");
-                }
-            }
-        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public JgLibHelper.MaschinenArten MaschineArt {
@@ -375,45 +390,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
                 if ((this.ScannerMitDisplayField.Equals(value) != true)) {
                     this.ScannerMitDisplayField = value;
                     this.RaisePropertyChanged("ScannerMitDisplay");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int VorschubProMeterInSek {
-            get {
-                return this.VorschubProMeterInSekField;
-            }
-            set {
-                if ((this.VorschubProMeterInSekField.Equals(value) != true)) {
-                    this.VorschubProMeterInSekField = value;
-                    this.RaisePropertyChanged("VorschubProMeterInSek");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ZeitProBauteilInSek {
-            get {
-                return this.ZeitProBauteilInSekField;
-            }
-            set {
-                if ((this.ZeitProBauteilInSekField.Equals(value) != true)) {
-                    this.ZeitProBauteilInSekField = value;
-                    this.RaisePropertyChanged("ZeitProBauteilInSek");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ZeitProBiegungInSek {
-            get {
-                return this.ZeitProBiegungInSekField;
-            }
-            set {
-                if ((this.ZeitProBiegungInSekField.Equals(value) != true)) {
-                    this.ZeitProBiegungInSekField = value;
-                    this.RaisePropertyChanged("ZeitProBiegungInSek");
                 }
             }
         }
@@ -603,10 +579,10 @@ namespace JgDienstScannerMaschine.ServiceRef {
         System.Threading.Tasks.Task<bool> SendeBauteilAsync(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeMeldung", ReplyAction="http://tempuri.org/IWcfService/SendeMeldungResponse")]
-        bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung);
+        bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeMeldung", ReplyAction="http://tempuri.org/IWcfService/SendeMeldungResponse")]
-        System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung);
+        System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetBediener", ReplyAction="http://tempuri.org/IWcfService/GetBedienerResponse")]
         System.Collections.Generic.List<JgDienstScannerMaschine.ServiceRef.JgWcfBediener> GetBediener();
@@ -619,12 +595,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetMaschinen", ReplyAction="http://tempuri.org/IWcfService/GetMaschinenResponse")]
         System.Threading.Tasks.Task<System.Collections.Generic.List<JgDienstScannerMaschine.ServiceRef.JgWcfMaschine>> GetMaschinenAsync(System.Guid IdStandort);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeMaschinenStatus", ReplyAction="http://tempuri.org/IWcfService/SendeMaschinenStatusResponse")]
-        bool SendeMaschinenStatus(JgDienstScannerMaschine.ServiceRef.JgWcfMaschine Maschine);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeMaschinenStatus", ReplyAction="http://tempuri.org/IWcfService/SendeMaschinenStatusResponse")]
-        System.Threading.Tasks.Task<bool> SendeMaschinenStatusAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMaschine Maschine);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -670,12 +640,12 @@ namespace JgDienstScannerMaschine.ServiceRef {
             return base.Channel.SendeBauteilAsync(Bauteil);
         }
         
-        public bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung) {
-            return base.Channel.SendeMeldung(Meldung);
+        public bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung) {
+            return base.Channel.SendeMeldung(Maschine, Meldung);
         }
         
-        public System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung) {
-            return base.Channel.SendeMeldungAsync(Meldung);
+        public System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung) {
+            return base.Channel.SendeMeldungAsync(Maschine, Meldung);
         }
         
         public System.Collections.Generic.List<JgDienstScannerMaschine.ServiceRef.JgWcfBediener> GetBediener() {
@@ -692,14 +662,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
         
         public System.Threading.Tasks.Task<System.Collections.Generic.List<JgDienstScannerMaschine.ServiceRef.JgWcfMaschine>> GetMaschinenAsync(System.Guid IdStandort) {
             return base.Channel.GetMaschinenAsync(IdStandort);
-        }
-        
-        public bool SendeMaschinenStatus(JgDienstScannerMaschine.ServiceRef.JgWcfMaschine Maschine) {
-            return base.Channel.SendeMaschinenStatus(Maschine);
-        }
-        
-        public System.Threading.Tasks.Task<bool> SendeMaschinenStatusAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMaschine Maschine) {
-            return base.Channel.SendeMaschinenStatusAsync(Maschine);
         }
     }
 }

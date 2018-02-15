@@ -10,15 +10,6 @@ namespace JgLibHelper
         Schnell
     }
 
-    public enum StatusProduktion
-    {
-        Frei,
-        InArbeit,
-        InReparatur,
-        InWartung,
-        InCoilwechsel
-    }
-
     public enum ScannerVorgang
     {
         CRADDLEANMELDUNG,
@@ -32,9 +23,8 @@ namespace JgLibHelper
         VERBUNDEN
     }
 
-    public enum ScannerProgram
+    public enum ScannerMeldung
     {
-        SCVORGANG,  // Wenn kein Programm ausgelöst wurde
         ANMELDUNG,
         ABMELDUNG,
         COILSTART,
@@ -43,6 +33,8 @@ namespace JgLibHelper
         REPA_ENDE,
         WARTSTART,
         WART_ENDE,
-        SCHALTER
+        SCHALTER,
+        Test,
+        Fehler
     }
 }

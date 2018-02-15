@@ -58,6 +58,9 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
     </Reference>
@@ -83,12 +86,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="JgDatenZumServer.cs" />
     <Compile Include="JgInit.cs" />
     <Compile Include="Klassen\BvbsDaten.cs" />
     <Compile Include="Klassen\JgMaschineBauteil.cs" />
-    <Compile Include="Klassen\JgMaschineProgramm.cs" />
+    <Compile Include="Klassen\JgMeldung.cs" />
     <Compile Include="Klassen\JgScannerAusgabe.cs" />
-    <Compile Include="Klassen\JgBasisKlasse.cs" />
     <Compile Include="JgScannerAuswertung.cs" />
     <Compile Include="JgScannerMaschine.cs" />
     <Compile Include="Klassen\JgBenutzer.cs" />
@@ -105,7 +108,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\ServiceRef\JgDienstScannerMaschine.ServiceRef.JgWcfBediener.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

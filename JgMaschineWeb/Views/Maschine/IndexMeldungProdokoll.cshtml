@@ -1,0 +1,69 @@
+﻿@model IEnumerable<JgLibDataModel.TabMeldung>
+
+@{
+    ViewBag.Title = "Index";
+    string standort = "##";
+}
+
+<br />
+<h2>Übersicht Meldungen der letzten 5 Tage</h2>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Maschine</th>
+            <th>Anmeldung</th>
+            <th>Abmeldung</th>
+            <th>Bediener</th>
+            <th>Meldung</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+
+        var standortNeu = (item.EMaschine?.EStandort == null) ? "Unbekannt" : item.EMaschine.EStandort.StandortName;
+
+        var meldung = "Reparatur";
+        switch (item.Meldung)
+        {
+            case JgLibHelper.ScannerMeldung.COILSTART: meldung = "Coilwechsel"; break;
+            case JgLibHelper.ScannerMeldung.WARTSTART: meldung = "Wartung"; break;
+        }
+
+        var datumAbmeldung = (item.ZeitAbmeldung == datetim)
+
+        if (standort != standortNeu)
+        {
+            standort = standortNeu;
+
+            <tr style="color:red">
+                <td><strong>Standort @standort</strong></td>
+            </tr>
+                }
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EMaschine.MaschineName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZeitMeldung)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZeitAbmeldung)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EBediener.AnzeigeName)
+            </td>
+            <td>
+                @meldung
+            </td>
+            <td>
+                <a class="btn-primary  btn-sm " href="@Url.Action("IndexMeldungProdokollEdit", new { Id = item.Id })"> Bearbeiten </a>
+            </td>
+        </tr>
+    }
+
+</table>

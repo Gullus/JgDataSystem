@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JgLibDataModel
 {
-    public class TabMeldung : TabBase, IJgMaschineProgram
+    public class TabMeldung : TabBase, IJgMaschineMeldung
     {
         public DateTime ZeitMeldung { get; set; }
-        public ScannerProgram Program { get; set; } = ScannerProgram.SCVORGANG;
+        public DateTime? ZeitAbmeldung { get; set; } = null;
 
-        public int? Anzahl { get; set; } = 0;
+        public ScannerMeldung Meldung { get; set; }
+
+        public int? Anzahl { get; set; }
 
         public string Bemerkung { get; set; }
 
@@ -20,10 +22,5 @@ namespace JgLibDataModel
         public Guid IdBediener { get; set; }
         [ForeignKey("IdBediener")]
         public TabBediener EBediener { get; set; }
-
-        public TabMeldung()
-        {
-            ZeitMeldung = DateTime.Now;
-        }
     }
 }

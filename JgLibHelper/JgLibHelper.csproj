@@ -45,7 +45,6 @@
     <Compile Include="JgEnums.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="JgSchnittstelle.cs" />
-    <Compile Include="JgKlassen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
