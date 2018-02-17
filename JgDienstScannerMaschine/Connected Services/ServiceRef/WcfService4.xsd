@@ -10,8 +10,10 @@
       <xs:enumeration value="REPA_ENDE" />
       <xs:enumeration value="WARTSTART" />
       <xs:enumeration value="WART_ENDE" />
-      <xs:enumeration value="SCHALTER" />
-      <xs:enumeration value="Test" />
+      <xs:enumeration value="SCHALTE_R" />
+      <xs:enumeration value="BAUT_ENDE" />
+      <xs:enumeration value="TES_____T" />
+      <xs:enumeration value="FEHLE___R" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ScannerMeldung" nillable="true" type="tns:ScannerMeldung" />

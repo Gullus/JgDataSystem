@@ -6,8 +6,13 @@ namespace JgLibHelper
     public interface IJgBase
     {
         Guid Id { get; set; }
-        DateTime Aenderung { get; set;}
+        DateTime Aenderung { get; set; }
     }
+
+    public interface IJgStandort : IJgBase
+    {
+        string StandortName { get; set; }
+    }       
 
     public interface IJgBediener : IJgBase
     {
@@ -17,32 +22,27 @@ namespace JgLibHelper
         string NummerAusweis { get; set; }
     }
 
-    public interface IJgMaschineBauteil : IJgBase
-    {
-        DateTime StartFertigung { get; set; }
-        DateTime? EndeFertigung { get; set; }
+    // Ende der Fertigung durch eine Meldung !!!
 
+    public interface IJgBauteil : IJgBase
+    {
         int DuchmesserInMm { get; set; }
         double GewichtInKg { get; set; }
         int LaengeInCm { get; set; }
         int AnzahlBiegungen { get; set; }
 
-        Guid IdMaschine { get; set; }
-        Guid Bediener { get; set; }
-        List<Guid> ListeHelfer { get; set; }
-
         // Id Bauteail aus JgData
         string IdBauteilJgData { get; set; }
-    }
-
-    public interface IJgMaschineMeldung : IJgBase
-    {
-        ScannerMeldung Meldung { get; set; }
-        DateTime ZeitMeldung { get; set; }
-
-        int? Anzahl { get; set; }
 
         Guid IdMaschine { get; set; }
+        Guid IdBediener { get; set; }
+        int AnzahlHelfer { get; set; }
+    }
+
+    public interface IJgMeldung : IJgBase
+    {
+        ScannerMeldung Meldung { get; set; }
+        int? Anzahl { get; set; }
         Guid IdBediener { get; set; }
     }
 
@@ -63,7 +63,8 @@ namespace JgLibHelper
     {
         Guid? IdMeldungBediener { get; set; }
         List<Guid> ListeIdMeldungHelfer { get; set; }
-        Guid? IdMeldungMeldung { get; set; } 
-    }
 
+        Guid? IdMeldungMeldung { get; set; } 
+        Guid? IdBauteilAktiv { get; set; } 
+    }
 }

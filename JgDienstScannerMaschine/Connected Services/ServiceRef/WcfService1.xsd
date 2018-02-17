@@ -8,15 +8,13 @@
       <xs:extension base="tns:JgWcfBase">
         <xs:sequence>
           <xs:element minOccurs="0" name="AnzahlBiegungen" type="xs:int" />
-          <xs:element minOccurs="0" name="Bediener" type="ser:guid" />
+          <xs:element minOccurs="0" name="AnzahlHelfer" type="xs:int" />
           <xs:element minOccurs="0" name="DuchmesserInMm" type="xs:int" />
-          <xs:element minOccurs="0" name="EndeFertigung" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="GewichtInKg" type="xs:double" />
           <xs:element minOccurs="0" name="IdBauteilJgData" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IdBediener" type="ser:guid" />
           <xs:element minOccurs="0" name="IdMaschine" type="ser:guid" />
           <xs:element minOccurs="0" name="LaengeInCm" type="xs:int" />
-          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListeHelfer" nillable="true" type="q1:ArrayOfguid" />
-          <xs:element minOccurs="0" name="StartFertigung" type="xs:dateTime" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -33,9 +31,10 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:JgWcfBase">
         <xs:sequence>
+          <xs:element minOccurs="0" name="IdBauteilAktiv" nillable="true" type="ser:guid" />
           <xs:element minOccurs="0" name="IdMeldungBediener" nillable="true" type="ser:guid" />
           <xs:element minOccurs="0" name="IdMeldungMeldung" nillable="true" type="ser:guid" />
-          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListeIdMeldungHelfer" nillable="true" type="q2:ArrayOfguid" />
+          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListeIdMeldungHelfer" nillable="true" type="q1:ArrayOfguid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -48,8 +47,7 @@
           <xs:element minOccurs="0" name="Anzahl" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="IdBediener" type="ser:guid" />
           <xs:element minOccurs="0" name="IdMaschine" type="ser:guid" />
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="Meldung" type="q3:ScannerMeldung" />
-          <xs:element minOccurs="0" name="ZeitMeldung" type="xs:dateTime" />
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="Meldung" type="q2:ScannerMeldung" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -83,7 +81,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:JgWcfBase">
         <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="MaschineArt" type="q4:MaschinenArten" />
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="MaschineArt" type="q3:MaschinenArten" />
           <xs:element minOccurs="0" name="MaschineIp" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="MaschineName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="MaschinePort" type="xs:int" />

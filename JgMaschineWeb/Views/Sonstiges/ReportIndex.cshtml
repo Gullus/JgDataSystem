@@ -1,0 +1,39 @@
+﻿@model IEnumerable<JgLibDataModel.TabReport>
+
+@{
+    ViewBag.Title = "Reporte Index";
+}
+
+<br />
+<h2>Übersicht Report</h2>
+<br />
+
+<a class="btn btn-primary" href="@Url.Action("ReportCreate")"> Neuen Report erstellen </a>
+<br /><br />
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Report</th>
+            <th>Beschreibung</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beschreibung)
+            </td>
+            <td width="250">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("ReportEdit", new { id = item.Id })"> Auswertung </a>
+                <a class="btn btn-outline-success btn-sm" href="@Url.Action("ReportEdit", new { id = item.Id })"> Bearbeiten </a>
+            </td>
+        </tr>
+    }
+
+</table>

@@ -4,16 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JgLibDataModel
 {
-    public class TabMeldung : TabBase, IJgMaschineMeldung
+    public class TabMeldung : TabBase, IJgMeldung
     {
-        public DateTime ZeitMeldung { get; set; }
-        public DateTime? ZeitAbmeldung { get; set; } = null;
+        #region von Schnittstelle
 
+        public DateTime ZeitMeldung { get; set; }
+        public int? Anzahl { get; set; }
         public ScannerMeldung Meldung { get; set; }
 
-        public int? Anzahl { get; set; }
+        #endregion
 
+        public DateTime? ZeitAbmeldung { get; set; } = null;
         public string Bemerkung { get; set; }
+
+        public StatusMeldung Status { get; set; } = StatusMeldung.Offen;
 
         public Guid IdMaschine { get; set; }
         [ForeignKey("IdMaschine")]
@@ -22,5 +26,8 @@ namespace JgLibDataModel
         public Guid IdBediener { get; set; }
         [ForeignKey("IdBediener")]
         public TabBediener EBediener { get; set; }
+
+        public TabMeldung()
+        { }
     }
 }

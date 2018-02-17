@@ -3,13 +3,14 @@
 @{
     ViewBag.Title = "Index";
     string standort = "##";
+    var prog = (string)ViewBag.Prog;
 }
 
 <br />
-<h2>Übersicht Meldungen der letzten 5 Tage</h2>
+<h2>@( prog == "OFFEN" ? "Offene Meldungen bearbeiten" : "Anzeige aller Meldungen der letzten 10 Tage" )</h2>
 <br />
 
-<table class="table">
+<table class="table table-sm table-striped table-hover">
     <thead>
         <tr>
             <th>Maschine</th>
@@ -17,6 +18,7 @@
             <th>Abmeldung</th>
             <th>Bediener</th>
             <th>Meldung</th>
+            <th>Status</th>
             <th></th>
         </tr>
     </thead>
@@ -33,16 +35,16 @@
             case JgLibHelper.ScannerMeldung.WARTSTART: meldung = "Wartung"; break;
         }
 
-        var datumAbmeldung = (item.ZeitAbmeldung == datetim)
+        var datumAbmeldung = (item.ZeitAbmeldung == DateTime.MinValue) ? "keine Abmeldung" : item.ZeitAbmeldung.ToString();
 
         if (standort != standortNeu)
         {
             standort = standortNeu;
 
-            <tr style="color:red">
-                <td><strong>Standort @standort</strong></td>
+            <tr>
+                <td colspan="6" style="color:red; Background:aliceblue" align="center"><strong> ****** Standort @standort ******</strong></td>
             </tr>
-                }
+        }
 
         <tr>
             <td>
@@ -51,17 +53,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ZeitMeldung)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZeitAbmeldung)
-            </td>
+            <td>@datumAbmeldung</td>
             <td>
                 @Html.DisplayFor(modelItem => item.EBediener.AnzeigeName)
             </td>
+            <td>@meldung</td>
             <td>
-                @meldung
+                @Html.DisplayFor(modelItem => item.Status) 
             </td>
             <td>
-                <a class="btn-primary  btn-sm " href="@Url.Action("IndexMeldungProdokollEdit", new { Id = item.Id })"> Bearbeiten </a>
+                <a class="btn btn-outline-primary btn-sm " href="@Url.Action("IndexMeldungProdokollEdit", new { Id = item.Id, Prog = prog })"> Bearbeiten </a>
             </td>
         </tr>
     }

@@ -12,8 +12,8 @@ using System;
 namespace JgLibDataModel.Migrations
 {
     [DbContext(typeof(JgMaschineDb))]
-    [Migration("20180214154107_VorgangMeldung")]
-    partial class VorgangMeldung
+    [Migration("20180217121809_neu")]
+    partial class neu
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<int>("AnzahlBiegungen");
 
-                    b.Property<Guid>("Bediener");
+                    b.Property<int>("AnzahlHelfer");
 
                     b.Property<int>("DuchmesserInMm");
 
@@ -40,6 +40,8 @@ namespace JgLibDataModel.Migrations
                     b.Property<double>("GewichtInKg");
 
                     b.Property<string>("IdBauteilJgData");
+
+                    b.Property<Guid>("IdBediener");
 
                     b.Property<Guid>("IdMaschine");
 
@@ -52,6 +54,8 @@ namespace JgLibDataModel.Migrations
                     b.Property<DateTime>("StartFertigung");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdBediener");
 
                     b.HasIndex("IdMaschine");
 
@@ -69,39 +73,21 @@ namespace JgLibDataModel.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("Nachname");
+                    b.Property<string>("Nachname")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
-                    b.Property<string>("NummerAusweis");
+                    b.Property<string>("NummerAusweis")
+                        .IsRequired()
+                        .HasMaxLength(3);
 
-                    b.Property<string>("Vorname");
+                    b.Property<string>("Vorname")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
                     b.ToTable("TabBedienerSet");
-                });
-
-            modelBuilder.Entity("JgLibDataModel.TabBedienerBauteil", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Aenderung");
-
-                    b.Property<Guid>("IdBauteil");
-
-                    b.Property<Guid>("IdBediener");
-
-                    b.Property<byte[]>("Modifikation")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdBauteil");
-
-                    b.HasIndex("IdBediener");
-
-                    b.ToTable("TabBedienerBauteilSet");
                 });
 
             modelBuilder.Entity("JgLibDataModel.TabMaschine", b =>
@@ -121,7 +107,9 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<string>("MaschineIp");
 
-                    b.Property<string>("MaschineName");
+                    b.Property<string>("MaschineName")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<int>("MaschinePort");
 
@@ -129,11 +117,15 @@ namespace JgLibDataModel.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("NummerScanner");
+                    b.Property<string>("NummerScanner")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<bool>("SammelScannung");
 
                     b.Property<bool>("ScannerMitDisplay");
+
+                    b.Property<byte[]>("StatusMaschine");
 
                     b.Property<int>("VorschubProMeterInSek");
 
@@ -169,6 +161,10 @@ namespace JgLibDataModel.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
+                    b.Property<int>("Status");
+
+                    b.Property<DateTime?>("ZeitAbmeldung");
+
                     b.Property<DateTime>("ZeitMeldung");
 
                     b.HasKey("Id");
@@ -178,6 +174,30 @@ namespace JgLibDataModel.Migrations
                     b.HasIndex("IdMaschine");
 
                     b.ToTable("TabMeldungSet");
+                });
+
+            modelBuilder.Entity("JgLibDataModel.TabReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Aenderung");
+
+                    b.Property<string>("Beschreibung");
+
+                    b.Property<byte[]>("Modifikation")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<byte[]>("ReportDaten");
+
+                    b.Property<string>("ReportName")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TabReportSet");
                 });
 
             modelBuilder.Entity("JgLibDataModel.TabStandort", b =>
@@ -192,7 +212,8 @@ namespace JgLibDataModel.Migrations
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.Property<string>("StandortName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -201,22 +222,14 @@ namespace JgLibDataModel.Migrations
 
             modelBuilder.Entity("JgLibDataModel.TabBauteil", b =>
                 {
+                    b.HasOne("JgLibDataModel.TabBediener", "EBediener")
+                        .WithMany("SBauteile")
+                        .HasForeignKey("IdBediener")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("JgLibDataModel.TabMaschine", "EMaschine")
                         .WithMany()
                         .HasForeignKey("IdMaschine")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("JgLibDataModel.TabBedienerBauteil", b =>
-                {
-                    b.HasOne("JgLibDataModel.TabBauteil", "EBauteil")
-                        .WithMany("SBedienerBauteil")
-                        .HasForeignKey("IdBauteil")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("JgLibDataModel.TabBediener", "EBediener")
-                        .WithMany("SBauteilBediener")
-                        .HasForeignKey("IdBediener")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -88,8 +88,11 @@
     </Compile>
     <Compile Include="JgDatenZumServer.cs" />
     <Compile Include="JgInit.cs" />
+    <Compile Include="Klassen\JgMaschineStatus.cs" />
     <Compile Include="Klassen\BvbsDaten.cs" />
-    <Compile Include="Klassen\JgMaschineBauteil.cs" />
+    <Compile Include="Klassen\IMerkeStatusMaschine.cs" />
+    <Compile Include="Klassen\JgBauteil.cs" />
+    <Compile Include="Klassen\JgBauteilFertig.cs" />
     <Compile Include="Klassen\JgMeldung.cs" />
     <Compile Include="Klassen\JgScannerAusgabe.cs" />
     <Compile Include="JgScannerAuswertung.cs" />

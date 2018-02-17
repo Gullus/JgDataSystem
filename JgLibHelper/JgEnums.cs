@@ -33,8 +33,16 @@ namespace JgLibHelper
         REPA_ENDE,
         WARTSTART,
         WART_ENDE,
-        SCHALTER,
-        Test,
-        Fehler
+        SCHALTE_R,
+        BAUT_ENDE,  // Wird bei Fertigstellung des Bauteils als Meldung an Server geschickt
+        TES_____T,
+        FEHLE___R
+    }
+
+    public enum StatusMeldung
+    {
+        Offen,
+        InBearbeitung,
+        Erledigt
     }
 }

@@ -21,7 +21,7 @@
         <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
-                    Maschinendaten
+                    Maschinendaten<br /> Id: @Model.Id
                 </div>
                 <div class="card-body">
 
@@ -125,7 +125,7 @@
 
                     <label>Bemerkung</label>
                     <div class="form-group">
-                        @Html.TextAreaFor(model => model.Bemerkung, 10, 100, new { @class = "form-control mw-100" })
+                        @Html.TextAreaFor(model => model.Bemerkung, 11, 100, new { @class = "form-control mw-100" })
                     </div>
                 </div>
             </div>

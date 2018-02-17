@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using JgLibHelper;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JgLibDataModel
 { 
-    public class TabStandort : TabBase
+    public class TabStandort : TabBase, IJgStandort
     {
         [Required]
         [MaxLength(30, ErrorMessage = "Es dürfen nicht mehr als 30 Zeichen verwendet werden")]

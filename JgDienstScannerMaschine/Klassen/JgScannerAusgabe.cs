@@ -19,7 +19,7 @@ namespace JgDienstScannerMaschine
 
         public bool ScannerMitDisplay { get; set; } = true;
 
-        public ScannerMeldung Meldung = ScannerMeldung.Fehler;
+        public ScannerMeldung Meldung = ScannerMeldung.FEHLE___R;
 
         public ScannerVorgang VorgangScan
         {
@@ -71,13 +71,12 @@ namespace JgDienstScannerMaschine
 
                 if (ScannerMitDisplay)
                 {
-                    var lAusgabe = new List<string>(_Ausgabe);
                     if (IstFehler)
-                        lAusgabe.Insert(0, ScannerTextCenter("- F E H L E R -"));
+                        sb.Append(_Esc + "[0K" + ScannerTextCenter("- F E H L E R -") + _Esc + "[G");
 
-                    sb.Append(_Esc + "[2J");
-                    foreach (var eintr in lAusgabe)
-                        sb.Append(_Esc + "[0K" + ScannerTextCenter(eintr) + _Esc + "[G");
+                    //sb.Append(_Esc + "[2J");
+                    foreach (var ausgabe in _Ausgabe)
+                        sb.Append(_Esc + "[0K" + ScannerTextCenter(ausgabe) + _Esc + "[G");
                 }
 
                 if (IstFehler)
@@ -108,14 +107,20 @@ namespace JgDienstScannerMaschine
 
         private string ScannerTextCenter(string Text)
         {
-            if (Text.Length > 21)
-                Text = Text.Substring(0, 21);
-
-            if (Text.Length < 21)
+            if (Text == "")
+                Text = " ";
+            else
             {
-                var anz = Convert.ToInt32((21 - Text.Length) / 2);
-                return "".PadLeft(anz) + Text;
+                if (Text.Length > 22)
+                    return Text.Substring(0, 22);
+                
+                if (Text.Length < 22)
+                {
+                    var anz = (int)((22 - Text.Length) / 2);
+                    return "           ".Substring(0, anz) + Text;
+                }
             }
+
             return Text;
         }
     }

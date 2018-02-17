@@ -3,26 +3,33 @@ using System;
 
 namespace JgDienstScannerMaschine
 {
-    public class JgMeldung : ServiceRef.JgWcfMeldung
+    public class JgMeldung : IJgMeldung
     {
+        #region Schnittstelle
+
+        public Guid Id { get; set; }
+        public ScannerMeldung Meldung { get; set; }
+        public int? Anzahl { get; set; }
+        public Guid IdBediener { get; set; }
+        public DateTime Aenderung { get; set; }
+
+        #endregion
+
         public JgMeldung()
         { }
 
-        public JgMeldung(Guid MyIdMaschine,  Guid MyIdBediener, ScannerMeldung MyMeldung, int? MyAnzahl = null)
+        public JgMeldung(Guid MyIdBediener, ScannerMeldung MyMeldung, int? MyAnzahl = null)
         {
             Id = Guid.NewGuid();
-            ZeitMeldung = DateTime.Now;
             Aenderung = DateTime.Now;
-
-            IdMaschine = MyIdMaschine;
-            IdBediener = MyIdBediener;
             Meldung = MyMeldung;
             Anzahl = MyAnzahl;
+            IdBediener = MyIdBediener;
         }
 
         public void Abmeldung()
         {
-            ZeitMeldung = DateTime.Now;
+            Aenderung = DateTime.Now;
 
             switch (Meldung)
             {

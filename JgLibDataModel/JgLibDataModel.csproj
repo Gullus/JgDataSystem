@@ -129,71 +129,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\20180206085554_DbErstellt.cs" />
-    <Compile Include="Migrations\20180206085554_DbErstellt.designer.cs">
-      <DependentUpon>20180206085554_DbErstellt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180206100443_MaschineErstellt.cs" />
-    <Compile Include="Migrations\20180206100443_MaschineErstellt.designer.cs">
-      <DependentUpon>20180206100443_MaschineErstellt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180206103153_Standort.cs" />
-    <Compile Include="Migrations\20180206103153_Standort.designer.cs">
-      <DependentUpon>20180206103153_Standort.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180206103740_Standort1.cs" />
-    <Compile Include="Migrations\20180206103740_Standort1.designer.cs">
-      <DependentUpon>20180206103740_Standort1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180206181731_Daten1.cs" />
-    <Compile Include="Migrations\20180206181731_Daten1.designer.cs">
-      <DependentUpon>20180206181731_Daten1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180208183725_Schnittstellen.cs" />
-    <Compile Include="Migrations\20180208183725_Schnittstellen.designer.cs">
-      <DependentUpon>20180208183725_Schnittstellen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180212125333_Test.cs" />
-    <Compile Include="Migrations\20180212125333_Test.designer.cs">
-      <DependentUpon>20180212125333_Test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180213113702_Ausweisnummer.cs" />
-    <Compile Include="Migrations\20180213113702_Ausweisnummer.designer.cs">
-      <DependentUpon>20180213113702_Ausweisnummer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180214154107_VorgangMeldung.cs" />
-    <Compile Include="Migrations\20180214154107_VorgangMeldung.designer.cs">
-      <DependentUpon>20180214154107_VorgangMeldung.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180214154458_VorgangMeldung1.cs" />
-    <Compile Include="Migrations\20180214154458_VorgangMeldung1.designer.cs">
-      <DependentUpon>20180214154458_VorgangMeldung1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180214155147_AnzahlAufNull.cs" />
-    <Compile Include="Migrations\20180214155147_AnzahlAufNull.designer.cs">
-      <DependentUpon>20180214155147_AnzahlAufNull.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180215064951_MaschinenStatus.cs" />
-    <Compile Include="Migrations\20180215064951_MaschinenStatus.designer.cs">
-      <DependentUpon>20180215064951_MaschinenStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180215125458_MeldungNeu.cs" />
-    <Compile Include="Migrations\20180215125458_MeldungNeu.designer.cs">
-      <DependentUpon>20180215125458_MeldungNeu.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180215130308_MeldungNeu1.cs" />
-    <Compile Include="Migrations\20180215130308_MeldungNeu1.designer.cs">
-      <DependentUpon>20180215130308_MeldungNeu1.cs</DependentUpon>
+    <Compile Include="Migrations\20180217121809_neu.cs" />
+    <Compile Include="Migrations\20180217121809_neu.designer.cs">
+      <DependentUpon>20180217121809_neu.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabellen\TabBauteil.cs" />
     <Compile Include="Tabellen\TabBediener.cs" />
     <Compile Include="JgMaschineDb.cs" />
-    <Compile Include="Tabellen\TabBedienerBauteil.cs" />
     <Compile Include="Tabellen\TabMaschine.cs" />
     <Compile Include="Tabellen\TabBase.cs" />
     <Compile Include="Tabellen\TabMeldung.cs" />
+    <Compile Include="Tabellen\TabReport.cs" />
     <Compile Include="Tabellen\TabStandort.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -45,8 +45,8 @@ namespace JgDienstScannerMaschine
                         switch (scanAusgabe.VorgangScan)
                         {
                             case ScannerVorgang.BF2D:
-                            case ScannerVorgang.TEST: scanAusgabe.Meldung = ScannerMeldung.Test; break;
-                            case ScannerVorgang.SCHALTER: scanAusgabe.Meldung = ScannerMeldung.SCHALTER; break;
+                            case ScannerVorgang.TEST: scanAusgabe.Meldung = ScannerMeldung.TES_____T; break;
+                            case ScannerVorgang.SCHALTER: scanAusgabe.Meldung = ScannerMeldung.SCHALTE_R; break;
                             case ScannerVorgang.MITA:
                                 if (TextEmpfangen[17] == '0')
                                     scanAusgabe.Meldung = ScannerMeldung.ANMELDUNG;
@@ -62,7 +62,7 @@ namespace JgDienstScannerMaschine
                         if ((scanAusgabe.VorgangScan != ScannerVorgang.MITA) && (maschine.MeldBediener == null))
                         {
                             JgLog.Set($"Maschine {maschine.MaschineName}. Kein Bediener angemeldet.", JgLog.LogArt.Info);
-                            scanAusgabe.Set(false, true, "Kein Bediener", "angemeldet !");
+                            scanAusgabe.Set(false, true, "", "Kein Bediener", "angemeldet !");
                         }
                         else
                         {
@@ -90,6 +90,7 @@ namespace JgDienstScannerMaschine
                             catch (Exception ex)
                             {
                                 ExceptionPolicy.HandleException(ex, "Policy");
+                                throw new Exception("Felhler in ScannerAusgabe", ex);
                             }
                         }
                     }
@@ -101,8 +102,27 @@ namespace JgDienstScannerMaschine
 
         // Programme zum Datenverarbeitung der Sacannerdaten **************************************************************
 
+        private void BauteilBeendet(JgScannerAusgabe ScanAusgabe, JgMaschineStamm Maschine)
+        {
+            _JgOpt.QueueSend($"Bauteil {ScanAusgabe.ScannKoerper} fertig", Maschine, new JgMeldung(Maschine.MeldBediener.Id, ScannerMeldung.BAUT_ENDE));
+
+            Maschine.ListeBauteile.Add(new JgBauteilFertig(Maschine.AktivBauteil.Id, Maschine.AktivBauteil.IdBauteilJgData));
+            Maschine.AktivBauteil = null;
+
+            ScanAusgabe.Set(false, false, "", "Bauteil", "fertig!");
+            JgLog.Set($"Bauteil Maschine: {Maschine.MaschineName}\nBauteilt: {Maschine.AktivBauteil.Id} erledigt", JgLog.LogArt.Unbedeutend);
+        }
+
         private void MaschineBvbsEintragen(JgScannerAusgabe ScanAusgabe, JgMaschineStamm Maschine)
         {
+            if (Maschine.AktivBauteil != null)
+            {
+                var bauteilFertig = Maschine.AktivBauteil.IdBauteilJgData == ScanAusgabe.ScannKoerper;
+                BauteilBeendet(ScanAusgabe, Maschine);
+                if (bauteilFertig)
+                    return;
+            }
+
             BvbsDaten btNeu = null;
 
             try
@@ -111,39 +131,27 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception f)
             {
-                JgLog.Set($"Bvbs Code konnte icht gelesen Werden.\nGrund: {f.Message}", JgLog.LogArt.Info);
+                JgLog.Set($"Bvbs Code von Maschine {Maschine.MaschineName} konnte icht gelesen Werden.\nGrund: {f.Message}", JgLog.LogArt.Info);
                 ScanAusgabe.Set(false, true, "Fehler im BVBS", "Code");
                 return;
             }
 
-            //todo: Aktives Bausteil von String in eindeute Id aus JgDate umwanden
+            //todo: Aktives Bausteil von String in eindeute Id aus JgData umwandeln
 
-            if (Maschine.AktivBauteil != null)
+            Maschine.AktivBauteil = new JgBauteil
             {
-                Maschine.AktivBauteil.EndeFertigung = DateTime.Now;
-
-                if (ScanAusgabe.BvbsString == Maschine.AktivBauteil.IdBauteilJgData)
-                {
-                    JgLog.Set($"Bauteil Maschine: {Maschine.MaschineName}\nBauteilt: {Maschine.AktivBauteil.Id} erledigt", JgLog.LogArt.Unbedeutend);
-                    ScanAusgabe.Set(false, false, "Bauteil erledigt");
-                    return;
-                }
-            }
-
-            Maschine.AktivBauteil = new JgMaschineBauteil
-            {
-                StartFertigung = DateTime.Now,
-
                 IdMaschine = Maschine.Id,
-                IdBauteilJgData = ScanAusgabe.BvbsString,
+                IdBauteilJgData = ScanAusgabe.ScannKoerper,
 
-                GewichtInKg = btNeu.Gewicht ?? -1.0,
-                DuchmesserInMm = btNeu.Durchmesser ?? -1,
-                LaengeInCm = btNeu.Laenge ?? -1,
+                GewichtInKg = btNeu.Gewicht ?? 0,
+                DuchmesserInMm = btNeu.Durchmesser ?? 0,
+                LaengeInCm = btNeu.Laenge ?? 0,
                 AnzahlBiegungen = btNeu.ListeGeometrie.Count(s => s.Geometrie == BvbsGeometrie.Koerper.Bogen)
             };
 
-            _JgOpt.QueueSend("BT", Maschine.AktivBauteil);
+            _JgOpt.QueueSend($"BT {Maschine.AktivBauteil.Id}", Maschine.AktivBauteil);
+            ScanAusgabe.Set(true, false, "Bauteil in", "Maschine", "registriert");
+            JgLog.Set($"Bauteil {Maschine.AktivBauteil.Id} in Maschine {Maschine.MaschineName} gestriert.", JgLog.LogArt.Unbedeutend);
         }
 
         private void MaschineAnmeldungEintragen(JgScannerAusgabe ScanAusgabe, JgMaschineStamm Maschine)
@@ -153,7 +161,7 @@ namespace JgDienstScannerMaschine
             if (bediener == null)
             {
                 JgLog.Set($"Bediener ({ScanAusgabe.ScannKoerper}) nicht in Datenbank !", JgLog.LogArt.Info);
-                ScanAusgabe.Set(false, true, "Bediener", ScanAusgabe.ScannKoerper, "nicht in regisitriert");
+                ScanAusgabe.Set(false, true, "Bediener", ScanAusgabe.ScannKoerper, "nicht regisitriert");
             }
             else
             {
@@ -180,12 +188,12 @@ namespace JgDienstScannerMaschine
                 {
                     // Wenn Bediener auf einer Maschine angemeldet ist
 
-                    if (maAbmeldung.MeldBediener.IdBediener == bediener.Id)
+                    if (maAbmeldung?.MeldBediener?.IdBediener == bediener.Id)
                     {
                         abmeldungBediener = true;
 
                         maAbmeldung.MeldBediener.Abmeldung();
-                        _JgOpt.QueueSend($"Bediener {bediener.BedienerName} von Maschine {maAbmeldung.MaschineName} abgemeldet", maAbmeldung.MeldBediener);
+                        _JgOpt.QueueSend($"Bediener {bediener.BedienerName} von Maschine {maAbmeldung.MaschineName} abgemeldet", maAbmeldung, maAbmeldung.MeldBediener);
                         maAbmeldung.MeldBediener = null;
                         JgLog.Set($"Bediener {bediener.BedienerName} von Maschine {maAbmeldung.MaschineName}  abgemeldet!", JgLog.LogArt.Unbedeutend);
 
@@ -194,10 +202,10 @@ namespace JgDienstScannerMaschine
                         foreach (var meldHelfer in maAbmeldung.MeldListeHelfer)
                         {
                             // Wenn Helfer in Liste Bediener vorhanden
-                            if ( _JgOpt.JgOpt.ListeBediener.ContainsKey(meldHelfer.IdBediener))
+                            if (_JgOpt.JgOpt.ListeBediener.ContainsKey(meldHelfer.IdBediener))
                             {
                                 meldHelfer.Abmeldung();
-                                _JgOpt.QueueSend($"Helfer {_JgOpt.JgOpt.ListeBediener[meldHelfer.IdBediener]} abgemeldet", meldHelfer);
+                                _JgOpt.QueueSend($"Helfer {_JgOpt.JgOpt.ListeBediener[meldHelfer.IdBediener]} abgemeldet", maAbmeldung, meldHelfer);
                                 JgLog.Set($"Helfer {_JgOpt.JgOpt.ListeBediener[meldHelfer.IdBediener].BedienerName} von Maschine {maAbmeldung.MaschineName} abgemeldet!", JgLog.LogArt.Unbedeutend);
                             }
                         }
@@ -209,13 +217,13 @@ namespace JgDienstScannerMaschine
                         // Ob in einer Helferliste eingetragen
 
                         var lHelfer = maAbmeldung.MeldListeHelfer.Where(w => w.IdBediener == bediener.Id).ToList();
-                        foreach(var meldHelfer in lHelfer)
+                        foreach (var meldHelfer in lHelfer)
                         {
                             abmeldungHelfer = true;
                             if (_JgOpt.JgOpt.ListeBediener.ContainsKey(meldHelfer.IdBediener))
                             {
                                 meldHelfer.Abmeldung();
-                                _JgOpt.QueueSend($"Helfer {_JgOpt.JgOpt.ListeBediener[meldHelfer.IdBediener]} abgemeldet", meldHelfer);
+                                _JgOpt.QueueSend($"Helfer {_JgOpt.JgOpt.ListeBediener[meldHelfer.IdBediener]} abgemeldet", maAbmeldung, meldHelfer);
                                 JgLog.Set($"Helfer {_JgOpt.JgOpt.ListeBediener[meldHelfer.IdBediener].BedienerName} von Maschine {maAbmeldung.MaschineName} abgemeldet!", JgLog.LogArt.Unbedeutend);
                             }
 
@@ -227,9 +235,9 @@ namespace JgDienstScannerMaschine
                 if (ScanAusgabe.Meldung == ScannerMeldung.ABMELDUNG)
                 {
                     if (abmeldungBediener)
-                        ScanAusgabe.Set(false, false, "Bediener", bediener.BedienerName, "abgemeldet!");
+                        ScanAusgabe.Set(false, false, "", "Bediener", bediener.BedienerName, "abgemeldet!");
                     else if (abmeldungHelfer)
-                        ScanAusgabe.Set(false, false, "Helfer", bediener.BedienerName, "abgemeldet!");
+                        ScanAusgabe.Set(false, false, "", "Helfer", bediener.BedienerName, "abgemeldet!");
                     else
                         ScanAusgabe.Set(false, true, "Keine Anmeldung", bediener.BedienerName, "registriert!");
                 }
@@ -237,16 +245,16 @@ namespace JgDienstScannerMaschine
                 {
                     if (Maschine.MeldBediener == null)
                     {
-                        Maschine.MeldBediener = new JgMeldung(Maschine.Id, bediener.Id, ScannerMeldung.ANMELDUNG);
-                        _JgOpt.QueueSend($"Bediener {bediener.BedienerName} angemeldet", Maschine.MeldBediener);
-                        ScanAusgabe.Set(false, false, "Bediener", bediener.BedienerName, "angemeldet!");
+                        Maschine.MeldBediener = new JgMeldung(bediener.Id, ScannerMeldung.ANMELDUNG);
+                        _JgOpt.QueueSend($"Bediener {bediener.BedienerName} angemeldet", Maschine, Maschine.MeldBediener);
+                        ScanAusgabe.Set(false, false, "", "Bediener", bediener.BedienerName, "angemeldet!");
                         JgLog.Set($"Bediener {bediener.BedienerName} an Maschine {Maschine.MaschineName} angemeldet!", JgLog.LogArt.Unbedeutend);
                     }
                     else // Wenn ein Bediener angemeldet, wird ein Helfer angemeldet
                     {
-                        var meld = new JgMeldung(Maschine.Id, bediener.Id, ScannerMeldung.ANMELDUNG);
-                        _JgOpt.QueueSend($"Helfer {bediener.BedienerName} angemeldet", meld);
-                        ScanAusgabe.Set(false, false, "Helfer", bediener.BedienerName, "angemeldet!");
+                        var meld = new JgMeldung(bediener.Id, ScannerMeldung.ANMELDUNG);
+                        _JgOpt.QueueSend($"Helfer {bediener.BedienerName} angemeldet", Maschine, meld);
+                        ScanAusgabe.Set(false, false, "", "Helfer", bediener.BedienerName, "angemeldet!");
                         Maschine.MeldListeHelfer.Add(meld);
                         JgLog.Set($"Helfer {bediener.BedienerName} an Maschine {Maschine.MaschineName} angemeldet!", JgLog.LogArt.Unbedeutend);
                     }
@@ -257,7 +265,7 @@ namespace JgDienstScannerMaschine
         private string[] MeldungBeenden(JgMaschineStamm Maschine)
         {
             if (Maschine.MeldMeldung == null)
-                return new string[] { "", "Keine Meldung", "registriert" };
+                return null;
 
             var progText = "Reparatur";
             switch (Maschine.MeldMeldung.Meldung)
@@ -271,13 +279,12 @@ namespace JgDienstScannerMaschine
             }
 
             Maschine.MeldMeldung.Abmeldung();
-            _JgOpt.QueueSend($"Programm {progText} beendet", Maschine.MeldMeldung);
+            _JgOpt.QueueSend($"Programm {progText} beendet", Maschine, Maschine.MeldMeldung);
             JgLog.Set($"Programm {progText} auf Maschine {Maschine.MaschineName} beendet!", JgLog.LogArt.Info);
             Maschine.MeldMeldung = null;
 
             return new string[] { "", progText, "beendet" };
         }
-
 
         private void MaschineMeldungEintragen(JgScannerAusgabe ScanAusgabe, JgMaschineStamm Maschine)
         {
@@ -286,12 +293,12 @@ namespace JgDienstScannerMaschine
             switch (ScanAusgabe.Meldung)
             {
                 case ScannerMeldung.COILSTART:
-                    if (Maschine.MeldMeldung.Meldung == ScannerMeldung.COILSTART)
+                    if (Maschine?.MeldMeldung?.Meldung == ScannerMeldung.COILSTART)
                         ScanAusgabe.Set(false, true, "Coilwechsle bereits", "begonnen");
                     else
                     {
                         MeldungBeenden(Maschine);
-                        Maschine.MeldMeldung = new JgMeldung(Maschine.Id, (Guid)Maschine.MeldBediener.IdBediener, ScannerMeldung.COILSTART);
+                        Maschine.MeldMeldung = new JgMeldung(Maschine.MeldBediener.IdBediener, ScannerMeldung.COILSTART);
 
                         try
                         {
@@ -300,41 +307,44 @@ namespace JgDienstScannerMaschine
                         catch { }
 
                         ScanAusgabe.Set(false, false, "", "Coilwechsel", "gestartet");
-                        _JgOpt.QueueSend($"Start Coilwechsel", Maschine.MeldMeldung);
+                        _JgOpt.QueueSend($"Start Coilwechsel", Maschine, Maschine.MeldMeldung);
 
                         JgLog.Set($"Start Coilwechsel auf Maschine {Maschine.MaschineName}. Anzahl: {Maschine.MeldMeldung.Anzahl ?? 0}", JgLog.LogArt.Info);
                     }
                     break;
                 case ScannerMeldung.REPASTART:
-                    if (Maschine.MeldMeldung.Meldung == ScannerMeldung.REPASTART)
+                    if (Maschine?.MeldMeldung?.Meldung == ScannerMeldung.REPASTART)
                         ScanAusgabe.Set(false, true, "Reparatur bereits", "begonnen");
                     else
                     {
                         MeldungBeenden(Maschine);
-                        Maschine.MeldMeldung = new JgMeldung(Maschine.Id, (Guid)Maschine.MeldBediener.IdBediener, ScannerMeldung.REPASTART);
+                        Maschine.MeldMeldung = new JgMeldung(Maschine.MeldBediener.IdBediener, ScannerMeldung.REPASTART);
 
                         ScanAusgabe.Set(false, false, "", "Reparatur", "gestartet");
-                        _JgOpt.QueueSend($"Start Reparatur", Maschine.MeldMeldung);
+                        _JgOpt.QueueSend($"Start Reparatur", Maschine, Maschine.MeldMeldung);
 
                         JgLog.Set($"Start Reparatur auf Maschine {Maschine.MaschineName}.", JgLog.LogArt.Info);
                     }
                     break;
                 case ScannerMeldung.WARTSTART:
-                    if (Maschine.MeldMeldung.Meldung == ScannerMeldung.WARTSTART)
+                    if (Maschine?.MeldMeldung?.Meldung == ScannerMeldung.WARTSTART)
                         ScanAusgabe.Set(false, true, "Wartung bereits", "begonnen");
                     else
                     {
                         MeldungBeenden(Maschine);
-                        Maschine.MeldMeldung = new JgMeldung(Maschine.Id, (Guid)Maschine.MeldBediener.IdMaschine, ScannerMeldung.WARTSTART);
+                        Maschine.MeldMeldung = new JgMeldung(Maschine.MeldBediener.IdBediener, ScannerMeldung.WARTSTART);
 
                         ScanAusgabe.Set(false, false, "", "Wartung", "gestartet");
-                        _JgOpt.QueueSend($"Start Wartung", Maschine.MeldMeldung);
+                        _JgOpt.QueueSend($"Start Wartung", Maschine, Maschine.MeldMeldung);
 
                         JgLog.Set($"Start Wartung auf Maschine {Maschine.MaschineName}.", JgLog.LogArt.Info);
                     }
                     break;
                 case ScannerMeldung.REPA_ENDE:
-                    ScanAusgabe.Set(false, true, MeldungBeenden(Maschine));
+                    if (Maschine.MeldMeldung == null)
+                        ScanAusgabe.Set(false, true, "", "Keine Meldung", "registriert");
+                    else
+                        ScanAusgabe.Set(false, false, MeldungBeenden(Maschine));
                     break;
             }
         }

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace JgDienstScannerMaschine
 {
-    public class JgMaschineBauteil : ServiceRef.JgWcfBauteil
+    public class JgBauteil : ServiceRef.JgWcfBauteil
     {
-        public JgMaschineBauteil()
+        public JgBauteil()
         {
             Id = Guid.NewGuid();
             Aenderung = DateTime.Now;

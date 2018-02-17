@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Maschine anzeigen</h2>
+        <h2>Maschinen anzeigen</h2>
         <p>
             Zur Auswahl der im System vorhandenen Maschinen.
         </p>
@@ -27,8 +27,20 @@
     <div class="col-md-4">
         <h2>Protokoll Meldungen</h2>
         <p>
-            Eingabe von Ursachen für Reparaturen
+            Eingabe von Ursachen für Reparaturen und Wartung
         </p>
-        <a class="btn btn-outline-primary" href="@Url.Action("Index", "IndexMeldungProdokoll")">Index Maschinen &raquo;</a>
+        <a class="btn btn-outline-success" href="@Url.Action("IndexMeldungProdokoll", "Maschine", new { Prog = "OFFEN" } )">Offen Protokolle &raquo;</a>
+        <a class="btn btn-outline-primary" href="@Url.Action("IndexMeldungProdokoll", "Maschine", new { Prog = "ALLE" } )">Alle Protokolle &raquo;</a>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Auswertungen anzeigen</h2>
+        <p>
+            Auswertungen anzeigen und bearbeiten.
+        </p>
+        <a class="btn btn-outline-primary" href="@Url.Action("ReportIndex", "Sonstiges")">Index Bediener &raquo;</a>
+    </div>
+</div>
+    

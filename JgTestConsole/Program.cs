@@ -12,14 +12,8 @@ namespace JgTestConsole
         static void Main(string[] args)
         {
 
-            using (var verb = new ServiceReference1.WcfServiceClient())
-            {
-                var erg = verb.WcfTest("HalloBallo");
-
-                Console.WriteLine(erg);
-
-            }
-
+            var c = new char[2] {  'g', 'a' };
+            Console.WriteLine(c);
 
             Console.WriteLine("Fertig");
             Console.ReadKey();

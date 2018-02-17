@@ -14,10 +14,10 @@ namespace JgWcfServiceLib
         string WcfTest(String TestString);
 
         [OperationContract]
-        Task<bool> SendeBauteil(JgWcfBauteil Bauteil);
+        Task<bool> SendeBauteil(JgWcfBauteil Bauteil, JgWcfMaschineStatus Maschine);
 
         [OperationContract]
-        Task<bool> SendeMeldung(JgWcfMaschineStatus Maschine, JgWcfMeldung Meldung);
+        Task<bool> SendeMeldung(JgWcfMeldung Meldung, JgWcfMaschineStatus Maschine);
 
         [OperationContract]
         Task<List<JgWcfBediener>> GetBediener();
@@ -37,14 +37,8 @@ namespace JgWcfServiceLib
     }
 
     [DataContract]
-    public class JgWcfBauteil : JgWcfBase, IJgMaschineBauteil
+    public class JgWcfBauteil : JgWcfBase, IJgBauteil
     {
-        [DataMember]
-        public DateTime StartFertigung { get; set; }
-
-        [DataMember]
-        public DateTime? EndeFertigung { get; set; }
-
         [DataMember]
         public int DuchmesserInMm { get; set; }
 
@@ -58,35 +52,37 @@ namespace JgWcfServiceLib
         public int AnzahlBiegungen { get; set; }
 
         [DataMember]
-        public Guid IdMaschine { get; set; }
-
-        [DataMember]
-        public Guid Bediener { get; set; }
-
-        [DataMember]
-        public List<Guid> ListeHelfer { get; set; }
-
-        [DataMember]
         public string IdBauteilJgData { get; set; }
-    }
-
-    [DataContract]
-    public class JgWcfMeldung : JgWcfBase, IJgMaschineMeldung
-    {
-        [DataMember]
-        public ScannerMeldung Meldung { get; set; }
-
-        [DataMember]
-        public DateTime ZeitMeldung { get; set; }
-
-        [DataMember]
-        public int? Anzahl { get; set; }
 
         [DataMember]
         public Guid IdMaschine { get; set; }
 
         [DataMember]
         public Guid IdBediener { get; set; }
+
+        [DataMember]
+        public int AnzahlHelfer { get; set; }
+    }
+
+    [DataContract]
+    public class JgWcfMeldung : JgWcfBase, IJgMeldung
+    {
+        #region Aus Schittsettele
+
+        [DataMember]
+        public ScannerMeldung Meldung { get; set; }
+
+        [DataMember]
+        public int? Anzahl { get; set; }
+
+
+        [DataMember]
+        public Guid IdBediener { get; set; }
+
+        #endregion
+
+        [DataMember]
+        public Guid IdMaschine { get; set; }
     }
 
     [DataContract]
@@ -131,12 +127,15 @@ namespace JgWcfServiceLib
     public class JgWcfMaschineStatus : JgWcfBase, IJgMaschineStatus
     {
         [DataMember]
-        public Guid? IdMeldungBediener { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Guid? IdMeldungBediener { get; set; }
 
         [DataMember]
-        public List<Guid> ListeIdMeldungHelfer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public List<Guid> ListeIdMeldungHelfer { get; set; }
 
         [DataMember]
-        public Guid? IdMeldungMeldung { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Guid? IdMeldungMeldung { get; set; }
+
+        [DataMember]
+        public Guid? IdBauteilAktiv { get; set; }
     }
 }

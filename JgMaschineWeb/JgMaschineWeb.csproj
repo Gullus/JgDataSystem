@@ -221,6 +221,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MaschineController.cs" />
     <Compile Include="Controllers\BedienerController.cs" />
+    <Compile Include="Controllers\SonstigesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -320,6 +321,9 @@
     <Content Include="Views\Bediener\Edit.cshtml" />
     <Content Include="Views\Bediener\Index.cshtml" />
     <Content Include="Views\Maschine\IndexMeldungProdokoll.cshtml" />
+    <Content Include="Views\Maschine\IndexMeldungProdokollEdit.cshtml" />
+    <Content Include="Views\Sonstiges\ReportIndex.cshtml" />
+    <Content Include="Views\Sonstiges\ReportEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

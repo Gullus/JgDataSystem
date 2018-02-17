@@ -1,6 +1,9 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+﻿using JgLibHelper;
+using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace JgDienstScannerMaschine
@@ -100,11 +103,12 @@ namespace JgDienstScannerMaschine
 
         public bool MaschinenVonServer()
         {
-            var speichern = false;
-            var copyMaschine = new JgLibHelper.JgCopyProperty<ServiceRef.JgWcfMaschine>();
+            var copyMaschine = new JgCopyProperty<ServiceRef.JgWcfMaschine>();
+            var speichern = true;
 
             try
             {
+
                 using (var dienst = new ServiceRef.WcfServiceClient())
                 {
                     var lWcfMaschinen = dienst.GetMaschinen(_JgOpt.IdStandort);
@@ -113,9 +117,19 @@ namespace JgDienstScannerMaschine
                         JgMaschineStamm maMaschine = null;
 
                         if (_JgOpt.ListeMaschinen.ContainsKey(maWcf.Id))
+                        {
                             maMaschine = _JgOpt.ListeMaschinen[maWcf.Id];
+                            if (maMaschine.Aenderung != maWcf.Aenderung)
+                            {
+                                speichern = true;
+                                copyMaschine.CopyProperties(maWcf, maMaschine);
+                            }
+
+                        }
                         else
                         {
+                            speichern = true;
+
                             switch (maWcf.MaschineArt)
                             {
                                 case JgLibHelper.MaschinenArten.Hand:
@@ -132,17 +146,10 @@ namespace JgDienstScannerMaschine
                                     break;
                             }
 
-                            maMaschine.Id = maWcf.Id;
-                            maMaschine.Aenderung = DateTime.Now;
-
-                            _JgOpt.ListeMaschinen.Add(maMaschine.Id, maMaschine);
-                        }
-
-                        if (maMaschine.Aenderung != maWcf.Aenderung)
-                        {
-                            speichern = true;
                             copyMaschine.CopyProperties(maWcf, maMaschine);
+                            _JgOpt.ListeMaschinen.Add(maWcf.Id, maMaschine);
                         }
+
                     }
                 }
             }
@@ -164,7 +171,7 @@ namespace JgDienstScannerMaschine
                 JgMaschineStamm[] arMaschineStamm = null;
                 using (var reader = new StreamReader(_FileMaschinen))
                 {
-                    var maschinenTypes = new Type[] { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress) };
+                    var maschinenTypes = new Type[] { typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress), typeof(JgMaschineHand) };
                     var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), maschinenTypes);
                     arMaschineStamm = (JgMaschineStamm[])serializer.Deserialize(reader);
                 }
@@ -197,6 +204,14 @@ namespace JgDienstScannerMaschine
             {
                 JgLog.Set($"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
+        }
+
+        public static JgMaschineStamm GetMaschine(Dictionary<Guid, JgMaschineStamm> ListeMaschinen, Guid IdMaschine)
+        {
+            if (ListeMaschinen.ContainsKey(IdMaschine))
+                return ListeMaschinen[IdMaschine];
+
+            return null;
         }
     }
 }

@@ -14,8 +14,7 @@ namespace JgWcfServiceServer
 {
     public class WcfService : IWcfService
     {
-        public JgCopyProperty<IJgMaschineMeldung> _KopieProgram = new JgCopyProperty<IJgMaschineMeldung>();
-        public JgCopyProperty<IJgMaschineBauteil> _KopieBauteil = new JgCopyProperty<IJgMaschineBauteil>();
+        public JgCopyProperty<IJgBauteil> _KopieBauteil = new JgCopyProperty<IJgBauteil>();
 
         public WcfService()
         { }
@@ -59,32 +58,53 @@ namespace JgWcfServiceServer
             return TestString;
         }
 
-        public Task<bool> SendeBauteil(JgWcfBauteil Bauteil)
+        public Task<bool> SendeBauteil(JgWcfBauteil Bauteil, JgWcfMaschineStatus StatusMaschine)
         {
             throw new NotImplementedException();
         }
 
         private ScannerMeldung[] _MeldungEnde = new  ScannerMeldung[] { ScannerMeldung.ABMELDUNG, ScannerMeldung.COIL_ENDE, ScannerMeldung.REPA_ENDE, ScannerMeldung.WART_ENDE };
 
-        public async Task<bool> SendeMeldung(JgWcfMaschineStatus StatusMaschine, JgWcfMeldung Meldung)
+        public async Task<bool> SendeMeldung(JgWcfMeldung Meldung, JgWcfMaschineStatus StatusMaschine)
         {
             try
             {
                 using (var db = new JgMaschineDb())
                 {
-                    if (_MeldungEnde.Contains(Meldung.Meldung))
+                    if (Meldung.Meldung == ScannerMeldung.BAUT_ENDE)
                     {
-                        // Wird eine Abmeldung oder Beendigung gemeldet wude, wird die der 
+                        // Die Endzeit eines Bauteils wird ittels einer Meldung
+                        // Angezeigt und eingetragen
+
+                        var baut = await db.TabBauteilSet.FindAsync(Meldung.Id);
+                        if (baut != null)
+                        {
+                            baut.EndeFertigung = Meldung.Aenderung;
+                            baut.Aenderung = Meldung.Aenderung;
+
+                        }
+                    }
+                    else if (_MeldungEnde.Contains(Meldung.Meldung))
+                    {
+                        // Wird eine Abmeldung oder Beendigung gemeldet, wird die der 
                         // dazugehörige Start gesucht und die Abmeldezeit wird eingetragen
 
                         var meldung = await db.TabMeldungSet.FindAsync(Meldung.Id);
                         if (meldung != null)
-                            meldung.ZeitAbmeldung = Meldung.ZeitMeldung; 
+                            meldung.ZeitAbmeldung = Meldung.Aenderung; 
                     }
                     else
                     {
-                        var meld = (TabMeldung)_KopieProgram.CopyProperties(Meldung, new TabMeldung());
-                        await db.TabMeldungSet.AddAsync(meld);
+                        await db.TabMeldungSet.AddAsync(new TabMeldung()
+                        {
+                            Id = Meldung.Id,
+                            IdBediener = Meldung.IdBediener,
+                            IdMaschine = Meldung.IdMaschine,
+                            ZeitMeldung = Meldung.Aenderung,
+                            Anzahl = Meldung.Anzahl,
+                            Meldung = Meldung.Meldung,
+                            Aenderung = Meldung.Aenderung
+                        });
                     }
 
                     if (StatusMaschine != null)
@@ -95,7 +115,7 @@ namespace JgWcfServiceServer
                             using (var memStream = new MemoryStream())
                             {
                                 var formatter = new BinaryFormatter();
-                                formatter.Serialize(memStream, Meldung);
+                                formatter.Serialize(memStream, StatusMaschine);
                                 ma.StatusMaschine = memStream.ToArray();
                             };
                         }

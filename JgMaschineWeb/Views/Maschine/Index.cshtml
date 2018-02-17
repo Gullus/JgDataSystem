@@ -9,7 +9,7 @@
 <h2>Übersicht Maschinen</h2>
 <br />
 
-<table class="table">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>Maschine</th>
@@ -32,8 +32,8 @@
         {
             standort = standortNeu;
 
-            <tr style="color:red">
-                <td><strong>Standort @standort</strong></td>
+            <tr>
+                <td colspan="6" style="color:red; Background:aliceblue" align="center"><strong> ****** Standort @standort ******</strong></td>
             </tr>
         }
 
@@ -59,8 +59,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IstAktiv)
             </td>
-            <td>
-                <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", new { id = item.Id })">Bearbeiten</a>
+            <td width="200">
+                <a class="btn btn-outline-success btn-sm" href="@Url.Action("Edit", new { id = item.Id })"> Status </a>
+                <a class="btn btn-outline-primary btn-sm" href="@Url.Action("Status", new { id = item.Id })"> Bearbeiten </a>
             </td>
         </tr>
 

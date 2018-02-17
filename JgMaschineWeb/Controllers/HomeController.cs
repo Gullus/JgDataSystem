@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -26,5 +28,20 @@ namespace JgMaschineWeb.Controllers
 
             return View();
         }
+
+        //[Authorize]
+        //public async Task<ActionResult> ReportBearbeiten(Guid? Id)
+        //{
+        //    if (Id == null)
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+        //    var report = await db.TabReportSet.Include(i => i.EMaschine)
+        //        .Include(f => f.EMaschine.EStandort).Include(b => b.EBediener)
+        //        .FirstOrDefaultAsync(f => f.Id == Id);
+
+        //    if (meldung == null)
+        //        return HttpNotFound();
+
+        //}
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Messaging;
 using System.ServiceModel;
 using System.Threading;
@@ -29,7 +27,7 @@ namespace JgDienstScannerMaschine
                 {
                     var queue = new MessageQueue(optSenden.PathQueue, QueueAccessMode.Receive)
                     {
-                        Formatter = new XmlMessageFormatter(new Type[] { typeof(ServiceRef.JgWcfMeldung), typeof(ServiceRef.JgWcfBauteil) })
+                        Formatter = new XmlMessageFormatter(new Type[] { typeof(ServiceRef.JgWcfMeldung), typeof( ServiceRef.JgWcfBauteil) })
                     };
 
                     while (true)
@@ -38,7 +36,6 @@ namespace JgDienstScannerMaschine
 
                         try
                         {
-
                             try
                             {
                                 var msg = queue.Peek(new TimeSpan(0, 0, 5));
@@ -56,7 +53,6 @@ namespace JgDienstScannerMaschine
 
                                 try
                                 {
-
                                     using (var verb = new ServiceRef.WcfServiceClient())
                                     {
                                         while (true)
@@ -80,28 +76,18 @@ namespace JgDienstScannerMaschine
 
                                             if (sendObj != null)
                                             {
-                                                if (sendObj is ServiceRef.JgWcfMeldung meldung)
+                                                if (sendObj is ServiceRef.JgWcfMeldung wcfMeldung)
                                                 {
-                                                    // Maschinenstatus erstellen
-                                                    ServiceRef.JgWcfMaschineStatus maschineStatus = null;
-                                                    if (optSenden.ListeMaschinen.ContainsKey(meldung.IdMaschine))
-                                                    {
-                                                        var ma = optSenden.ListeMaschinen[meldung.IdMaschine];
-                                                        var idHelfer = ma.MeldListeHelfer.Select(s => s.Id).ToList();
+                                                    var maschine = JgInit.GetMaschine(optSenden.ListeMaschinen, wcfMeldung.IdMaschine);
+                                                    var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
+                                                    maStatus.Save();
 
-                                                        maschineStatus = new ServiceRef.JgWcfMaschineStatus()
-                                                        {
-                                                            Id = ma.Id,
-                                                            IdMeldungBediener = ma.MeldBediener.Id,
-                                                            IdMeldungMeldung = ma.MeldBediener.Id,
-                                                            ListeIdMeldungHelfer = new List<Guid>(idHelfer)
-                                                        };
-                                                    }
+                                                    var stat = maStatus.GetAsWcfMaschinenStatus();
 
-                                                    if (verb.SendeMeldung(maschineStatus, meldung))
+                                                    if (verb.SendeMeldung(wcfMeldung, maStatus.GetAsWcfMaschinenStatus()))
                                                     {
                                                         myTransaction.Commit();
-                                                        JgLog.Set("Wcf Programm gesendet", JgLog.LogArt.Info);
+                                                        JgLog.Set($"Wcf Meldung {wcfMeldung.Meldung} mit Id {wcfMeldung.Id} gesendet", JgLog.LogArt.Info);
                                                     }
                                                     else
                                                         myTransaction.Abort();
@@ -125,7 +111,7 @@ namespace JgDienstScannerMaschine
                                     switch (faultEx.Code.Name)
                                     {
                                         case "InternalServiceFault":
-                                            JgLog.Set("Server nicht in Betrieb oder nicht gefunden !", JgLog.LogArt.Info);
+                                            JgLog.Set(faultEx.Message, JgLog.LogArt.Info);
                                             Thread.Sleep(10000);
                                             break;
                                         default:

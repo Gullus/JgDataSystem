@@ -86,6 +86,9 @@ namespace JgDienstScannerMaschine.ServiceRef {
     public partial class JgWcfMaschineStatus : JgDienstScannerMaschine.ServiceRef.JgWcfBase {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> IdBauteilAktivField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<System.Guid> IdMeldungBedienerField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -93,6 +96,19 @@ namespace JgDienstScannerMaschine.ServiceRef {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<System.Guid> ListeIdMeldungHelferField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> IdBauteilAktiv {
+            get {
+                return this.IdBauteilAktivField;
+            }
+            set {
+                if ((this.IdBauteilAktivField.Equals(value) != true)) {
+                    this.IdBauteilAktivField = value;
+                    this.RaisePropertyChanged("IdBauteilAktiv");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<System.Guid> IdMeldungBediener {
@@ -152,9 +168,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private JgLibHelper.ScannerMeldung MeldungField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ZeitMeldungField;
-        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> Anzahl {
             get {
@@ -203,19 +216,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
                 if ((this.MeldungField.Equals(value) != true)) {
                     this.MeldungField = value;
                     this.RaisePropertyChanged("Meldung");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime ZeitMeldung {
-            get {
-                return this.ZeitMeldungField;
-            }
-            set {
-                if ((this.ZeitMeldungField.Equals(value) != true)) {
-                    this.ZeitMeldungField = value;
-                    this.RaisePropertyChanged("ZeitMeldung");
                 }
             }
         }
@@ -405,13 +405,10 @@ namespace JgDienstScannerMaschine.ServiceRef {
         private int AnzahlBiegungenField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid BedienerField;
+        private int AnzahlHelferField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int DuchmesserInMmField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<System.DateTime> EndeFertigungField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double GewichtInKgField;
@@ -420,16 +417,13 @@ namespace JgDienstScannerMaschine.ServiceRef {
         private string IdBauteilJgDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdBedienerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid IdMaschineField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int LaengeInCmField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.List<System.Guid> ListeHelferField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime StartFertigungField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int AnzahlBiegungen {
@@ -445,14 +439,14 @@ namespace JgDienstScannerMaschine.ServiceRef {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid Bediener {
+        public int AnzahlHelfer {
             get {
-                return this.BedienerField;
+                return this.AnzahlHelferField;
             }
             set {
-                if ((this.BedienerField.Equals(value) != true)) {
-                    this.BedienerField = value;
-                    this.RaisePropertyChanged("Bediener");
+                if ((this.AnzahlHelferField.Equals(value) != true)) {
+                    this.AnzahlHelferField = value;
+                    this.RaisePropertyChanged("AnzahlHelfer");
                 }
             }
         }
@@ -466,19 +460,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
                 if ((this.DuchmesserInMmField.Equals(value) != true)) {
                     this.DuchmesserInMmField = value;
                     this.RaisePropertyChanged("DuchmesserInMm");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<System.DateTime> EndeFertigung {
-            get {
-                return this.EndeFertigungField;
-            }
-            set {
-                if ((this.EndeFertigungField.Equals(value) != true)) {
-                    this.EndeFertigungField = value;
-                    this.RaisePropertyChanged("EndeFertigung");
                 }
             }
         }
@@ -510,6 +491,19 @@ namespace JgDienstScannerMaschine.ServiceRef {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid IdBediener {
+            get {
+                return this.IdBedienerField;
+            }
+            set {
+                if ((this.IdBedienerField.Equals(value) != true)) {
+                    this.IdBedienerField = value;
+                    this.RaisePropertyChanged("IdBediener");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Guid IdMaschine {
             get {
                 return this.IdMaschineField;
@@ -534,32 +528,6 @@ namespace JgDienstScannerMaschine.ServiceRef {
                 }
             }
         }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<System.Guid> ListeHelfer {
-            get {
-                return this.ListeHelferField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ListeHelferField, value) != true)) {
-                    this.ListeHelferField = value;
-                    this.RaisePropertyChanged("ListeHelfer");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime StartFertigung {
-            get {
-                return this.StartFertigungField;
-            }
-            set {
-                if ((this.StartFertigungField.Equals(value) != true)) {
-                    this.StartFertigungField = value;
-                    this.RaisePropertyChanged("StartFertigung");
-                }
-            }
-        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -573,16 +541,16 @@ namespace JgDienstScannerMaschine.ServiceRef {
         System.Threading.Tasks.Task<string> WcfTestAsync(string TestString);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeBauteil", ReplyAction="http://tempuri.org/IWcfService/SendeBauteilResponse")]
-        bool SendeBauteil(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil);
+        bool SendeBauteil(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeBauteil", ReplyAction="http://tempuri.org/IWcfService/SendeBauteilResponse")]
-        System.Threading.Tasks.Task<bool> SendeBauteilAsync(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil);
+        System.Threading.Tasks.Task<bool> SendeBauteilAsync(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeMeldung", ReplyAction="http://tempuri.org/IWcfService/SendeMeldungResponse")]
-        bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung);
+        bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/SendeMeldung", ReplyAction="http://tempuri.org/IWcfService/SendeMeldungResponse")]
-        System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung);
+        System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfService/GetBediener", ReplyAction="http://tempuri.org/IWcfService/GetBedienerResponse")]
         System.Collections.Generic.List<JgDienstScannerMaschine.ServiceRef.JgWcfBediener> GetBediener();
@@ -632,20 +600,20 @@ namespace JgDienstScannerMaschine.ServiceRef {
             return base.Channel.WcfTestAsync(TestString);
         }
         
-        public bool SendeBauteil(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil) {
-            return base.Channel.SendeBauteil(Bauteil);
+        public bool SendeBauteil(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine) {
+            return base.Channel.SendeBauteil(Bauteil, Maschine);
         }
         
-        public System.Threading.Tasks.Task<bool> SendeBauteilAsync(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil) {
-            return base.Channel.SendeBauteilAsync(Bauteil);
+        public System.Threading.Tasks.Task<bool> SendeBauteilAsync(JgDienstScannerMaschine.ServiceRef.JgWcfBauteil Bauteil, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine) {
+            return base.Channel.SendeBauteilAsync(Bauteil, Maschine);
         }
         
-        public bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung) {
-            return base.Channel.SendeMeldung(Maschine, Meldung);
+        public bool SendeMeldung(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine) {
+            return base.Channel.SendeMeldung(Meldung, Maschine);
         }
         
-        public System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine, JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung) {
-            return base.Channel.SendeMeldungAsync(Maschine, Meldung);
+        public System.Threading.Tasks.Task<bool> SendeMeldungAsync(JgDienstScannerMaschine.ServiceRef.JgWcfMeldung Meldung, JgDienstScannerMaschine.ServiceRef.JgWcfMaschineStatus Maschine) {
+            return base.Channel.SendeMeldungAsync(Meldung, Maschine);
         }
         
         public System.Collections.Generic.List<JgDienstScannerMaschine.ServiceRef.JgWcfBediener> GetBediener() {

@@ -42,7 +42,7 @@ namespace JgMaschineWeb.Controllers
             if (Id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-                var maschine = await db.TabMaschineSet.FindAsync(Id);
+            var maschine = await db.TabMaschineSet.FindAsync(Id);
             if (maschine == null)
                 return HttpNotFound();
 
@@ -69,25 +69,62 @@ namespace JgMaschineWeb.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexMeldungProdokoll()
+        public async Task<ActionResult> IndexMeldungProdokoll(string Prog)
         {
-            var auswahlBis = DateTime.Now.Date.AddDays(-5);
-            var meldungen = new ScannerMeldung[] { ScannerMeldung.WARTSTART, ScannerMeldung.REPASTART };
+            var meldungen = new ScannerMeldung[] { ScannerMeldung.WARTSTART, ScannerMeldung.REPASTART, ScannerMeldung.COILSTART };
             var lMeldungen = db.TabMeldungSet
-                .Include(i => i.EBediener)
-                .Include(m => m.EMaschine)
-                .Include(s => s.EMaschine.EStandort)
-                .Where(w => (w.ZeitMeldung >= auswahlBis) && (meldungen.Contains(w.Meldung)))
-                .OrderBy(o => o.EMaschine.EStandort.StandortName).ThenBy(o => o.EMaschine.MaschineName);
+                .Where(w => (meldungen.Contains(w.Meldung)));
 
+            if (Prog == "OFFEN")
+                lMeldungen = lMeldungen.Where(w => w.Status == StatusMeldung.Offen);
+            else
+            {
+                var auswahlBis = DateTime.Now.Date.AddDays(-10);
+                lMeldungen = lMeldungen.Where(w => w.ZeitMeldung >= auswahlBis);
+            }
+
+            lMeldungen = lMeldungen.Include(i => i.EBediener)
+               .Include(m => m.EMaschine)
+               .Include(s => s.EMaschine.EStandort)
+               .OrderBy(o => o.EMaschine.EStandort.StandortName).ThenBy(o => o.ZeitMeldung);
+
+            ViewBag.Prog = Prog;
             return View(await lMeldungen.ToListAsync());
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexMeldungProdokollEdit(Guid? Id)
+        public async Task<ActionResult> IndexMeldungProdokollEdit(Guid? Id, string Prog)
         {
+            if (Id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            return View();
+            var meldung = await db.TabMeldungSet.Include(i => i.EMaschine)
+                .Include(f => f.EMaschine.EStandort).Include(b => b.EBediener)
+                .FirstOrDefaultAsync(f => f.Id == Id);
+
+            if (meldung == null)
+                return HttpNotFound();
+
+            ViewBag.Prog = Prog;
+            return View(meldung);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> IndexMeldungProdokollEdit(Guid Id, string Prog)
+        {
+            if (ModelState.IsValid)
+            {
+                var meldung = await db.TabMeldungSet.FindAsync(Id);
+                TryUpdateModel(meldung);
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("IndexMeldungProdokoll", new { Prog });
+            }
+
+            var mel = new TabMeldung();
+            TryUpdateModel(mel);
+            return View(mel);
         }
 
         protected override void Dispose(bool disposing)

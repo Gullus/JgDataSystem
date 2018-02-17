@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JgLibHelper;
+using System;
 using System.Messaging;
 
 namespace JgDienstScannerMaschine
@@ -23,14 +24,21 @@ namespace JgDienstScannerMaschine
             _Queue = new MessageQueue(JgOpt.PathQueue, QueueAccessMode.Send);
         }
 
-        public void QueueSend(string MyLabel, ServiceRef.JgWcfMeldung Meldung)
+        public void QueueSend(string MyLabel, JgMaschineStamm Maschine, JgMeldung Meldung)
         {
-            QueueSendAusfuehren(MyLabel, (ServiceRef.JgWcfMeldung)Meldung);
+            QueueSendAusfuehren(MyLabel, new ServiceRef.JgWcfMeldung()
+            {
+                Aenderung = Meldung.Aenderung,
+                Id = Meldung.Id,
+                Anzahl = Meldung.Anzahl,
+                IdBediener = Meldung.IdBediener,
+                IdMaschine = Maschine.Id
+            });
         }
 
-        public void QueueSend(string MyLabel, JgMaschineBauteil Bauteil)
+        public void QueueSend(string MyLabel, JgBauteil Bauteil)
         {
-            QueueSendAusfuehren(MyLabel, (ServiceRef.JgWcfBauteil)Bauteil);
+            QueueSendAusfuehren(MyLabel, Bauteil);
         }
 
         public void QueueSendAusfuehren(string MyLabel, object SendObjekt)
@@ -44,7 +52,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Daten konnten nict an MessageQueue gesendert werden !\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set($"Daten konnten nicht an MessageQueue übergeben werden !\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
     }

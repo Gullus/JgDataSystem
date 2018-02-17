@@ -1,28 +1,29 @@
-﻿using JgLibHelper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace JgDienstScannerMaschine
 {
-    public abstract class JgMaschineStamm : ServiceRef.JgWcfMaschine
+    public abstract class JgMaschineStamm : ServiceRef.JgWcfMaschine, IJgMaschineStatus
     {
-        // Ohne Schnittstelle ************
-
-        public List<Guid> ListeBauteile { get; set; } = new List<Guid>();
-        public JgMaschineBauteil AktivBauteil { get; set; } = null;
-
-        public JgMeldung MeldBediener { get; set; }
-        public List<JgMeldung> MeldListeHelfer { get; set; } = new List<JgMeldung>();
+        // Schnittstelle IMerkeStatusMaschine  ************
 
         public JgMeldung MeldMeldung { get; set; }
 
+        public JgMeldung MeldBediener { get; set; }
+
+        public JgBauteil AktivBauteil { get; set; } = null;
+
+        public List<JgMeldung> MeldListeHelfer { get; set; } = new List<JgMeldung>();
+
+        public List<JgBauteilFertig> ListeBauteile { get; set; } = new List<JgBauteilFertig>();
+
         // Programme *********************
-        
+
         public abstract void SendeDatenZurMaschine(string BvBsCode);
 
         public override string ToString()
@@ -42,12 +43,12 @@ namespace JgDienstScannerMaschine
     public class JgMaschineProgress : JgMaschineStamm
     {
         private DatenTaskMaschine _DatenTask;
-            
+
         public JgMaschineProgress()
         {
             _DatenTask = new DatenTaskMaschine()
             {
-                
+
                 PfadProduktionsListe = Properties.Settings.Default.ProgressPfadProduktionsListe,
             };
         }

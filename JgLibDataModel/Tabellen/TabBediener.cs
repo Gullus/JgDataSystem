@@ -7,6 +7,8 @@ namespace JgLibDataModel
 {
     public class TabBediener : TabBase, IJgBediener
     {
+        #region Schnittstelle
+
         [Required]
         [MaxLength(30, ErrorMessage = "Es dürfen nicht mehr als 30 Zeichen verwendet werden")]
         public string Vorname { get; set; }
@@ -17,14 +19,16 @@ namespace JgLibDataModel
 
         [Required]
         [MaxLength(30, ErrorMessage = "Es dürfen nicht mehr als 30 Zeichen verwendet werden")]
-        [StringLength(3, MinimumLength =3, ErrorMessage = "Die Zeichen müssen 3 Zeichen lang sein.")]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "Die Zeichen müssen 3 Zeichen lang sein.")]
         public string NummerAusweis { get; set; }
-  
+
+        #endregion
+
         [InverseProperty("EBediener")]
         public ICollection<TabMeldung> SMeldungen { get; set; }
 
         [InverseProperty("EBediener")]
-        public ICollection<TabBedienerBauteil> SBauteilBediener { get; set; }
+        public ICollection<TabBauteil> SBauteile { get; set; }
 
         // ******************************************************************
 
@@ -33,6 +37,7 @@ namespace JgLibDataModel
         public TabBediener()
         {
             SMeldungen = new HashSet<TabMeldung>();
+            SBauteile = new HashSet<TabBauteil>();
         }
     }
 

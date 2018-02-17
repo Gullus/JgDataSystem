@@ -5,10 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JgLibDataModel
 {
-    public class TabBauteil : TabBase, IJgMaschineBauteil
+    public class TabBauteil : TabBase, IJgBauteil
     {
-        public DateTime StartFertigung { get; set; }
-        public DateTime? EndeFertigung { get; set; } = null;
+        #region Schnittstelle
 
         public int DuchmesserInMm { get; set; } = 0;
         public double GewichtInKg { get; set; } = 0;
@@ -18,23 +17,21 @@ namespace JgLibDataModel
         public string IdBauteilJgData { get; set; } = null;
 
         public Guid IdMaschine { get; set; }
+        public Guid IdBediener { get; set; }
+        public int AnzahlHelfer { get; set; }
+   
+        #endregion
+
+        public DateTime StartFertigung { get; set; }
+        public DateTime? EndeFertigung { get; set; } = null;
+
         [ForeignKey("IdMaschine")]
         public TabMaschine EMaschine { get; set; }
 
-        public Guid Bediener { get; set; }
-
-
-        // Muss nach der Übertragung noch eingetragen werden
-
-        [NotMapped]
-        public List<Guid> ListeHelfer { get; set; }
-
-        [InverseProperty("EBauteil")]
-        public ICollection<TabBedienerBauteil> SBedienerBauteil { get; set; }
+        [ForeignKey("IdBediener")]
+        public TabBediener EBediener { get; set; }
 
         public TabBauteil()
-        {
-            StartFertigung = DateTime.Now;
-        }
+        { }
     }
 }

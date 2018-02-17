@@ -17,8 +17,7 @@ namespace JgDienstScannerMaschine
 
             Logger.SetLogWriter(new LogWriterFactory().Create());
             ExceptionPolicy.SetExceptionManager(new ExceptionPolicyFactory().CreateManager(), false);
-            // ExceptionPolicy.HandleException(ex, "Policy");
-
+            // Bsp.: ExceptionPolicy.HandleException(ex, "Policy");
 
             var pr = Properties.Settings.Default;
 
@@ -27,14 +26,25 @@ namespace JgDienstScannerMaschine
                 IdStandort = pr.IdStandort,
             };
 
+            // Bediener local laden, danach mit Server abgeleichen
+
             var init = new JgInit(jgOpt);
             init.BedienerLocalLaden();
             if (init.BedienerVonServer())
                 init.BedienerLocalSpeichern();
 
+            // Maschinen local laden, danach mit Server abgeleichen
+
             init.MaschinenLocalLaden();
             if (init.MaschinenVonServer())
                 init.MaschinenLocalSpeichern();
+
+            // Status Maschine laden, wenn vorhanden
+
+            foreach (var maStatus in jgOpt.ListeMaschinen.Values)
+               JgMaschinenStatus.Load(maStatus, jgOpt.PfadDaten);
+
+            // Optionen für jedes Craddel laden
 
             var listeCraddleOpt = new List<JgOptionenCraddle>();
             for (int i = 0; i < 5; i++)
