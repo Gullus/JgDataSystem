@@ -11,12 +11,19 @@ namespace JgTestConsole
     {
         static void Main(string[] args)
         {
+            var t2 = new C2();
 
-            var c = new char[2] {  'g', 'a' };
-            Console.WriteLine(c);
+            C1 t1 = (C1)t2;
 
-            Console.WriteLine("Fertig");
+            Console.WriteLine(t1.feld1);
+            Console.WriteLine(t1.GetType());
+
+            var t = new TAttr();
+            
+            
+
             Console.ReadKey();
+            
         }
     }
 
@@ -30,19 +37,20 @@ namespace JgTestConsole
         int feld2 { get; set; } 
     }
 
-    public class C1 : I1, ICloneable
+    public class C1 : I1
     {
         public int feld1 { get; set; } = 300;
 
-        public object Clone()
-        {
-            return (I1)this.MemberwiseClone();
-        }
     }
 
-    public class C2 : I1
+    public class C2 : C1, I2
     {
-        public int feld1 { get; set; } = 500;
+        public int feld2 { get; set; } = 400;
+
+        public C2()
+        {
+            feld1 = 1000;
+        }
     }
 
 
@@ -63,4 +71,19 @@ namespace JgTestConsole
         public int MyProperty1 { get; set; }
         public int MyProperty2 { get; set; }
     }
+
+    public abstract class TestAttr : Attribute
+    {
+        public string Err1 { get; set; }
+        public string Err2 { get; set; }
+    }
+
+
+    public class TAttr : TestAttr
+    {
+        public void TestInt()
+        { }
+
+    }
+
 }

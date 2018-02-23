@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace JgMaschineWeb.Controllers
 {
-    public class SonstigesController : Controller
+    public class AuswertungController : Controller
     {
         private JgMaschineDb db = new JgMaschineDb();
 

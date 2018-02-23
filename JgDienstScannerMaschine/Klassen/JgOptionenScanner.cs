@@ -28,17 +28,21 @@ namespace JgDienstScannerMaschine
         {
             QueueSendAusfuehren(MyLabel, new ServiceRef.JgWcfMeldung()
             {
-                Aenderung = Meldung.Aenderung,
+                IdMaschine = Maschine.Id,
+
                 Id = Meldung.Id,
-                Anzahl = Meldung.Anzahl,
+                Meldung = Meldung.Meldung,
                 IdBediener = Meldung.IdBediener,
-                IdMaschine = Maschine.Id
+                Anzahl = Meldung.Anzahl,
+                Aenderung = Meldung.Aenderung,
             });
         }
 
+        private JgCopyProperty<ServiceRef.JgWcfBauteil> _CopyBauteil = new JgCopyProperty<ServiceRef.JgWcfBauteil>(); 
+
         public void QueueSend(string MyLabel, JgBauteil Bauteil)
         {
-            QueueSendAusfuehren(MyLabel, Bauteil);
+            QueueSendAusfuehren(MyLabel, _CopyBauteil.CopyProperties(Bauteil, new ServiceRef.JgWcfBauteil()));
         }
 
         public void QueueSendAusfuehren(string MyLabel, object SendObjekt)
@@ -52,7 +56,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Daten konnten nicht an MessageQueue übergeben werden !\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Daten konnten nicht an MessageQueue übergeben werden !\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
     }

@@ -1,13 +1,12 @@
-﻿using System;
+﻿using JgLibHelper;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace JgDienstScannerMaschine
 {
-    public class JgMaschinenStatus : IJgMaschineStatus
+    public class JgMaschinenStatus
     {
         #region Schnittstelle
 
@@ -39,10 +38,10 @@ namespace JgDienstScannerMaschine
             if (_Maschine != null)
                 MaschineInThis(Maschine);
 
-            _DateiAusgabe = GetDatai(PfadAusgabe, _Maschine.Id);
+            _DateiAusgabe = GetDateiName(PfadAusgabe, _Maschine.Id);
         }
 
-        private static string GetDatai(string Pfad, Guid IdMaschine)
+        private static string GetDateiName(string Pfad, Guid IdMaschine)
         {
             return Pfad + "StatusMaschine_" + IdMaschine.ToString() + ".xml";
         }
@@ -56,7 +55,7 @@ namespace JgDienstScannerMaschine
             ListeBauteile = Maschine.ListeBauteile;
         }
 
-        public void Save()
+        public void SaveStatusMaschineLocal()
         {
             if (_Maschine != null)
             {
@@ -66,71 +65,70 @@ namespace JgDienstScannerMaschine
 
                     try
                     {
-                        using (var writer = new StreamWriter(optUeberg.DateiAusgabe))
-                        {
-                            var serializer = new XmlSerializer(typeof(JgMaschinenStatus));
-                            serializer.Serialize(writer, optUeberg.StatusMaschine);
-                        }
+                        Helper.ObjektInXmlDatei<JgMaschinenStatus>(optUeberg.StatusMaschine, optUeberg.DateiAusgabe);
                     }
                     catch (Exception ex)
                     {
-                        JgLog.Set($"Fehler Reader Load Maschinenstatus ausgelöst.\nGrund: {ex.Message}", JgLog.LogArt.Info);
+                        JgLog.Set(null, $"Fehler Reader Load Maschinenstatus ausgelöst.\nGrund: {ex.Message}", JgLog.LogArt.Info);
                     }
 
                 }, new OptUebergabe() { StatusMaschine = this, DateiAusgabe = _DateiAusgabe });
             }
         }
 
-        public static void Load(JgMaschineStamm Maschine, string PfadAusgabe)
+        public static void LoadStatusMaschineLocal(JgMaschineStamm Maschine, string PfadAusgabe)
         {
             if (Maschine != null)
             {
-                var datAusgabe = GetDatai(PfadAusgabe, Maschine.Id);
+                var datAusgabe = GetDateiName(PfadAusgabe, Maschine.Id);
 
-                if (File.Exists(datAusgabe))
+                try
                 {
-                    try
+                    var erg = Helper.XmlDateiInObjekt<JgMaschinenStatus>(datAusgabe);
+
+                    if (erg != null)
                     {
-                        using (var reader = new StreamReader(datAusgabe))
-                        {
-                            var serializer = new XmlSerializer(typeof(JgMaschinenStatus));
-                            var erg = (JgMaschinenStatus)serializer.Deserialize(reader);
-                            if (erg != null)
-                            {
-                                Maschine.AktivBauteil = erg.AktivBauteil;
-                                Maschine.ListeBauteile = erg.ListeBauteile;
-                                Maschine.MeldBediener = erg.MeldBediener;
-                                Maschine.MeldListeHelfer = erg.MeldListeHelfer;
-                                Maschine.MeldMeldung = erg.MeldMeldung;
-                            }
-                        }
+                        Maschine.AktivBauteil = erg.AktivBauteil;
+                        Maschine.ListeBauteile = erg.ListeBauteile;
+                        Maschine.MeldBediener = erg.MeldBediener;
+                        Maschine.MeldListeHelfer = erg.MeldListeHelfer;
+                        Maschine.MeldMeldung = erg.MeldMeldung;
                     }
-                    catch (Exception ex)
-                    {
-                        JgLog.Set($"Fehler Reader Program 'Load' Maschinenstatus für Datei {datAusgabe} ausgelöst\nGrund: {ex.Message}", JgLog.LogArt.Info);
-                    }
+                }
+                catch (Exception ex)
+                {
+                    JgLog.Set(null, $"Fehler Reader Program 'Load' Maschinenstatus für Datei {datAusgabe} ausgelöst\nGrund: {ex.Message}", JgLog.LogArt.Info);
                 }
             }
         }
 
-        public ServiceRef.JgWcfMaschineStatus GetAsWcfMaschinenStatus()
+        public byte[] GetStatusAsXmlByte()
         {
-            if (_Maschine == null)
-                return null;
-
-            var lhelfer = MeldListeHelfer.Select(s => s.Id).ToList();
-
-            var erg = new ServiceRef.JgWcfMaschineStatus()
+            if (_Maschine != null)
             {
-                Id = _Maschine.Id,
-                Aenderung = DateTime.Now,
-                IdMeldungBediener = MeldBediener?.Id,
-                IdMeldungMeldung = MeldBediener?.Id,
-                IdBauteilAktiv = AktivBauteil?.Id,
-                ListeIdMeldungHelfer = new List<Guid>(lhelfer)
-            };
+                var lhelfer = MeldListeHelfer.Select(s => s.Id).ToList();
 
-            return erg;
+                var erg = new JgMaschinenStatusMeldungen()
+                {
+                    Aenderung = DateTime.Now,
+                    IdBediener = MeldBediener?.Id,
+                    IdMeldung = MeldMeldung?.Id,
+                    IdAktivBauteil = AktivBauteil?.Id,
+                    IdListeHelfer = new List<Guid>(lhelfer),
+                    Information = _Maschine.Information
+                };
+
+                try
+                {
+                    return Helper.ObjectInXmlDatenByte<JgMaschinenStatusMeldungen>(erg);
+                }
+                catch (Exception ex)
+                {
+                    JgLog.Set(null, $"Fehler Reader Load Maschinenstatus ausgelöst.\nGrund: {ex.Message}", JgLog.LogArt.Info);
+                }
+            }
+
+            return null;
         }
     }
 }

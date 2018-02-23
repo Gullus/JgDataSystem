@@ -27,7 +27,7 @@ namespace JgDienstScannerMaschine
             IdBediener = MyIdBediener;
         }
 
-        public void Abmeldung()
+        public JgMeldung Abmeldung()
         {
             Aenderung = DateTime.Now;
 
@@ -46,6 +46,8 @@ namespace JgDienstScannerMaschine
                     Meldung = ScannerMeldung.WART_ENDE;
                     break;
             }
+
+            return this;
         }
     }
 }

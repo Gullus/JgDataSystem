@@ -1,0 +1,68 @@
+﻿@model IEnumerable<JgLibDataModel.TabBauteil>
+
+<table class="table table-hover table-striped table-sm">
+    
+    <thead style="border-top:hidden">
+        <tr>
+            <th>Id</th>
+            <th>Datum</th>
+            <th>Start</th>
+            <th>Ende</th>
+            <th>Zeit<br />praktisch</th>
+            <th>Zeit<br />theoret.</th>
+            @*<th style="max-width:120px">IdJgData</th>*@
+            <th>Ø</th>
+            <th>Anzahl<br />Teile</th>
+            <th>Gewicht</th>
+            <th>Laenge</th>
+            <th>Anzahl<br />Bieg.</th>
+            <th>Anzahl<br />Helfer</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td align="center">
+                @item.StartFertigung.ToString("dd.MM")
+            </td>
+            <td align="center">
+                @item.StartFertigung.ToString("HH:mm:ss")
+            </td>
+            <td align="center">
+                @(item.EndeFertigung == null ? "-" : item.EndeFertigung.Value.ToString("HH:mm:ss"))
+            </td>
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.ZeitPraktisch)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.ZeitTheoretisch)
+            </td>
+            @*<td with="120">
+                    @Html.DisplayFor(modelItem => item.IdBauteilJgData)
+                </td>*@
+            <td align="right">
+                @Html.DisplayFor(modelItem => item.DuchmesserInMm)
+            </td>
+            <td align="right">
+                @Html.DisplayFor(modelItem => item.AnzahlTeile)
+            </td>
+            <td align="right">
+                @item.GewichtInKg.ToString("N2")
+            </td>
+            <td align="right">
+                @Html.DisplayFor(modelItem => item.LaengeInCm)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.AnzahlBiegungen)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.AnzahlHelfer)
+            </td>
+        </tr>
+    }
+
+</table>

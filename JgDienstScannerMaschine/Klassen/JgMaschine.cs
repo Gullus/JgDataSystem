@@ -4,11 +4,10 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace JgDienstScannerMaschine
 {
-    public abstract class JgMaschineStamm : ServiceRef.JgWcfMaschine, IJgMaschineStatus
+    public abstract class JgMaschineStamm : ServiceRef.JgWcfMaschine
     {
         // Schnittstelle IMerkeStatusMaschine  ************
 
@@ -21,6 +20,8 @@ namespace JgDienstScannerMaschine
         public List<JgMeldung> MeldListeHelfer { get; set; } = new List<JgMeldung>();
 
         public List<JgBauteilFertig> ListeBauteile { get; set; } = new List<JgBauteilFertig>();
+
+        public string Information { get; set; }
 
         // Programme *********************
 
@@ -55,7 +56,7 @@ namespace JgDienstScannerMaschine
 
         public override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set($"Sende Maschine Progress", JgLog.LogArt.Info);
+            JgLog.Set(this, $"Sende Maschine Progress", JgLog.LogArt.Info);
             _DatenTask.BvbsString = BvBsCode;
 
             Task.Factory.StartNew((SendDaten) =>
@@ -69,7 +70,7 @@ namespace JgDienstScannerMaschine
                 }
                 catch (Exception ex)
                 {
-                    JgLog.Set($"Fehler beim schreiben der Progress Produktionsliste Maschine: {MaschineName} \nDatei: {datei}.\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
+                    JgLog.Set(this, $"Fehler beim schreiben der Progress Produktionsliste!\nDatei: {datei}.\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
                 }
             }, _DatenTask);
         }
@@ -91,7 +92,8 @@ namespace JgDienstScannerMaschine
 
         public override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set($"Sende Maschine Evg", JgLog.LogArt.Info);
+
+            JgLog.Set(this, $"Sende Daten.", JgLog.LogArt.Info);
 
             Task.Factory.StartNew((SendDaten) =>
             {
@@ -106,7 +108,7 @@ namespace JgDienstScannerMaschine
                 }
                 catch (Exception f)
                 {
-                    JgLog.Set($"Fehler beim schreiben der EVG Produktionsliste in die Maschine {md.Maschine.MaschineName}!\nDatei: {datProdListe}.\nGrund: {f.Message}", JgLog.LogArt.Warnung);
+                    JgLog.Set(this, $"Fehler beim schreiben der EVG Produktionsliste!\nDatei: {datProdListe}.\nGrund: {f.Message}", JgLog.LogArt.Warnung);
                 }
 
                 // Produktionsauftrag schreiben
@@ -118,7 +120,7 @@ namespace JgDienstScannerMaschine
                 }
                 catch (Exception f)
                 {
-                    JgLog.Set($"Fehler beim schreiben des EVG Produktionsauftrages in die Maschine {md.Maschine.MaschineName}!\nDatei: {datProtAuftrag}.\nGrund: {f.Message}", JgLog.LogArt.Warnung);
+                    JgLog.Set(this, $"Fehler beim schreiben des EVG Produktionsauftrages!\nDatei: {datProtAuftrag}.\nGrund: {f.Message}", JgLog.LogArt.Warnung);
                 }
 
             }, _DatenTask);
@@ -139,10 +141,10 @@ namespace JgDienstScannerMaschine
 
         public override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set($"Sende Maschine Schnell", JgLog.LogArt.Info);
+            JgLog.Set(this, $"Sende Daten.", JgLog.LogArt.Info);
 
             if (this.MaschinePort == 0)
-                JgLog.Set($"Bei Maschine: {MaschineName} wurde keine Portnummer eingetragen!", JgLog.LogArt.Krittisch);
+                JgLog.Set(this, $"Bei Maschine wurde keine Portnummer eingetragen!", JgLog.LogArt.Krittisch);
             else
             {
 
@@ -169,7 +171,7 @@ namespace JgDienstScannerMaschine
                                 buffer = new byte[client.ReceiveBufferSize];
                                 int anzEmpfang = nwStr.Read(buffer, 0, (int)client.ReceiveBufferSize);
                                 var empfangen = Encoding.ASCII.GetString(buffer, 0, anzEmpfang);
-                                JgLog.Set($"Rückantwort von Maschine {md.Maschine.MaschineName}: {empfangen}", JgLog.LogArt.Unbedeutend);
+                                JgLog.Set(this, $"Rückantwort von Maschine {md.Maschine.MaschineName}: {empfangen}", JgLog.LogArt.Unbedeutend);
 
                                 #region Antwort der Maschine auf Fehler prüfen
 
@@ -215,12 +217,12 @@ namespace JgDienstScannerMaschine
                             }
 
                             client.Close();
-                            JgLog.Set($"Verbindung mit: {md.Maschine.MaschineName} abgeschlossen.", JgLog.LogArt.Unbedeutend);
+                            JgLog.Set(this, $"Verbindung abgeschlossen.", JgLog.LogArt.Unbedeutend);
                         }
                     }
                     catch (Exception f)
                     {
-                        JgLog.Set($"Fehler beim senden der Bvbs Daten an die Maschine: {md.Maschine.MaschineName}\nDaten: {md.BvbsString}\nGrund: {f.Message}", JgLog.LogArt.Warnung);
+                        JgLog.Set(this, $"Fehler beim senden der Bvbs Daten an die Maschine.\nDaten: {md.BvbsString}\nGrund: {f.Message}", JgLog.LogArt.Warnung);
                     }
                 }, _DatenTask);
             }
@@ -231,7 +233,7 @@ namespace JgDienstScannerMaschine
     {
         public override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set($"Sende Maschine Hand", JgLog.LogArt.Info);
+            JgLog.Set(this, $"Sende Daten.", JgLog.LogArt.Info);
         }
     }
 }

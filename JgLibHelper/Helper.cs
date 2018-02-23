@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+using System.IO;
 using System.Net.NetworkInformation;
-using System.Reflection;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace JgLibHelper
 {
@@ -65,6 +65,75 @@ namespace JgLibHelper
                 }
             }
             return false;
+        }
+
+        public static string GetExcept(Exception Ex)
+        {
+            var sb = new StringBuilder(Ex.Message);
+            var ex = Ex.InnerException;
+            while (ex != null)
+            {
+                sb.AppendLine("\nInnerException:");
+                sb.AppendLine("  " + ex.Message);
+                ex = ex.InnerException;
+            }
+
+            return sb.ToString();
+        }
+
+        public static T ByteDatenXmlInObjekt<T>(byte[] Daten)
+        {
+            try
+            {
+                using (var mem = new MemoryStream(Daten))
+                {
+                    using (var reader = new StreamReader(mem))
+                    {
+                        var serializer = new XmlSerializer(typeof(T));
+                        return (T)serializer.Deserialize(reader);
+                    }
+                }
+            }
+            catch
+            { }
+
+            return default(T);
+        }
+
+        public static byte[] ObjectInXmlDatenByte<T>(object Objekt, Type[] Typen = null)
+        {
+            using (var mem = new MemoryStream())
+            {
+                using (var writer = new StreamWriter(mem))
+                {
+                    var serializer = new XmlSerializer(typeof(T), Typen);
+                    serializer.Serialize(writer, Objekt);
+                    return mem.ToArray();
+                }
+            }
+        }
+ 
+        public static T XmlDateiInObjekt<T>(string DataName, Type[] Typen = null)
+        {
+            if (File.Exists(DataName))
+            {
+                using (var reader = new StreamReader(DataName))
+                {
+                    var serializer = new XmlSerializer(typeof(T), Typen);
+                    return (T)serializer.Deserialize(reader);
+                }
+            }
+
+            return default(T);
+        }
+
+        public static void ObjektInXmlDatei<T>(object Objekt, string DataName, Type[] Typen = null)
+        {
+            using (var writer = new StreamWriter(DataName))
+            {
+                var serializer = new XmlSerializer(typeof(Object), Typen);
+                serializer.Serialize(writer, Objekt);
+            }
         }
     }
 }

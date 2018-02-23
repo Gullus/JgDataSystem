@@ -15,7 +15,7 @@ namespace JgDienstScannerMaschine
             Stop
         }
 
-        public static void Set(string LogText, LogArt Art)
+        public static void Set(JgMaschineStamm Maschine, string LogText, LogArt Art)
         {
             System.Diagnostics.TraceEventType art = System.Diagnostics.TraceEventType.Verbose;
 
@@ -41,7 +41,18 @@ namespace JgDienstScannerMaschine
                     break;
             }
 
-            Logger.Write(LogText, "Service", 0, 0, art);
+            if (Maschine == null)
+                Logger.Write(LogText, "Service", 0, 0, art);
+            else
+            {
+                Logger.Write($"Maschine: {Maschine.MaschineName}\n{LogText}", "Service", 0, 0, art);
+
+                if (Art == LogArt.Unbedeutend)
+                    Maschine.Information = "";
+                else
+                    Maschine.Information = LogText;
+            }
+
         }
     }
 }

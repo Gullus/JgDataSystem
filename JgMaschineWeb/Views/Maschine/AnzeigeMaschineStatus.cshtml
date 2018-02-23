@@ -1,0 +1,53 @@
+﻿@model SelectList
+
+@{
+    ViewBag.Title = "Maschinendaten Bearbeiten";
+}
+
+<br />
+<h2>Maschinenstatus</h2>
+<p>Hier werden Informationen zur Eingabe der Daten eingegeben</p>
+<br />
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card border-primary">
+            <div class="card-header alert-primary">
+                Auswahl Maschine
+            </div>
+            @Html.ListBox("LbMaschinen", Model, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="IdStatusPartiel">
+            <h6><strong>Lade Status .....</strong></h6>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+    function StatusLaden() {
+
+        var url = '@Url.Action("AnzeigeMaschineStatusPartial")/' + $("#LbMaschinen").val();
+
+        $.post(url, function (data) {
+            $('#IdStatusPartiel').html(data);
+        });
+    }
+
+    StatusLaden();
+
+    setInterval(function () {
+        StatusLaden();
+    }, 5000);
+
+    jQuery(function () {
+        $('#LbMaschinen').on('change', function () {
+            StatusLaden();
+        });
+    });
+
+</script>

@@ -29,11 +29,11 @@ namespace JgDienstScannerMaschine
 
                 while (true)
                 {
-                    JgLog.Set($"Verbindungsaufbau {optCrad.Info}", JgLog.LogArt.Info);
+                    JgLog.Set(null, $"Verbindungsaufbau {optCrad.Info}", JgLog.LogArt.Info);
 
                     if (!Helper.IstPingOk(optCrad.CraddleIpAdresse, out msg))
                     {
-                        JgLog.Set($"Ping Fehler {optCrad.Info}\nGrund: {msg}", JgLog.LogArt.Info);
+                        JgLog.Set(null, $"Ping Fehler {optCrad.Info}\nGrund: {msg}", JgLog.LogArt.Info);
                         Thread.Sleep(20000);
                         continue;
                     }
@@ -44,12 +44,12 @@ namespace JgDienstScannerMaschine
                     }
                     catch (Exception ex)
                     {
-                        JgLog.Set($"Fehler Verbindungsaufbau {optCrad.Info}\nGrund: {ex.Message}", JgLog.LogArt.Info);
+                        JgLog.Set(null, $"Fehler Verbindungsaufbau {optCrad.Info}\nGrund: {ex.Message}", JgLog.LogArt.Info);
                         Thread.Sleep(30000);
                         continue;
                     }
 
-                    JgLog.Set($"Verbindung Ok {optCrad.Info}", JgLog.LogArt.Info);
+                    JgLog.Set(null, $"Verbindung Ok {optCrad.Info}", JgLog.LogArt.Info);
                     netStream = client.GetStream();
 
                     while (true)
@@ -72,7 +72,7 @@ namespace JgDienstScannerMaschine
                                 if (!Helper.IstPingOk(ipCraddle, out msg))
                                     break;
 
-                                JgLog.Set($"Ping {ipCraddle} Ok.", JgLog.LogArt.Unbedeutend);
+                                JgLog.Set(null, $"Ping {ipCraddle} Ok.", JgLog.LogArt.Unbedeutend);
                             }
                         }, optCrad.CraddleIpAdresse, ctPing);
 
@@ -94,7 +94,7 @@ namespace JgDienstScannerMaschine
                                 if (!ctScanner.IsCancellationRequested)
                                 {
                                     var letzteZeichen = Encoding.ASCII.GetString(bufferEmpfang, 0, anzZeichen);
-                                    JgLog.Set($"Fehler Datenempfang {optCrad.Info}!\nLetzter Text: {letzteZeichen}\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
+                                    JgLog.Set(null, $"Fehler Datenempfang {optCrad.Info}!\nLetzter Text: {letzteZeichen}\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
                                     return optCrad.TextBeiFehler;
                                 }
                             }
@@ -111,15 +111,15 @@ namespace JgDienstScannerMaschine
                             var textEmpfangen = taskScannen.Result;
 
                             if (textEmpfangen == optCrad.TextBeiFehler)
-                                JgLog.Set($"{optCrad.Info} -> Fehlertext angesprochen.", JgLog.LogArt.Warnung);
+                                JgLog.Set(null, $"{optCrad.Info} -> Fehlertext angesprochen.", JgLog.LogArt.Warnung);
                             else if (textEmpfangen.Length == 1)
-                                JgLog.Set($"{optCrad.Info} -> Ein Zeichen Empfangen: {Convert.ToByte(textEmpfangen[0])}", JgLog.LogArt.Warnung);
+                                JgLog.Set(null, $"{optCrad.Info} -> Ein Zeichen Empfangen: {Convert.ToByte(textEmpfangen[0])}", JgLog.LogArt.Warnung);
                             else if (textEmpfangen.Length < 1)
-                                JgLog.Set($"{optCrad.Info} -> Leeres Zeichen Empfangen!", JgLog.LogArt.Warnung);                   
+                                JgLog.Set(null, $"{optCrad.Info} -> Leeres Zeichen Empfangen!", JgLog.LogArt.Warnung);                   
                             else
                             {
                                 if (textEmpfangen.Contains(optCrad.TextVerbinungOk))
-                                    JgLog.Set($"Verbindung Craddle OK ! {textEmpfangen}", JgLog.LogArt.Info);
+                                    JgLog.Set(null, $"Verbindung Craddle OK ! {textEmpfangen}", JgLog.LogArt.Info);
                                 else
                                 {
                                     var ergScanner = auswertScanner.TextEmpfangen(taskScannen.Result);
@@ -130,7 +130,7 @@ namespace JgDienstScannerMaschine
                         }
                         try
                         {
-                            JgLog.Set($"Abbruch {optCrad.Info}!", JgLog.LogArt.Warnung);
+                            JgLog.Set(null, $"Abbruch {optCrad.Info}!", JgLog.LogArt.Warnung);
 
                             if (client != null)
                             {

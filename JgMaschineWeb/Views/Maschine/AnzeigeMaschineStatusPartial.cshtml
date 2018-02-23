@@ -1,0 +1,256 @@
+﻿@model JgMaschineWeb.Models.JgMaschineStatusAnzeige
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Maschinendaten<br /> Id: @Model.Maschine.Id
+            </div>
+            <div class="card-body">
+
+                <table>
+                    <tr>
+                        <td width="200px">
+                            <strong>Maschinenname</strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Maschine.MaschineName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200px">
+                            <strong>Maschinenart</strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Maschine.MaschineArt)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Standort</strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Maschine.EStandort.StandortName)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>letzte Änderung</strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Aenderung)
+                        </td>
+                    </tr>
+
+                </table>
+
+                <hr />
+
+                <table>
+                    <tr>
+                        <td width="200px">
+                            <strong>Status Maschine</strong>
+                        </td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        @if (Model.Meldung == null)
+                        {
+                            <td>Maschine betriebsbereit</td>
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>
+                                <strong style="color:red">@Html.DisplayFor(model => model.Meldung.Meldung) @(Model.Meldung.Anzahl != null ? $"  [{Model.Meldung.Anzahl}]" : "")</strong>
+                            </td>
+                            <td>
+                                @Model.Meldung.ZeitMeldung.ToString("dd.MM HH:mm:ss")
+                            </td>
+                        }
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+        <br />
+
+        <div class="card">
+            <div class="card-header">
+                Information
+            </div>
+            <div class="card-body">
+                <p>
+                    @Model.Information
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Bediener und Helfer
+            </div>
+            <div class="card-body">
+
+                <table>
+                    <tr>
+                        <th width="250px">Bediener</th>
+                        <th>Anmeldung</th>
+                    </tr>
+                    <tr>
+                        @if (Model?.Bediener?.EBediener != null)
+                        {
+                            <td>
+                                @Model.Bediener.EBediener.AnzeigeName
+                            </td>
+                            <td>
+                                @Model.Bediener.ZeitMeldung.ToString("dd.MM HH:mm:ss")
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                            <td></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Maschinenhelfer</strong>
+                        </td>
+                    </tr>
+
+                    @if (Model.ListeHelfer.Count > 0)
+                    {
+                        foreach (var helfer in Model.ListeHelfer)
+                        {
+                            <tr>
+                                <td>
+                                    @helfer.EBediener.Nachname
+                                </td>
+                                <td>
+                                    @helfer.ZeitMeldung.ToString("dd.MM HH:mm:ss")
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>-</td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+        </div>
+
+        <br />
+
+        <div class="card">
+            <div class="card-header">
+                Aktives Bauteil
+            </div>
+            <div class="card-body">
+
+                <table>
+                    @if (Model.Bauteil == null)
+                    {
+                        <tr>
+                            <td>Kein Bauteil registriert</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                <strong>Start Fertig.</strong>
+                            </td>
+                            <td colspan="3">
+                                @Model.Bauteil.StartFertigung.ToString("HH:mm:ss")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Id JgData</strong>
+                            </td>
+                            <td colspan="3">
+                                @Html.DisplayFor(model => model.Bauteil.Id)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">-------------------------</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Anzahl Teile</strong>
+                            </td>
+                            <td width="80">
+                                @Html.DisplayFor(model => model.Bauteil.AnzahlTeile)
+                            </td>
+                            <td>
+                                <strong>Durchmesser</strong>
+                            </td>
+                            <td width="80">
+                                @Html.DisplayFor(model => model.Bauteil.DuchmesserInMm)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Länge [cm]</strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Bauteil.LaengeInCm)
+                            </td>
+                            <td>
+                                <strong>Gewicht [kg]</strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Bauteil.GewichtInKg)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Biegungen</strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Bauteil.AnzahlBiegungen)
+                            </td>
+                            <td>
+                                <strong>th. Zeit [min]</strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Bauteil.ZeitTheoretisch)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">-------------------------</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Helfer</strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Bauteil.AnzahlHelfer)
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

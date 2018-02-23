@@ -73,22 +73,18 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label>Vorschub pro Meter [s]</label>
-                            @Html.EditorFor(model => model.VorschubProMeterInSek, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.VorschubProMeterInSek, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.VorschubProMeterInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
                         <div class="form-group col-md-6">
                             <label>Zeit pro Biegung [s]</label>
-                            @Html.EditorFor(model => model.ZeitProBiegungInSek, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ZeitProBiegungInSek, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.ZeitProBiegungInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label>Fixzeit pro Bauteil [s]</label>
-                            @Html.EditorFor(model => model.ZeitProBauteilInSek, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ZeitProBauteilInSek, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.ZeitProBauteilInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
 

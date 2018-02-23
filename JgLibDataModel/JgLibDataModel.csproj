@@ -76,8 +76,8 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
+    <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -132,6 +132,14 @@
     <Compile Include="Migrations\20180217121809_neu.cs" />
     <Compile Include="Migrations\20180217121809_neu.designer.cs">
       <DependentUpon>20180217121809_neu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180218183613_AnzahlBauteil.cs" />
+    <Compile Include="Migrations\20180218183613_AnzahlBauteil.designer.cs">
+      <DependentUpon>20180218183613_AnzahlBauteil.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20180219165821_Single.cs" />
+    <Compile Include="Migrations\20180219165821_Single.designer.cs">
+      <DependentUpon>20180219165821_Single.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

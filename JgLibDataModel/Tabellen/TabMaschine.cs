@@ -18,9 +18,9 @@ namespace JgLibDataModel
         public int MaschinePort { get; set; }
         public bool SammelScannung { get; set; }
 
-        public int VorschubProMeterInSek { get; set; }
-        public int ZeitProBiegungInSek { get; set; }
-        public int ZeitProBauteilInSek { get; set; }
+        public Single VorschubProMeterInSek { get; set; }
+        public Single ZeitProBiegungInSek { get; set; }
+        public Single ZeitProBauteilInSek { get; set; }
 
         public bool ScannerMitDisplay { get; set; }
 
@@ -39,6 +39,50 @@ namespace JgLibDataModel
 
         [InverseProperty("EMaschine")]
         public ICollection<TabMeldung> SMeldungen { get; set; }
+
+        // Anzeige für Validierung in WebPage
+
+        [NotMapped]
+        public string VorschubProMeterInSekAnzeige
+        {
+            get => VorschubProMeterInSek.ToString("N3");
+            set
+            {
+                try
+                {
+                    VorschubProMeterInSek = Convert.ToSingle(value);
+                }
+                catch { }
+            }
+        }
+
+        [NotMapped]
+        public string ZeitProBiegungInSekAnzeige
+        {
+            get => ZeitProBiegungInSek.ToString("N3");
+            set
+            {
+                try
+                {
+                    ZeitProBiegungInSek = Convert.ToSingle(value);
+                }
+                catch { }
+            }
+        }
+
+        [NotMapped]
+        public string ZeitProBauteilInSekAnzeige
+        {
+            get => ZeitProBauteilInSek.ToString("N3");
+            set
+            {
+                try
+                {
+                    ZeitProBauteilInSek = Convert.ToSingle(value);
+                }
+                catch { }
+            }
+        }
 
         public TabMaschine()
         {

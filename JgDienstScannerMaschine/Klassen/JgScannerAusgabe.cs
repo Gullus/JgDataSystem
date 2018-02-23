@@ -30,7 +30,7 @@ namespace JgDienstScannerMaschine
 
                 if (!Enum.TryParse<ScannerVorgang>(scanVorgangText, true, out erg))
                 {
-                    JgLog.Set($"Scanner {ScannerKennung}. Sanvorgang konnte nicht ermittelt werden ({scanVorgangText}).", JgLog.LogArt.Fehler);
+                    JgLog.Set(null, $"Scanner {ScannerKennung}. Sanvorgang konnte nicht ermittelt werden ({scanVorgangText}).", JgLog.LogArt.Fehler);
                     Set(false, true, "Scanvorgang falsch", scanVorgangText);
                 }
 

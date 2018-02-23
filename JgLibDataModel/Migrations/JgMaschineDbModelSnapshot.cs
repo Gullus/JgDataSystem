@@ -32,6 +32,8 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<int>("AnzahlHelfer");
 
+                    b.Property<int>("AnzahlTeile");
+
                     b.Property<int>("DuchmesserInMm");
 
                     b.Property<DateTime?>("EndeFertigung");
@@ -53,6 +55,8 @@ namespace JgLibDataModel.Migrations
                     b.Property<DateTime>("StartFertigung");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdBauteilJgData");
 
                     b.HasIndex("IdBediener");
 
@@ -126,11 +130,11 @@ namespace JgLibDataModel.Migrations
 
                     b.Property<byte[]>("StatusMaschine");
 
-                    b.Property<int>("VorschubProMeterInSek");
+                    b.Property<float>("VorschubProMeterInSek");
 
-                    b.Property<int>("ZeitProBauteilInSek");
+                    b.Property<float>("ZeitProBauteilInSek");
 
-                    b.Property<int>("ZeitProBiegungInSek");
+                    b.Property<float>("ZeitProBiegungInSek");
 
                     b.HasKey("Id");
 

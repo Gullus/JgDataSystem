@@ -30,7 +30,6 @@
     <MetadataFile FileName="WcfService2.xsd" MetadataType="Schema" ID="083e5bf3-7bce-429f-9c58-a656d7124a07" SourceId="1" SourceUrl="http://localhost:58115/WcfService.svc?xsd=xsd1" />
     <MetadataFile FileName="WcfService3.xsd" MetadataType="Schema" ID="4db0075e-5603-4ee6-9ba1-332b8793f98d" SourceId="1" SourceUrl="http://localhost:58115/WcfService.svc?xsd=xsd0" />
     <MetadataFile FileName="WcfService.wsdl" MetadataType="Wsdl" ID="f26e5625-ed9b-4e0f-88aa-a7ffc736801e" SourceId="1" SourceUrl="http://localhost:58115/WcfService.svc?wsdl" />
-    <MetadataFile FileName="WcfService4.xsd" MetadataType="Schema" ID="5d56c872-2ff7-4fb5-9ffa-e5a36d9bebac" SourceId="1" SourceUrl="http://localhost:58115/WcfService.svc?xsd=xsd4" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

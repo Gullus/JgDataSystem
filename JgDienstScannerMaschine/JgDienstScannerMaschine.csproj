@@ -88,11 +88,10 @@
     </Compile>
     <Compile Include="JgDatenZumServer.cs" />
     <Compile Include="JgInit.cs" />
-    <Compile Include="Klassen\JgMaschineStatus.cs" />
     <Compile Include="Klassen\BvbsDaten.cs" />
-    <Compile Include="Klassen\IMerkeStatusMaschine.cs" />
     <Compile Include="Klassen\JgBauteil.cs" />
     <Compile Include="Klassen\JgBauteilFertig.cs" />
+    <Compile Include="Klassen\JgMaschineStatus.cs" />
     <Compile Include="Klassen\JgMeldung.cs" />
     <Compile Include="Klassen\JgScannerAusgabe.cs" />
     <Compile Include="JgScannerAuswertung.cs" />
@@ -131,9 +130,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServiceRef\WcfService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\ServiceRef\WcfService4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />

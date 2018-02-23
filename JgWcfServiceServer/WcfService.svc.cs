@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace JgWcfServiceServer
@@ -15,6 +13,7 @@ namespace JgWcfServiceServer
     public class WcfService : IWcfService
     {
         public JgCopyProperty<IJgBauteil> _KopieBauteil = new JgCopyProperty<IJgBauteil>();
+        public JgCopyProperty<IJgMeldung> _KopieMeldung = new JgCopyProperty<IJgMeldung>();
 
         public WcfService()
         { }
@@ -41,7 +40,7 @@ namespace JgWcfServiceServer
         {
             var lWcfBenutzer = new List<JgWcfBediener>();
             var copyBediener = new JgCopyProperty<IJgBediener>();
-            
+
             using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
             {
                 var tempDb = await db.TabBedienerSet.ToListAsync();
@@ -58,14 +57,44 @@ namespace JgWcfServiceServer
             return TestString;
         }
 
-        public Task<bool> SendeBauteil(JgWcfBauteil Bauteil, JgWcfMaschineStatus StatusMaschine)
+        private JgCopyProperty<IJgBauteil> _CopyBauteil = new JgCopyProperty<IJgBauteil>(); 
+
+        public async Task<string> SendeBauteil(JgWcfBauteil Bauteil, byte[] TStatusMaschine)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var db = new JgMaschineDb())
+                {
+                    var bauteil = await db.TabBauteilSet.FindAsync(Bauteil.Id);
+                    if (bauteil != null)
+                        return $"OK Fehler Bauteil mit Id {Bauteil.Id} bereits in Datenbank vorhanden ! Vorgang wird ignoriert.";
+
+                    var bt = new TabBauteil();
+                    _CopyBauteil.CopyProperties(Bauteil, bt);
+                    bt.StartFertigung = Bauteil.Aenderung;
+                    await db.TabBauteilSet.AddAsync(bt);
+
+                    if (TStatusMaschine != null)
+                    {
+                        var ma = await db.TabMaschineSet.FindAsync(Bauteil.IdMaschine);
+                        if (ma != null)
+                            ma.StatusMaschine = TStatusMaschine;
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Helper.GetExcept(ex);
+            }
+
+            return "OK";
         }
 
-        private ScannerMeldung[] _MeldungEnde = new  ScannerMeldung[] { ScannerMeldung.ABMELDUNG, ScannerMeldung.COIL_ENDE, ScannerMeldung.REPA_ENDE, ScannerMeldung.WART_ENDE };
+        private ScannerMeldung[] _MeldungEnde = new ScannerMeldung[] { ScannerMeldung.ABMELDUNG, ScannerMeldung.COIL_ENDE, ScannerMeldung.REPA_ENDE, ScannerMeldung.WART_ENDE };
 
-        public async Task<bool> SendeMeldung(JgWcfMeldung Meldung, JgWcfMaschineStatus StatusMaschine)
+        public async Task<string> SendeMeldung(JgWcfMeldung Meldung, byte[] StatusMaschine)
         {
             try
             {
@@ -73,7 +102,7 @@ namespace JgWcfServiceServer
                 {
                     if (Meldung.Meldung == ScannerMeldung.BAUT_ENDE)
                     {
-                        // Die Endzeit eines Bauteils wird ittels einer Meldung
+                        // Die Endzeit eines Bauteils wird mittels einer Meldung
                         // Angezeigt und eingetragen
 
                         var baut = await db.TabBauteilSet.FindAsync(Meldung.Id);
@@ -81,8 +110,9 @@ namespace JgWcfServiceServer
                         {
                             baut.EndeFertigung = Meldung.Aenderung;
                             baut.Aenderung = Meldung.Aenderung;
-
                         }
+                        else
+                            return $"OK Bauteil Ende nicht eingetragen, Id {Meldung.Id} nicht gefunden! Vorgang wird ignoriert.";
                     }
                     else if (_MeldungEnde.Contains(Meldung.Meldung))
                     {
@@ -91,20 +121,25 @@ namespace JgWcfServiceServer
 
                         var meldung = await db.TabMeldungSet.FindAsync(Meldung.Id);
                         if (meldung != null)
-                            meldung.ZeitAbmeldung = Meldung.Aenderung; 
+                        {
+                            meldung.ZeitAbmeldung = Meldung.Aenderung;
+                            meldung.Aenderung = Meldung.Aenderung;
+                        }
+                        else
+                            return $"OK Meldung {meldung.Meldung} nicht eingetragen, Id {Meldung.Id} nicht gefunden! Vorgang wird ignoriert.";
                     }
                     else
                     {
-                        await db.TabMeldungSet.AddAsync(new TabMeldung()
+                        var meld = await db.TabMeldungSet.FindAsync(Meldung.Id);
+                        if (meld != null)
+                            return $"OK Fehler {Meldung.Meldung} Id {Meldung.Id} bereits in Datenbank vorhanden ! Vorgang wird ignoriert.";
+
+                        meld = new TabMeldung()
                         {
-                            Id = Meldung.Id,
-                            IdBediener = Meldung.IdBediener,
-                            IdMaschine = Meldung.IdMaschine,
-                            ZeitMeldung = Meldung.Aenderung,
-                            Anzahl = Meldung.Anzahl,
-                            Meldung = Meldung.Meldung,
-                            Aenderung = Meldung.Aenderung
-                        });
+                            ZeitMeldung = Meldung.Aenderung
+                        };
+                        _KopieMeldung.CopyProperties(Meldung, meld);
+                        await db.TabMeldungSet.AddAsync(meld);
                     }
 
                     if (StatusMaschine != null)
@@ -112,12 +147,8 @@ namespace JgWcfServiceServer
                         var ma = await db.TabMaschineSet.FindAsync(Meldung.IdMaschine);
                         if (ma != null)
                         {
-                            using (var memStream = new MemoryStream())
-                            {
-                                var formatter = new BinaryFormatter();
-                                formatter.Serialize(memStream, StatusMaschine);
-                                ma.StatusMaschine = memStream.ToArray();
-                            };
+                            ma.StatusMaschine = StatusMaschine;
+                            ma.Aenderung = new DateTime();
                         }
                     }
 
@@ -126,10 +157,10 @@ namespace JgWcfServiceServer
             }
             catch (Exception ex)
             {
-                return false;
+                return Helper.GetExcept(ex);
             }
 
-            return true;
+            return "OK";
         }
     }
 }

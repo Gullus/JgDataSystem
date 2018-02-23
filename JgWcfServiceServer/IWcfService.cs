@@ -14,10 +14,10 @@ namespace JgWcfServiceLib
         string WcfTest(String TestString);
 
         [OperationContract]
-        Task<bool> SendeBauteil(JgWcfBauteil Bauteil, JgWcfMaschineStatus Maschine);
+        Task<string> SendeBauteil(JgWcfBauteil Bauteil, byte[] TMaschine);
 
         [OperationContract]
-        Task<bool> SendeMeldung(JgWcfMeldung Meldung, JgWcfMaschineStatus Maschine);
+        Task<string> SendeMeldung(JgWcfMeldung Meldung, byte[] TMaschine);
 
         [OperationContract]
         Task<List<JgWcfBediener>> GetBediener();
@@ -62,6 +62,9 @@ namespace JgWcfServiceLib
 
         [DataMember]
         public int AnzahlHelfer { get; set; }
+
+        [DataMember]
+        public int AnzahlTeile { get; set; }
     }
 
     [DataContract]
@@ -121,21 +124,5 @@ namespace JgWcfServiceLib
 
         [DataMember]
         public string NummerAusweis { get; set; }
-    }
-
-    [DataContract]
-    public class JgWcfMaschineStatus : JgWcfBase, IJgMaschineStatus
-    {
-        [DataMember]
-        public Guid? IdMeldungBediener { get; set; }
-
-        [DataMember]
-        public List<Guid> ListeIdMeldungHelfer { get; set; }
-
-        [DataMember]
-        public Guid? IdMeldungMeldung { get; set; }
-
-        [DataMember]
-        public Guid? IdBauteilAktiv { get; set; }
     }
 }

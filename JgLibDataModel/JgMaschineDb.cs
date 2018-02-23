@@ -21,6 +21,14 @@ namespace JgLibDataModel
         public DbSet<TabMeldung> TabMeldungSet { get; set; }
         public DbSet<TabReport> TabReportSet { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TabBauteil>()
+                .HasIndex(b => b.IdBauteilJgData);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(SqlVerbindung);

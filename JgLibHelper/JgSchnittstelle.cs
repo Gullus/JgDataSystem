@@ -26,6 +26,7 @@ namespace JgLibHelper
 
     public interface IJgBauteil : IJgBase
     {
+        int AnzahlTeile { get; set; }
         int DuchmesserInMm { get; set; }
         double GewichtInKg { get; set; }
         int LaengeInCm { get; set; }
@@ -57,14 +58,5 @@ namespace JgLibHelper
         bool SammelScannung { get; set; }
         string NummerScanner { get; set; }
         bool ScannerMitDisplay { get; set; }
-    }
-
-    public interface IJgMaschineStatus
-    {
-        Guid? IdMeldungBediener { get; set; }
-        List<Guid> ListeIdMeldungHelfer { get; set; }
-
-        Guid? IdMeldungMeldung { get; set; } 
-        Guid? IdBauteilAktiv { get; set; } 
     }
 }

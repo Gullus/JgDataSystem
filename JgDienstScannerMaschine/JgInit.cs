@@ -3,8 +3,6 @@ using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
 
 namespace JgDienstScannerMaschine
 {
@@ -53,7 +51,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Fehler Wcf Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Fehler Wcf Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
 
             return speichern;
@@ -61,24 +59,19 @@ namespace JgDienstScannerMaschine
 
         public void BedienerLocalLaden()
         {
-            if (!File.Exists(_FileBediener))
-                return;
             try
             {
-                JgBediener[] arBediener = null;
-                using (var reader = new StreamReader(_FileBediener))
+                var lBediener = Helper.XmlDateiInObjekt<JgBediener[]>(_FileBediener);
+                if (lBediener != null)
                 {
-                    var serializer = new XmlSerializer(typeof(JgBediener[]));
-                    arBediener = (JgBediener[])serializer.Deserialize(reader);
+                    _JgOpt.ListeBediener.Clear();
+                    foreach (var ma in lBediener)
+                        _JgOpt.ListeBediener.Add(ma.Id, ma);
                 }
-
-                _JgOpt.ListeBediener.Clear();
-                foreach (var ma in arBediener)
-                    _JgOpt.ListeBediener.Add(ma.Id, ma);
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Fehler beim localen laden Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Fehler beim localen laden Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 
@@ -89,15 +82,11 @@ namespace JgDienstScannerMaschine
 
             try
             {
-                using (var writer = new StreamWriter(_FileBediener))
-                {
-                    var serializer = new XmlSerializer(typeof(JgBediener[]));
-                    serializer.Serialize(writer, arSpeichern);
-                }
+                Helper.ObjektInXmlDatei<JgBediener[]>(arSpeichern, _FileBediener);
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Fehler beim localen speichern der Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 
@@ -168,21 +157,19 @@ namespace JgDienstScannerMaschine
 
             try
             {
-                JgMaschineStamm[] arMaschineStamm = null;
-                using (var reader = new StreamReader(_FileMaschinen))
-                {
-                    var maschinenTypes = new Type[] { typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress), typeof(JgMaschineHand) };
-                    var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), maschinenTypes);
-                    arMaschineStamm = (JgMaschineStamm[])serializer.Deserialize(reader);
-                }
+                var maschinenTypes = new Type[] { typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress), typeof(JgMaschineHand) };
+                var lMaschinen = Helper.XmlDateiInObjekt<JgMaschineStamm[]>(_FileMaschinen, maschinenTypes);
 
-                _JgOpt.ListeMaschinen.Clear();
-                foreach (var ma in arMaschineStamm)
-                    _JgOpt.ListeMaschinen.Add(ma.Id, ma);
+                if (lMaschinen != null)
+                {
+                    _JgOpt.ListeMaschinen.Clear();
+                    foreach (var ma in lMaschinen)
+                        _JgOpt.ListeMaschinen.Add(ma.Id, ma);
+                }
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Fehler locales laden XML Daten Maschine!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Fehler locales laden XML Daten Maschine!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 
@@ -193,16 +180,12 @@ namespace JgDienstScannerMaschine
 
             try
             {
-                using (var writer = new StreamWriter(_FileMaschinen))
-                {
-                    Type[] maschinenTypes = { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress) };
-                    var serializer = new XmlSerializer(typeof(JgMaschineStamm[]), maschinenTypes);
-                    serializer.Serialize(writer, arSpeichern);
-                }
+                var maschinenTypes = new Type[] { typeof(JgMaschineHand), typeof(JgMaschineEvg), typeof(JgMaschineSchnell), typeof(JgMaschineProgress) };
+                Helper.ObjektInXmlDatei<JgMaschineStamm[]>(arSpeichern, _FileMaschinen, maschinenTypes);
             }
             catch (Exception ex)
             {
-                JgLog.Set($"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
         }
 

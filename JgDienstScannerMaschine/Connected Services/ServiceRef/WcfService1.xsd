@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/JgWcfServiceLib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/JgLibHelper" />
+  <xs:import schemaLocation="http://localhost:58115/WcfService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/JgLibHelper" />
   <xs:complexType name="JgWcfBauteil">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:JgWcfBase">
         <xs:sequence>
           <xs:element minOccurs="0" name="AnzahlBiegungen" type="xs:int" />
           <xs:element minOccurs="0" name="AnzahlHelfer" type="xs:int" />
+          <xs:element minOccurs="0" name="AnzahlTeile" type="xs:int" />
           <xs:element minOccurs="0" name="DuchmesserInMm" type="xs:int" />
           <xs:element minOccurs="0" name="GewichtInKg" type="xs:double" />
           <xs:element minOccurs="0" name="IdBauteilJgData" nillable="true" type="xs:string" />
@@ -27,19 +27,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="JgWcfBase" nillable="true" type="tns:JgWcfBase" />
-  <xs:complexType name="JgWcfMaschineStatus">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:JgWcfBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="IdBauteilAktiv" nillable="true" type="ser:guid" />
-          <xs:element minOccurs="0" name="IdMeldungBediener" nillable="true" type="ser:guid" />
-          <xs:element minOccurs="0" name="IdMeldungMeldung" nillable="true" type="ser:guid" />
-          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListeIdMeldungHelfer" nillable="true" type="q1:ArrayOfguid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="JgWcfMaschineStatus" nillable="true" type="tns:JgWcfMaschineStatus" />
   <xs:complexType name="JgWcfMeldung">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:JgWcfBase">
@@ -47,7 +34,7 @@
           <xs:element minOccurs="0" name="Anzahl" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="IdBediener" type="ser:guid" />
           <xs:element minOccurs="0" name="IdMaschine" type="ser:guid" />
-          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="Meldung" type="q2:ScannerMeldung" />
+          <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="Meldung" type="q1:ScannerMeldung" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -81,7 +68,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:JgWcfBase">
         <xs:sequence>
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="MaschineArt" type="q3:MaschinenArten" />
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/JgLibHelper" minOccurs="0" name="MaschineArt" type="q2:MaschinenArten" />
           <xs:element minOccurs="0" name="MaschineIp" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="MaschineName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="MaschinePort" type="xs:int" />

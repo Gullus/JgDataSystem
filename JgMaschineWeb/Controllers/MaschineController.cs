@@ -1,7 +1,9 @@
 ﻿using JgLibDataModel;
 using JgLibHelper;
+using JgMaschineWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -125,6 +127,98 @@ namespace JgMaschineWeb.Controllers
             var mel = new TabMeldung();
             TryUpdateModel(mel);
             return View(mel);
+        }
+
+        [Authorize]
+        public async Task<ActionResult> IndexBauteileProMaschine(Guid? Id)
+        {
+            if (Id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var listeMaschinen = await db.TabMaschineSet.Where(w => w.IstAktiv)
+                .OrderBy(o => o.MaschineName).ToListAsync();
+
+            var maschine = listeMaschinen.FirstOrDefault(f => f.Id == Id);
+
+            if (maschine == null)
+                return HttpNotFound();
+
+            var datStart = DateTime.Now.Date;
+            var datEnde = datStart.AddDays(1);
+
+            var bauteile = db.TabBauteilSet
+                .Where(w => (w.IdMaschine == Id) && (w.StartFertigung >= datStart) && (w.StartFertigung < datEnde))
+                .OrderBy(o => o.StartFertigung);
+
+            ViewBag.ListeMaschinen = new SelectList(listeMaschinen, "Id", "MaschineName", maschine.Id);
+            return View(await bauteile.ToListAsync());
+        }
+
+        public async Task<ActionResult> IndexBauteileProMaschinePartial(Guid IdMaschine, DateTime TxtDatumVon, DateTime TxtDatumBis)
+        {
+            var datBis = TxtDatumBis.Date.AddDays(1);
+            var bauteile = db.TabBauteilSet
+                .Where(w => (w.IdMaschine == IdMaschine) && (w.StartFertigung >= TxtDatumVon.Date) && (w.StartFertigung < datBis))
+                .OrderBy(o => o.StartFertigung);
+
+            return View(await bauteile.ToListAsync());
+        }
+
+        public async Task<ActionResult> AnzeigeMaschineStatus(Guid? Id)
+        {
+            if (Id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var lMaschinen = await db.TabMaschineSet
+                .Where(w => w.IstAktiv)
+                .OrderBy(o => o.MaschineName).ToListAsync();
+
+            var maschine = lMaschinen.FirstOrDefault(f => f.Id == Id);
+
+            if (maschine == null)
+                return HttpNotFound();
+
+            return View(new SelectList(lMaschinen, "Id", "MaschineName", maschine.Id));
+        }
+
+        public async Task<PartialViewResult> AnzeigeMaschineStatusPartial(Guid? Id)
+        {
+            var maschine = await db.TabMaschineSet.Include(i => i.EStandort).FirstOrDefaultAsync(f => f.Id == Id);
+
+            if (maschine.StatusMaschine == null)
+                return PartialView("AnzeigeMaschineStatusFehler");
+
+            var meldStatus = Helper.ByteDatenXmlInObjekt<JgMaschinenStatusMeldungen>(maschine.StatusMaschine);
+
+            // Alle Meldungen mit einem mal vom Server holen
+
+            var idisHelfer = meldStatus.IdListeHelfer.Select(s => s).ToList();
+            var idisMeldungen = new List<Guid>(idisHelfer);
+            if (meldStatus.IdBediener != null)
+                idisMeldungen.Add((Guid)meldStatus.IdBediener);
+            if (meldStatus.IdMeldung != null)
+                idisMeldungen.Add((Guid)meldStatus.IdMeldung);
+
+            var lMeldungen = await db.TabMeldungSet.Include(i => i.EBediener).Where(w => idisMeldungen.Contains(w.Id)).ToListAsync();
+
+            var anzeigeStatus = new JgMaschineStatusAnzeige()
+            {
+                Maschine = maschine,
+                ListeHelfer = new List<TabMeldung>(lMeldungen.Where(w => idisHelfer.Contains(w.Id))), 
+                Aenderung = meldStatus.Aenderung,
+                Information = meldStatus.Information
+            };
+
+            if (meldStatus.IdAktivBauteil != null)
+                anzeigeStatus.Bauteil = await db.TabBauteilSet.FindAsync(meldStatus.IdAktivBauteil);
+
+            if (meldStatus.IdBediener != null)
+                anzeigeStatus.Bediener = lMeldungen.FirstOrDefault(f => f.Id == meldStatus.IdBediener);
+
+            if (meldStatus.IdMeldung != null)
+                anzeigeStatus.Meldung = lMeldungen.FirstOrDefault(f => f.Id == meldStatus.IdMeldung);
+
+            return PartialView(anzeigeStatus);
         }
 
         protected override void Dispose(bool disposing)

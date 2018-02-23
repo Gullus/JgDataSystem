@@ -19,6 +19,8 @@ namespace JgDienstScannerMaschine
             ExceptionPolicy.SetExceptionManager(new ExceptionPolicyFactory().CreateManager(), false);
             // Bsp.: ExceptionPolicy.HandleException(ex, "Policy");
 
+            JgLog.Set(null, "Programm gestartet.", JgLog.LogArt.Info);
+
             var pr = Properties.Settings.Default;
 
             var jgOpt = new JgOptionen()
@@ -42,7 +44,7 @@ namespace JgDienstScannerMaschine
             // Status Maschine laden, wenn vorhanden
 
             foreach (var maStatus in jgOpt.ListeMaschinen.Values)
-               JgMaschinenStatus.Load(maStatus, jgOpt.PfadDaten);
+               JgMaschinenStatus.LoadStatusMaschineLocal(maStatus, jgOpt.PfadDaten);
 
             // Optionen für jedes Craddel laden
 

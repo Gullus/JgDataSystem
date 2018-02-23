@@ -4,8 +4,9 @@ namespace JgDienstScannerMaschine
 {
     public class JgBauteilFertig
     {
-        public Guid IdBauteil { get; set;}
+        public Guid IdBauteil { get; set; }
         public string IdJgData { get; set; }
+        public DateTime Erstellt { get; set; }
 
         public JgBauteilFertig()
         { }
@@ -14,6 +15,7 @@ namespace JgDienstScannerMaschine
         {
             IdBauteil = MyIdBauteil;
             IdJgData = MyIdJgData;
+            Erstellt = DateTime.Now;
         }
     }
 }
