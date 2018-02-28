@@ -12,7 +12,7 @@ namespace JgLibDataModel
 {
     public class JgMaschineDb : DbContext
     {
-        public string SqlVerbindung { get; set; } = @"Data Source=.\SqlExpress;Initial Catalog = JgDataSystem; Integrated Security = True";
+        public string SqlVerbindung { get; set; } = @"Data Source=.\SqlExpress;Initial Catalog = JgMaschineSystem; Integrated Security = True";
 
         public DbSet<TabStandort> TabStandortSet { get; set; }
         public DbSet<TabBediener> TabBedienerSet { get; set; }

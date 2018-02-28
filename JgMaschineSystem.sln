@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgTestConsole", "JgTestConsole\JgTestConsole.csproj", "{7D191063-7B5B-40B0-A113-39F043B6D6DA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,7 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgDienstScannerMaschine", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMonitor", "JgMonitor\JgMonitor.csproj", "{D209DC79-42CD-44B4-B11C-EECE0D49B245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineWeb", "JgMaschineWeb\JgMaschineWeb.csproj", "{78C27981-07D9-4A76-9682-D46F2C2D7768}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineAspWeb", "JgMaschineAspWeb\JgMaschineAspWeb.csproj", "{9109309E-DDDF-486E-BBCE-02B43815FC58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineAspWeb.Tests", "JgMaschineAspWeb.Tests\JgMaschineAspWeb.Tests.csproj", "{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +55,14 @@ Global
 		{D209DC79-42CD-44B4-B11C-EECE0D49B245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D209DC79-42CD-44B4-B11C-EECE0D49B245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D209DC79-42CD-44B4-B11C-EECE0D49B245}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78C27981-07D9-4A76-9682-D46F2C2D7768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78C27981-07D9-4A76-9682-D46F2C2D7768}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78C27981-07D9-4A76-9682-D46F2C2D7768}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78C27981-07D9-4A76-9682-D46F2C2D7768}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
