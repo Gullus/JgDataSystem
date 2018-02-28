@@ -1,5 +1,7 @@
 ﻿@model JgMaschineWeb.Models.JgMaschineStatusAnzeige
 
+<input type="hidden" id="IdZeitAenderung" value="@Model.Maschine.StatusMaschineAenderung" />
+
 <div class="row">
     <div class="col-md-6">
         <div class="card">
@@ -39,7 +41,7 @@
                             <strong>letzte Änderung</strong>
                         </td>
                         <td>
-                            @Html.DisplayFor(model => model.Aenderung)
+                            @Html.DisplayFor(model => model.Maschine.StatusMaschineAenderung)
                         </td>
                     </tr>
 

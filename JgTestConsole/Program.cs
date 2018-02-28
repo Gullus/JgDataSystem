@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace JgTestConsole
 {
@@ -11,15 +12,13 @@ namespace JgTestConsole
     {
         static void Main(string[] args)
         {
-            var t2 = new C2();
+            var test = "Hallo\n\rBallo";
 
-            C1 t1 = (C1)t2;
+            test = test.Replace("\n", string.Empty).Replace("\r", string.Empty);
 
-            Console.WriteLine(t1.feld1);
-            Console.WriteLine(t1.GetType());
+            Console.WriteLine(test + "\a");
 
-            var t = new TAttr();
-            
+
             
 
             Console.ReadKey();

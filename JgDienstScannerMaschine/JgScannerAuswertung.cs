@@ -145,24 +145,34 @@ namespace JgDienstScannerMaschine
 
             //todo: Aktives Bausteil von String in eindeutige Id aus JgData umwandeln
 
-            Maschine.AktivBauteil = new JgBauteil
+            var btId = ScanAusgabe.ScannKoerper.Replace("\n", string.Empty).Replace("\r", string.Empty);
+
+            if (Maschine.ListeBauteile.Any(a => a.IdJgData == btId))
             {
+                ScanAusgabe.Set(true, true, "Bauteil wurde", "bereits", "erstellt !");
+            }
+            else
+            {
+                Maschine.AktivBauteil = new JgBauteil
+                {
 
-                IdMaschine = Maschine.Id,
-                IdBediener = Maschine.MeldBediener.IdBediener,
-                IdBauteilJgData = ScanAusgabe.ScannKoerper,
-                AnzahlHelfer = Maschine.MeldListeHelfer.Count,
-            
-                AnzahlTeile = btNeu.Anzahl ?? 0,
-                GewichtInKg = btNeu.Gewicht ?? 0,
-                DuchmesserInMm = btNeu.Durchmesser ?? 0,
-                LaengeInCm = btNeu.Laenge ?? 0,
-                AnzahlBiegungen = btNeu.ListeGeometrie.Count() - 1
-            };
+                    IdMaschine = Maschine.Id,
+                    IdBediener = Maschine.MeldBediener.IdBediener,
+                    AnzahlHelfer = Maschine.MeldListeHelfer.Count,
 
-            _JgOpt.QueueSend($"BT {Maschine.AktivBauteil.Id}", Maschine.AktivBauteil);
-            ScanAusgabe.Set(true, false, "Bauteil in", "Maschine", "registriert");
-            JgLog.Set(Maschine, $"Bauteil {Maschine.AktivBauteil.Id} registriert.", JgLog.LogArt.Unbedeutend);
+                    IdBauteilJgData = btId,
+
+                    AnzahlTeile = btNeu.Anzahl ?? 0,
+                    GewichtInKg = btNeu.Gewicht ?? 0,
+                    DuchmesserInMm = btNeu.Durchmesser ?? 0,
+                    LaengeInCm = btNeu.Laenge ?? 0,
+                    AnzahlBiegungen = btNeu.ListeGeometrie.Count() - 1
+                };
+
+                JgLog.Set(Maschine, $"Bauteil {Maschine.AktivBauteil.Id} registriert.", JgLog.LogArt.Unbedeutend);
+                _JgOpt.QueueSend($"BT {Maschine.AktivBauteil.Id}", Maschine.AktivBauteil);
+                ScanAusgabe.Set(true, false, "Bauteil in", "Maschine", "registriert");
+            }
         }
 
         private void MaschineAnmeldungEintragen(JgScannerAusgabe ScanAusgabe, JgMaschineStamm Maschine)
@@ -297,8 +307,8 @@ namespace JgDienstScannerMaschine
 
             var meldung = Maschine.MeldMeldung.Abmeldung();
             Maschine.MeldMeldung = null;
-            _JgOpt.QueueSend($"Meldung {progText} beendet", Maschine, meldung);
             JgLog.Set(Maschine, $"Meldung {progText} beendet!", JgLog.LogArt.Info);
+            _JgOpt.QueueSend($"Meldung {progText} beendet", Maschine, meldung);
 
             return new string[] { "", progText, "beendet" };
         }
@@ -323,10 +333,9 @@ namespace JgDienstScannerMaschine
                         }
                         catch { }
 
+                        JgLog.Set(Maschine, $"Start Coilwechsel. Anzahl: {Maschine.MeldMeldung.Anzahl ?? 0}", JgLog.LogArt.Info);
                         ScanAusgabe.Set(false, false, "", "Coilwechsel", "gestartet");
                         _JgOpt.QueueSend($"Start Coilwechsel", Maschine, Maschine.MeldMeldung);
-
-                        JgLog.Set(Maschine, $"Start Coilwechsel. Anzahl: {Maschine.MeldMeldung.Anzahl ?? 0}", JgLog.LogArt.Info);
                     }
                     break;
                 case ScannerMeldung.REPASTART:
@@ -337,10 +346,9 @@ namespace JgDienstScannerMaschine
                         MeldungBeenden(Maschine);
                         Maschine.MeldMeldung = new JgMeldung(Maschine.MeldBediener.IdBediener, ScannerMeldung.REPASTART);
 
+                        JgLog.Set(Maschine, "Start Reparatur.", JgLog.LogArt.Info);
                         ScanAusgabe.Set(false, false, "", "Reparatur", "gestartet");
                         _JgOpt.QueueSend($"Start Reparatur", Maschine, Maschine.MeldMeldung);
-
-                        JgLog.Set(Maschine, "Start Reparatur.", JgLog.LogArt.Info);
                     }
                     break;
                 case ScannerMeldung.WARTSTART:
@@ -351,10 +359,9 @@ namespace JgDienstScannerMaschine
                         MeldungBeenden(Maschine);
                         Maschine.MeldMeldung = new JgMeldung(Maschine.MeldBediener.IdBediener, ScannerMeldung.WARTSTART);
 
+                        JgLog.Set(Maschine, $"Start Wartung.", JgLog.LogArt.Info);
                         ScanAusgabe.Set(false, false, "", "Wartung", "gestartet");
                         _JgOpt.QueueSend($"Start Wartung", Maschine, Maschine.MeldMeldung);
-
-                        JgLog.Set(Maschine, $"Start Wartung.", JgLog.LogArt.Info);
                     }
                     break;
                 case ScannerMeldung.REPA_ENDE:

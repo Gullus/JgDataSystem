@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,22 @@ namespace JgDienstScannerMaschine
 
         // Programme *********************
 
-        public abstract void SendeDatenZurMaschine(string BvBsCode);
+        internal DatenTaskMaschine _DatenTask;
+
+        public JgMaschineStamm()
+        {
+            _DatenTask = new DatenTaskMaschine() { Maschine = this };
+        }
+
+        public void DatenZurMaschine(string BvBsCode)
+        {
+            JgLog.Set(this, $"Sende Daten an {this.MaschineName}", JgLog.LogArt.Info);
+            SendeDatenZurMaschine(BvBsCode);
+        }
+
+        internal abstract void SendeDatenZurMaschine(string BvBsCode);
+
+        internal abstract void EinlesenZeitenAusMaschine();
 
         public override string ToString()
         {
@@ -43,20 +59,13 @@ namespace JgDienstScannerMaschine
 
     public class JgMaschineProgress : JgMaschineStamm
     {
-        private DatenTaskMaschine _DatenTask;
-
         public JgMaschineProgress()
         {
-            _DatenTask = new DatenTaskMaschine()
-            {
-
-                PfadProduktionsListe = Properties.Settings.Default.ProgressPfadProduktionsListe,
-            };
+            _DatenTask.PfadProduktionsListe = Properties.Settings.Default.ProgressPfadProduktionsListe;
         }
 
-        public override void SendeDatenZurMaschine(string BvBsCode)
+        internal override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set(this, $"Sende Maschine Progress", JgLog.LogArt.Info);
             _DatenTask.BvbsString = BvBsCode;
 
             Task.Factory.StartNew((SendDaten) =>
@@ -70,31 +79,90 @@ namespace JgDienstScannerMaschine
                 }
                 catch (Exception ex)
                 {
-                    JgLog.Set(this, $"Fehler beim schreiben der Progress Produktionsliste!\nDatei: {datei}.\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
+                    JgLog.Set(this, $"Fehler beim schreiben der Progress Produktionsliste!\nDatei: {datei}.\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
                 }
-            }, _DatenTask);
+            }, BvBsCode);
+        }
+
+        private void FehlerAusloesen(string FeldName, int NummerZeile, string Zeile, int FeldIndext, string Wert, Exception Fehler)
+        {
+            var msg = $"Fehler bei Konvertierung der Importdaten Feld '{FeldName} in Zeile {NummerZeile}."
+              + $"\nIndex: {FeldIndext} Wert: {Wert}\nDatensatz: {Zeile}\nFehler: {Fehler.Message}";
+            throw new Exception(msg);
+        }
+
+        internal override void EinlesenZeitenAusMaschine()
+        {
+            int zaehler = 0;
+            string msg = "";
+            //_Ergebnisse.Clear();
+
+            //var lZeilen = StringListenLaden(DateiName);
+
+            //if (lZeilen != null)
+            //{
+            //    foreach (var zeile in lZeilen)
+            //    {
+            //        zaehler++;
+            //        var felder = zeile.Split(new char[] { ';' }, StringSplitOptions.None);
+            //        var erg = new ErgebnisAbfrage();
+
+            //        try
+            //        {
+            //            erg.Start = Convert.ToDateTime(felder[6]);
+            //        }
+            //        catch (Exception f)
+            //        {
+            //            FehlerAusloesen("DatumStart", zaehler, zeile, 6, felder[6], f);
+            //        }
+
+            //        try
+            //        {
+            //            erg.Dauer = Convert.ToDateTime(felder[7]) - (DateTime)erg.Start;
+            //        }
+            //        catch (Exception f)
+            //        {
+            //            FehlerAusloesen("DatumEnde", zaehler, zeile, 7, felder[7], f);
+            //        }
+
+            //        try
+            //        {
+            //            erg.Schluessel = felder[2];
+            //        }
+            //        catch (Exception f)
+            //        {
+            //            FehlerAusloesen("NummerPosition", zaehler, zeile, 2, felder[2], f);
+            //        }
+
+            //        _Ergebnisse.Add(erg);
+            //    }
+
+            //    ErgebnissInDatenbank(Maschine, _Ergebnisse);
+
+            //    try
+            //    {
+            //        File.Delete(DateiName);
+            //    }
+            //    catch (Exception f)
+            //    {
+            //        msg = $"Datei {DateiName} konnte nicht gelöscht werden !\nGrund: {f.Message}";
+            //        throw new Exception(msg);
+            //    }
+            //}
+
         }
     }
 
     public class JgMaschineEvg : JgMaschineStamm
     {
-        private DatenTaskMaschine _DatenTask;
-
         public JgMaschineEvg()
         {
-            _DatenTask = new DatenTaskMaschine()
-            {
-                Maschine = this,
-                PfadProduktionsListe = Properties.Settings.Default.EvgPfadProduktionsListe,
-                DateiProduktionsAuftrag = Properties.Settings.Default.EvgDateiProduktionsAuftrag
-            };
+            _DatenTask.PfadProduktionsListe = Properties.Settings.Default.EvgPfadProduktionsListe;
+            _DatenTask.DateiProduktionsAuftrag = Properties.Settings.Default.EvgDateiProduktionsAuftrag;
         }
 
-        public override void SendeDatenZurMaschine(string BvBsCode)
+        internal override void SendeDatenZurMaschine(string BvBsCode)
         {
-
-            JgLog.Set(this, $"Sende Daten.", JgLog.LogArt.Info);
-
             Task.Factory.StartNew((SendDaten) =>
             {
                 var md = (DatenTaskMaschine)SendDaten;
@@ -125,24 +193,93 @@ namespace JgDienstScannerMaschine
 
             }, _DatenTask);
         }
+
+        internal override void EinlesenZeitenAusMaschine()
+        {
+            var pfadStart = @"\\" + this.MaschineIp + @"\" + "Muss noch eingessellt werden";
+
+            if (! Directory.Exists(pfadStart))
+            {
+                JgLog.Set(this, "Pad zum Auslesen der Daten nicht gefunden", JgLog.LogArt.Fehler);
+
+            }
+            else
+            {
+                // alle relevante Dateien aus Verzeichnissen laden -> Stammverzeichnis ...\EVG\Eingabe\Monit\(Jahr)\(HahrMonat)\....
+
+                var heute = DateTime.Now.Date;
+                var durchlauf = this.ListeBauteile.Min(m => m.Erstellt);
+                var dateienAuswertung = new List<string>();
+
+                while (durchlauf <= heute)
+                {
+                    var dirMonatJahr = string.Format(@"{0}\{1}\{1}{2}", pfadStart, durchlauf.Year, durchlauf.Month.ToString("D2"));
+                    dateienAuswertung.AddRange(Directory.EnumerateFiles(dirMonatJahr, "F_*.mon").ToList());
+                    durchlauf.AddMonths(1);
+                };
+
+                //var merkeLetzteDatum = Maschine.eProtokoll.LetzteDateiDatum;
+                //var merkeLetzteZeile = Maschine.eProtokoll.LetzteZeile;
+                //var merkeZeileBauteil = 0;
+
+                //foreach (var datei in dateienAuswertung)
+                //{
+                //    var datum = Helper.DatumAusYyyyMMdd(Path.GetFileName(datei).Substring(2));
+
+                //    if (datum < Maschine.eProtokoll.LetzteDateiDatum)
+                //        continue;
+
+                //    var lZeilen = StringListenLaden(datei);
+
+                //    if (datum > Maschine.eProtokoll.LetzteDateiDatum)
+                //        Maschine.eProtokoll.LetzteDateiDatum = datum;
+
+                //    ErgebnisAbfrage ergNeu = null;
+                //    var zeileStart = 0;
+
+                //    if (datum == merkeLetzteDatum)
+                //        zeileStart = merkeLetzteZeile;
+
+                //    for (int zeile = zeileStart; zeile < lZeilen.Length; zeile++)
+                //    {
+                //        if (lZeilen[zeile][7] == 'A')
+                //        {
+                //            merkeZeileBauteil = zeile;
+                //            ergNeu = new ErgebnisAbfrage() { Start = GetDatum(datum, lZeilen[zeile]) };
+                //            _Ergebnisse.Add(ergNeu);
+
+                //            var felder = lZeilen[zeile].Split(new char[] { ';' }, StringSplitOptions.None);
+                //            try
+                //            {
+                //                ergNeu.Schluessel = felder[4];
+                //            }
+                //            catch (Exception f)
+                //            {
+                //                var msg = $"Fehler beim konvertieren der Id {felder[4]} in Zeile: {zeile}.\nGrund: {f.Message}";
+                //                throw new Exception(msg);
+                //            }
+                //        }
+                //        else if ((ergNeu != null) && (lZeilen[zeile][7] == 'D'))
+                //            ergNeu.Dauer = (DateTime)ergNeu.Start - GetDatum(datum, lZeilen[zeile]);
+                //    }
+
+                //    if (datum == Maschine.eProtokoll.LetzteDateiDatum)
+                //        Maschine.eProtokoll.LetzteZeile = merkeZeileBauteil;
+                //}
+
+                //ErgebnissInDatenbank(Maschine, _Ergebnisse);
+            }
+
+        }
     }
 
     public class JgMaschineSchnell : JgMaschineStamm
     {
-        private DatenTaskMaschine _DatenTask;
-
         public JgMaschineSchnell()
-        {
-            _DatenTask = new DatenTaskMaschine()
-            {
-                Maschine = this
-            };
-        }
+        { }
 
-        public override void SendeDatenZurMaschine(string BvBsCode)
+        internal override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set(this, $"Sende Daten.", JgLog.LogArt.Info);
-
             if (this.MaschinePort == 0)
                 JgLog.Set(this, $"Bei Maschine wurde keine Portnummer eingetragen!", JgLog.LogArt.Krittisch);
             else
@@ -227,13 +364,19 @@ namespace JgDienstScannerMaschine
                 }, _DatenTask);
             }
         }
+
+        internal override void EinlesenZeitenAusMaschine()
+        { }
     }
 
     public class JgMaschineHand : JgMaschineStamm
     {
-        public override void SendeDatenZurMaschine(string BvBsCode)
+        internal override void SendeDatenZurMaschine(string BvBsCode)
         {
-            JgLog.Set(this, $"Sende Daten.", JgLog.LogArt.Info);
+            JgLog.Set(this, $"Daten registriert.", JgLog.LogArt.Info);
         }
+
+        internal override void EinlesenZeitenAusMaschine()
+        { }
     }
 }

@@ -51,7 +51,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set(null, $"Fehler Wcf Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                JgLog.Set(null, $"Fehler beim Wcf Bediener laden vom Server!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
             }
 
             return speichern;
@@ -71,7 +71,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set(null, $"Fehler beim localen laden Bediener!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                ExceptionPolicy.HandleException(new Exception("Fehler beim localen laden Bediener!", ex), "Policy");
             }
         }
 
@@ -144,7 +144,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                ExceptionPolicy.HandleException(new Exception("Fehler beim Wcf Maschine laden!", ex), "Policy");
+                ExceptionPolicy.HandleException(new Exception("Fehler beim Wcf Maschine laden vom Server!", ex), "Policy");
             }
 
             return speichern;
@@ -169,7 +169,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set(null, $"Fehler locales laden XML Daten Maschine!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                ExceptionPolicy.HandleException(new Exception("Fehler localen laden Maschinen!", ex), "Policy");
             }
         }
 
@@ -185,7 +185,7 @@ namespace JgDienstScannerMaschine
             }
             catch (Exception ex)
             {
-                JgLog.Set(null, $"Fehler beim localen speichern der Maschinen!\nGrund: {ex.Message}", JgLog.LogArt.Fehler);
+                ExceptionPolicy.HandleException(new Exception("Fehler locales speichern Maschinen!", ex), "Policy");
             }
         }
 

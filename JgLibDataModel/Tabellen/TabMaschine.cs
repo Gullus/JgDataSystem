@@ -31,6 +31,8 @@ namespace JgLibDataModel
         public bool IstAktiv { get; set; }
 
         public string Bemerkung { get; set; }
+
+        public DateTime StatusMaschineAenderung { get; set; }
         public byte[] StatusMaschine { get; set; } 
 
         public Guid IdStandort { get; set; }

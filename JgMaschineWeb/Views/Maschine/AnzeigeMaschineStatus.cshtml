@@ -33,6 +33,10 @@
 
         var url = '@Url.Action("AnzeigeMaschineStatusPartial")/' + $("#LbMaschinen").val();
 
+        var zeit = $("#IdZeitAenderung").val();
+        if (zeit != undefined)
+            url += '?DatumAenderung=' + zeit;
+
         $.post(url, function (data) {
             $('#IdStatusPartiel').html(data);
         });

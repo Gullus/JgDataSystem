@@ -59,7 +59,7 @@ namespace JgWcfServiceServer
 
         private JgCopyProperty<IJgBauteil> _CopyBauteil = new JgCopyProperty<IJgBauteil>(); 
 
-        public async Task<string> SendeBauteil(JgWcfBauteil Bauteil, byte[] TStatusMaschine)
+        public async Task<string> SendeBauteil(JgWcfBauteil Bauteil, byte[] StatusMaschine)
         {
             try
             {
@@ -74,11 +74,14 @@ namespace JgWcfServiceServer
                     bt.StartFertigung = Bauteil.Aenderung;
                     await db.TabBauteilSet.AddAsync(bt);
 
-                    if (TStatusMaschine != null)
+                    if (StatusMaschine != null)
                     {
                         var ma = await db.TabMaschineSet.FindAsync(Bauteil.IdMaschine);
                         if (ma != null)
-                            ma.StatusMaschine = TStatusMaschine;
+                        {
+                            ma.StatusMaschine = StatusMaschine;
+                            ma.StatusMaschineAenderung = DateTime.Now;
+                        }
                     }
 
                     await db.SaveChangesAsync();
@@ -136,7 +139,8 @@ namespace JgWcfServiceServer
 
                         meld = new TabMeldung()
                         {
-                            ZeitMeldung = Meldung.Aenderung
+                            ZeitMeldung = Meldung.Aenderung,
+                            IdMaschine = Meldung.IdMaschine
                         };
                         _KopieMeldung.CopyProperties(Meldung, meld);
                         await db.TabMeldungSet.AddAsync(meld);
@@ -148,7 +152,7 @@ namespace JgWcfServiceServer
                         if (ma != null)
                         {
                             ma.StatusMaschine = StatusMaschine;
-                            ma.Aenderung = new DateTime();
+                            ma.StatusMaschineAenderung = DateTime.Now;
                         }
                     }
 

@@ -10,7 +10,6 @@ namespace JgLibHelper
         public Guid? IdMeldung { get; set; }
         public List<Guid> IdListeHelfer { get; set; } = new List<Guid>();
 
-        public DateTime Aenderung { get; set; }
         public string Information { get; set; }
     }
 }

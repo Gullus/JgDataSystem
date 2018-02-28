@@ -110,7 +110,6 @@ namespace JgDienstScannerMaschine
 
                 var erg = new JgMaschinenStatusMeldungen()
                 {
-                    Aenderung = DateTime.Now,
                     IdBediener = MeldBediener?.Id,
                     IdMeldung = MeldMeldung?.Id,
                     IdAktivBauteil = AktivBauteil?.Id,

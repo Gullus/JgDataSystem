@@ -62,6 +62,7 @@ namespace JgMaschineWeb.Controllers
             {
                 var bediener = await db.TabBedienerSet.FindAsync(Id);
                 TryUpdateModel(bediener);
+                bediener.Aenderung = DateTime.Now;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

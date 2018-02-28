@@ -141,6 +141,10 @@
     <Compile Include="Migrations\20180219165821_Single.designer.cs">
       <DependentUpon>20180219165821_Single.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20180224100109_add-migration status datum.cs" />
+    <Compile Include="Migrations\20180224100109_add-migration status datum.designer.cs">
+      <DependentUpon>20180224100109_add-migration status datum.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\JgMaschineDbModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabellen\TabBauteil.cs" />

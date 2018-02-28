@@ -131,7 +131,7 @@ namespace JgLibHelper
         {
             using (var writer = new StreamWriter(DataName))
             {
-                var serializer = new XmlSerializer(typeof(Object), Typen);
+                var serializer = new XmlSerializer(typeof(T), Typen);
                 serializer.Serialize(writer, Objekt);
             }
         }

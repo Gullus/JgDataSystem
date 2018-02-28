@@ -82,20 +82,20 @@ namespace JgDienstScannerMaschine
                                                     var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
                                                     maStatus.SaveStatusMaschineLocal();
 
-                                                    var rueck = verb.SendeMeldung(wcfMeldung, maStatus.GetStatusAsXmlByte());
+                                                    var antwortServer = verb.SendeMeldung(wcfMeldung, maStatus.GetStatusAsXmlByte());
 
-                                                    if (rueck.Substring(0, 2) == "OK")
+                                                    if (antwortServer.Substring(0, 2) == "OK")
                                                     {
                                                         myTransaction.Commit();
-                                                        if (rueck.Length > 2)
-                                                            JgLog.Set(null, rueck.Substring(2), JgLog.LogArt.Fehler);
+                                                        if (antwortServer.Length > 2)
+                                                            JgLog.Set(null, antwortServer.Substring(2), JgLog.LogArt.Fehler);
                                                         else
                                                             JgLog.Set(null, $"Wcf Meldung {wcfMeldung.Meldung} mit Id {wcfMeldung.Id} gesendet", JgLog.LogArt.Info);
                                                     }
                                                     else
                                                     {
                                                         myTransaction.Abort();
-                                                        JgLog.Set(null, $"Wpf 'Meldung' Fehler durch Server!\nGrund: {rueck}", JgLog.LogArt.Fehler);
+                                                        JgLog.Set(null, $"Wpf 'Meldung' Fehler durch Server!\nGrund: {antwortServer}", JgLog.LogArt.Fehler);
                                                     }
                                                 }
                                                 else if (sendObj is ServiceRef.JgWcfBauteil wcfBauteil)
@@ -104,20 +104,20 @@ namespace JgDienstScannerMaschine
                                                     var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
                                                     maStatus.SaveStatusMaschineLocal();
 
-                                                    var rueck = verb.SendeBauteil(wcfBauteil, maStatus.GetStatusAsXmlByte());
+                                                    var antwortServer = verb.SendeBauteil(wcfBauteil, maStatus.GetStatusAsXmlByte());
 
-                                                    if (rueck.Substring(0, 2) == "OK")
+                                                    if (antwortServer.Substring(0, 2) == "OK")
                                                     {
                                                         myTransaction.Commit();
-                                                        if (rueck.Length > 2)
-                                                            JgLog.Set(null, rueck.Substring(2), JgLog.LogArt.Fehler);
+                                                        if (antwortServer.Length > 2)
+                                                            JgLog.Set(null, antwortServer.Substring(2), JgLog.LogArt.Fehler);
                                                         else
                                                             JgLog.Set(null, $"Wcf Bauteil mit Id {wcfBauteil.Id} gesendet", JgLog.LogArt.Info);
                                                     }
                                                     else
                                                     {
                                                         myTransaction.Abort();
-                                                        JgLog.Set(null, $"Wpf 'Bauteil' Fehler durch Server!\nGrund: {rueck}", JgLog.LogArt.Fehler);
+                                                        JgLog.Set(null, $"Wpf 'Bauteil' Fehler durch Server!\nGrund: {antwortServer}", JgLog.LogArt.Fehler);
                                                     }
                                                 }
 
@@ -129,7 +129,7 @@ namespace JgDienstScannerMaschine
                                 {
                                     if (myTransaction != null)
                                         myTransaction.Abort();
-                                    JgLog.Set(null, $"WCF Zeitüberschreitung {ex.Message}", JgLog.LogArt.Fehler);
+            
                                     throw new TimeoutException("Wpf Zeitüberschreitung", ex);
                                 }
                                 catch (FaultException faultEx)
@@ -153,14 +153,12 @@ namespace JgDienstScannerMaschine
                                 {
                                     if (myTransaction != null)
                                         myTransaction.Abort();
-                                    JgLog.Set(null, $"WCF Kommunikationsproblem {ex.Message} - {ex.StackTrace}", JgLog.LogArt.Fehler);
                                     throw new CommunicationException("WCF Kommunikationsproblem", ex);
                                 }
                                 catch (Exception ex)
                                 {
                                     if (myTransaction != null)
                                         myTransaction.Abort();
-                                    JgLog.Set(null, $"WCF - Unbekannter Fehler. \nGrund: {ex.Message} - {ex.StackTrace}", JgLog.LogArt.Fehler);
                                     throw new Exception("WCF - Unbekannter Fehler", ex);
                                 }
                             }

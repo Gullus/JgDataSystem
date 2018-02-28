@@ -91,8 +91,12 @@
     <Compile Include="Klassen\BvbsDaten.cs" />
     <Compile Include="Klassen\JgBauteil.cs" />
     <Compile Include="Klassen\JgBauteilFertig.cs" />
+    <Compile Include="Klassen\JgProtokollBase.cs" />
+    <Compile Include="Klassen\JgProtokollEvg.cs" />
     <Compile Include="Klassen\JgMaschineStatus.cs" />
     <Compile Include="Klassen\JgMeldung.cs" />
+    <Compile Include="Klassen\JgProtokollProgress.cs" />
+    <Compile Include="Klassen\JgProtokollStamm.cs" />
     <Compile Include="Klassen\JgScannerAusgabe.cs" />
     <Compile Include="JgScannerAuswertung.cs" />
     <Compile Include="JgScannerMaschine.cs" />
@@ -176,6 +180,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Fehlercode\FehlerCodeFirmaSchnell.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

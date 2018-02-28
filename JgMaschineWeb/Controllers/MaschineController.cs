@@ -60,6 +60,7 @@ namespace JgMaschineWeb.Controllers
             {
                 var maschine = await db.TabMaschineSet.FindAsync(Id);
                 TryUpdateModel(maschine);
+                maschine.Aenderung = DateTime.Now;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -181,9 +182,15 @@ namespace JgMaschineWeb.Controllers
             return View(new SelectList(lMaschinen, "Id", "MaschineName", maschine.Id));
         }
 
-        public async Task<PartialViewResult> AnzeigeMaschineStatusPartial(Guid? Id)
+        public async Task<PartialViewResult> AnzeigeMaschineStatusPartial(Guid? Id, string DatumAenderung = null)
         {
             var maschine = await db.TabMaschineSet.Include(i => i.EStandort).FirstOrDefaultAsync(f => f.Id == Id);
+
+            if (DatumAenderung != null)
+            {
+                if (maschine.StatusMaschineAenderung.ToString("dd.MM.yyyy HH:mm:ss") == DatumAenderung)
+                    return PartialView(null);
+            }
 
             if (maschine.StatusMaschine == null)
                 return PartialView("AnzeigeMaschineStatusFehler");
@@ -205,7 +212,6 @@ namespace JgMaschineWeb.Controllers
             {
                 Maschine = maschine,
                 ListeHelfer = new List<TabMeldung>(lMeldungen.Where(w => idisHelfer.Contains(w.Id))), 
-                Aenderung = meldStatus.Aenderung,
                 Information = meldStatus.Information
             };
 
