@@ -1,0 +1,142 @@
+﻿@model JgLibDataModel.TabMaschine
+
+@{
+    ViewBag.Title = "Maschinendaten Bearbeiten";
+}
+
+<br />
+<h2>Maschinendaten Bearbeiten</h2>
+<br />
+<p>Hier werden Informationen zur Eingabe der Daten eingegeben</p>
+<hr />
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    Maschinendaten<br /> Id: @Model.Id
+                </div>
+                <div class="card-body">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label>Maschinenname</label>
+                            @Html.EditorFor(model => model.MaschineName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MaschineName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>Maschinenart</label>
+                            <select asp-for="MaschineArt" asp-items="Html.GetEnumSelectList(typeof(JgLibHelper.MaschinenArten))" class="form-control"></select>
+                            @Html.ValidationMessageFor(model => model.MaschineArt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label>Ip Adresse Maschine</label>
+                            @Html.EditorFor(model => model.MaschineIp, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MaschineIp, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>Port</label>
+                            @Html.EditorFor(model => model.MaschinePort, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MaschinePort, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Standort</label>
+                        @Html.DropDownListFor(model => model.IdStandort, (SelectList)ViewBag.Standort, htmlAttributes: new { @class = "form-control  mw-100" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.EditorFor(model => model.IstAktiv)
+                        <label class="form-check-label">Maschine ist aktiv</label>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Vorschub pro Meterccc [s]</label>
+                            @Html.EditorFor(model => model.VorschubProMeterInSek, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Zeit pro Biegung [s]</label>
+                            @Html.EditorFor(model => model.ZeitProBiegungInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Fixzeit pro Bauteil [s]</label>
+                            @Html.EditorFor(model => model.ZeitProBauteilInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    Scannerdaten
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label>Scannernummer</label>
+                        @Html.EditorFor(model => model.NummerScanner, new { htmlAttributes = new { @class = "form-control mw-100" } })
+                        @Html.ValidationMessageFor(model => model.NummerScanner, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.SammelScannung)
+                                <label class="form-check-label">Sammelscan möglich</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            @Html.CheckBoxFor(model => model.ScannerMitDisplay)
+                            <label class="form-check-label">Scanner hat Display</label>
+                        </div>
+                    </div>
+
+                    <label>Bemerkung</label>
+                    <div class="form-group">
+                        @Html.TextAreaFor(model => model.Bemerkung, 11, 100, new { @class = "form-control mw-100" })
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="card">
+                <div class="card-body">
+                    <input type="submit" value=" Änderung Speichern " class="btn btn-primary" />
+                    <a class="btn btn-outline-primary" href="@Url.Action("Index")">Abbrechen </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

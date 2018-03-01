@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron" style="padding:20px 30px 10px 30px">
+    <div class="row">
+
+        <div class="col-md-7">
+            <br />
+            <br />
+            <br />
+            <h2>JgData - JgMaschine</h2>
+            <p class="lead">Program zum Überwachen von Maschinen</p>
+        </div>
+        <div class="col-md-3">
+            <img  src="~/images/SportLogo.JPG"  />
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-warning btn-block btn-sm" asp-route- href="@Url.Action("IndexMeldungProdokoll", "Maschine", new { Prog = "OFFEN" } )">Info</a>
+            <a class="btn btn-warning btn-block btn-sm" style="margin:5px 0px 0px 0px" href="@Url.Action("IndexMeldungProdokoll", "Maschine", new { Prog = "OFFEN" } )">Kontakt</a>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Maschinen anzeigen</h2>
+        <p>
+            Zur Auswahl der im System vorhandenen Maschinen.
+        </p>
+        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Maschine")">Index Maschinen &raquo;</a>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Bediener anzeigen</h2>
+        <p>
+            Zur Auswahl der im System vorhandenen Bediener.
+        </p>
+        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Bediener")">Index Bediener &raquo;</a>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Protokoll Meldungen</h2>
+        <p>
+            Eingabe von Ursachen für Reparaturen und Wartung
+        </p>
+        <a class="btn btn-warning" href="@Url.Action("IndexMeldungProdokoll", "Maschine", new { Prog = "OFFEN" } )">Offen Protokolle &raquo;</a>
+        <a class="btn btn-outline-primary" href="@Url.Action("IndexMeldungProdokoll", "Maschine", new { Prog = "ALLE" } )">Alle Protokolle &raquo;</a>
+
+        <a class="btn btn-default btn-outline-primary" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+            Learn More
+        </a>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Auswertungen</h2>
+        <p>
+            Auswertungen anzeigen und bearbeiten.
+        </p>
+        <a class="btn btn-outline-primary" href="@Url.Action("ReportIndex", "Auswertung")">Index Auswertungen &raquo;</a>
+    </div>
+</div>

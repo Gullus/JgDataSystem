@@ -21,9 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgDienstScannerMaschine", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMonitor", "JgMonitor\JgMonitor.csproj", "{D209DC79-42CD-44B4-B11C-EECE0D49B245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineAspWeb", "JgMaschineAspWeb\JgMaschineAspWeb.csproj", "{9109309E-DDDF-486E-BBCE-02B43815FC58}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineAspWeb.Tests", "JgMaschineAspWeb.Tests\JgMaschineAspWeb.Tests.csproj", "{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineAspCore", "JgMaschineAspCore\JgMaschineAspCore.csproj", "{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,20 +53,16 @@ Global
 		{D209DC79-42CD-44B4-B11C-EECE0D49B245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D209DC79-42CD-44B4-B11C-EECE0D49B245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D209DC79-42CD-44B4-B11C-EECE0D49B245}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9109309E-DDDF-486E-BBCE-02B43815FC58}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BA1D15A-5A19-4315-B2CF-1D632DDF8223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {88D3399A-BF1E-483B-9723-C6F9CDAC2F4D}
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45
+		SolutionGuid = {88D3399A-BF1E-483B-9723-C6F9CDAC2F4D}
 	EndGlobalSection
 EndGlobal
