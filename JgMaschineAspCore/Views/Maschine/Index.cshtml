@@ -59,10 +59,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IstAktiv)
             </td>
-            <td width="200">
+            <td width="250">
                 <a class="btn btn-outline-success btn-sm" href="@Url.Action("AnzeigeMaschineStatus", new { id = item.Id })"> Status </a>
+                <a class="btn btn-outline-warning btn-sm" href="@Url.Action("IndexBauteileProMaschine", new { id = item.Id })"> Bauteile </a>
                 <a class="btn btn-outline-primary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"> Bearb. </a>
-                <a class="btn btn-outline-warning btn-sm" href="@Url.Action("IndexBauteileProMaschine", new { id = item.Id })"> BT </a>
             </td>
         </tr>
 

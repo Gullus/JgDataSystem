@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<JgLibDataModel.TabBauteil>
 
 <table class="table table-hover table-striped table-sm">
-    
+
     <thead style="border-top:hidden">
         <tr>
             <th>Id</th>
@@ -27,7 +27,7 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td align="center">
-                @item.StartFertigung.ToString("dd.MM")
+                @item.StartFertigung.ToString("dd.MM.yy")
             </td>
             <td align="center">
                 @item.StartFertigung.ToString("HH:mm:ss")

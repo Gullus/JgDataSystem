@@ -1,5 +1,4 @@
-﻿@model IEnumerable<JgLibDataModel.TabBauteil>
-
+﻿
 @{
     ViewBag.Title = "Index Bauteile";
 }
@@ -7,8 +6,7 @@
 <br />
 <h2>Übersicht Bauteile</h2>
 
-@using (Ajax.BeginForm("IndexBauteileProMaschinePartial", new AjaxOptions { UpdateTargetId = "result" }))
-{
+<form id="FormBauteil">
     <div class="card">
         <div class="card-body">
             <div class=" form-inline">
@@ -21,23 +19,35 @@
                     <input type="date" class="form-control mx-sm-3" name="TxtDatumVon" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label">Datum von</label>
+                    <label class="col-form-label">bis</label>
                     <input type="date" class="form-control mx-sm-3" name="TxtDatumBis" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
-
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"> Anzeigen </button>
+                    <button class="btn btn-primary" type="button" id="BtnAnzeige" onclick="BtAktualisieren()"> Anzeigen </button>
                 </div>
             </div>
         </div>
     </div>
-}
+
+</form>
 
 <br />
 
-<div id="result">
-    @{ Html.RenderPartial("IndexBauteileProMaschinePartial", Model); }
-</div>
+<div id="anzeigeBauteile" />
 
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script type="text/javascript">
+
+     function BtAktualisieren() {
+
+        var url = '@Url.Action("IndexBauteileProMaschinePartial")';
+
+        $.post(url, $('#FormBauteil').serialize(), function (data) {
+            $('#anzeigeBauteile').html(data);
+        });
+     };
+
+     BtAktualisieren();
+
+</script>

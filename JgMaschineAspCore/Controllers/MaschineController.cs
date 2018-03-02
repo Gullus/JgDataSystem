@@ -73,7 +73,7 @@ namespace JgMaschineAspWeb.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexMeldungProdokoll(string Prog)
+        public async Task<ActionResult> IndexMeldungProtokoll(string Prog)
         {
             var meldungen = new ScannerMeldung[] { ScannerMeldung.WARTSTART, ScannerMeldung.REPASTART, ScannerMeldung.COILSTART };
             var lMeldungen = db.TabMeldungSet
@@ -97,7 +97,7 @@ namespace JgMaschineAspWeb.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexMeldungProdokollEdit(Guid? Id, string Prog)
+        public async Task<ActionResult> IndexMeldungProtokollEdit(Guid? Id, string Prog)
         {
             if (Id != null)
             {
@@ -117,7 +117,7 @@ namespace JgMaschineAspWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> IndexMeldungProdokollEdit(Guid Id, string Prog)
+        public async Task<ActionResult> IndexMeldungProtokollEdit(Guid Id, string Prog)
         {
             if (ModelState.IsValid)
             {
@@ -138,23 +138,11 @@ namespace JgMaschineAspWeb.Controllers
         {
             if (Id != null)
             {
-                var listeMaschinen = await db.TabMaschineSet.Where(w => w.IstAktiv)
-                    .OrderBy(o => o.MaschineName).ToListAsync();
+                var listeMaschinen = db.TabMaschineSet.Where(w => w.IstAktiv)
+                    .OrderBy(o => o.MaschineName);
 
-                var maschine = listeMaschinen.FirstOrDefault(f => f.Id == Id);
-
-                if (maschine != null)
-                {
-                    var datStart = DateTime.Now.Date;
-                    var datEnde = datStart.AddDays(1);
-
-                    var bauteile = db.TabBauteilSet
-                        .Where(w => (w.IdMaschine == Id) && (w.StartFertigung >= datStart) && (w.StartFertigung < datEnde))
-                        .OrderBy(o => o.StartFertigung);
-
-                    ViewBag.ListeMaschinen = new SelectList(listeMaschinen, "Id", "MaschineName", maschine.Id);
-                    return View(await bauteile.ToListAsync());
-                }
+                ViewBag.ListeMaschinen = new SelectList(await listeMaschinen.ToListAsync(), "Id", "MaschineName", Id);
+                return View();
             }
 
             return StatusCode(500);
@@ -178,10 +166,7 @@ namespace JgMaschineAspWeb.Controllers
                     .Where(w => w.IstAktiv)
                     .OrderBy(o => o.MaschineName).ToListAsync();
 
-                var maschine = lMaschinen.FirstOrDefault(f => f.Id == Id);
-
-                if (maschine != null)
-                    return View(new SelectList(lMaschinen, "Id", "MaschineName", maschine.Id));
+                return View(new SelectList(lMaschinen, "Id", "MaschineName", Id));
             }
 
             return StatusCode(500);
