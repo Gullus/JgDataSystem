@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JgMaschineAspCore.Models;
+using JgMaschineAspCore.Models.AccountViewModels;
+using JgMaschineAspCore.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using JgMaschineAspCore.Models;
-using JgMaschineAspCore.Models.AccountViewModels;
-using JgMaschineAspCore.Services;
 
 namespace JgMaschineAspCore.Controllers
 {
@@ -24,17 +23,20 @@ namespace JgMaschineAspCore.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         [TempData]
@@ -430,12 +432,70 @@ namespace JgMaschineAspCore.Controllers
             return View();
         }
 
-
         [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> RollenEintragen()
+        {
+            if (! await _roleManager.RoleExistsAsync("Admin"))
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+            if (!await _roleManager.RoleExistsAsync("Auswertung"))
+                await _roleManager.CreateAsync(new IdentityRole("Auswertung"));
+
+            var rolesAdmin = await _userManager.GetUsersInRoleAsync("Admin");
+            var rolesAuswertung = await _userManager.GetUsersInRoleAsync("Auswertung");
+
+            var lAnwender = await _userManager.Users
+                .Select(s => new BenutzerRollenAnzeigen()
+                {
+                    Id = s.Id,
+                    BenutzerName = s.UserName
+                }).ToListAsync();
+
+            foreach (var anwender in lAnwender)
+            {
+                anwender.IstAdmin = rolesAdmin.Any(a => a.Id == anwender.Id);
+                anwender.IstAuswertung = rolesAuswertung.Any(a => a.Id == anwender.Id);
+            }
+
+            return View(lAnwender);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RollenEintragen(IFormCollection Erg)
+        {
+            var lIdUsers = await _userManager.Users.ToListAsync();
+
+            var idisIstAdmin = (await _userManager.GetUsersInRoleAsync("Admin")).Select(s => s.Id).ToList();
+            var idisIstAnwender = (await _userManager.GetUsersInRoleAsync("Auswertung")).Select(s => s.Id).ToList();
+
+            var idisErgAdmin = Erg.Where(w => (w.Key.Substring(0, 5) == "IdAdm")).Select(s => s.Key.Substring(5)).ToList();
+            var idisErgAuswertung = Erg.Where(w => (w.Key.Substring(0, 5) == "IdAus")).Select(s => s.Key.Substring(5)).ToList();
+
+
+            foreach (var user in lIdUsers)
+            {
+                if (!idisIstAdmin.Contains(user.Id) && idisErgAdmin.Contains(user.Id))
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                else if (idisIstAdmin.Contains(user.Id) && ! idisErgAdmin.Contains(user.Id))
+                    await _userManager.RemoveFromRoleAsync(user, "Admin");
+
+                if (!idisIstAnwender.Contains(user.Id) && idisErgAuswertung.Contains(user.Id))
+                    await _userManager.AddToRoleAsync(user, "Auswertung");
+                else if (idisIstAnwender.Contains(user.Id) && !idisErgAuswertung.Contains(user.Id))
+                    await _userManager.RemoveFromRoleAsync(user, "Auswertung");
+            }
+
+            return RedirectToAction("RollenEintragen");
+        }            
+
 
         #region Helpers
 

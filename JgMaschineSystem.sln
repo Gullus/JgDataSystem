@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgDienstScannerMaschine", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMonitor", "JgMonitor\JgMonitor.csproj", "{D209DC79-42CD-44B4-B11C-EECE0D49B245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineAspCore", "JgMaschineAspCore\JgMaschineAspCore.csproj", "{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JgMaschineAspCore", "JgMaschineAspCore\JgMaschineAspCore.csproj", "{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

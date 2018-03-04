@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using JgMaschineAspCore.Data;
 using JgMaschineAspCore.Models;
 using JgMaschineAspCore.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace JgMaschineAspCore
 {
@@ -70,13 +71,17 @@ namespace JgMaschineAspCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
+ 
                 app.UseBrowserLink();
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();      
                 app.UseDatabaseErrorPage();
+
+                // Zeigt eine Seite mit dem Statuscode
+                app.UseStatusCodePages();
             }
             else
             {
@@ -84,7 +89,6 @@ namespace JgMaschineAspCore
             }
 
             app.UseStaticFiles();
-
             app.UseAuthentication();
 
             app.UseMvc(routes =>

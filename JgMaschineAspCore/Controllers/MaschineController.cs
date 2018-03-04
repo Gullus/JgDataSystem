@@ -2,6 +2,7 @@
 using JgLibHelper;
 using JgMaschineAspCore.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -125,7 +126,7 @@ namespace JgMaschineAspWeb.Controllers
                 await TryUpdateModelAsync(meldung);
                 await db.SaveChangesAsync();
 
-                return RedirectToAction("IndexMeldungProdokoll", new { Prog });
+                return RedirectToAction("IndexMeldungProtokoll", new { Prog });
             }
 
             var mel = new TabMeldung();
@@ -145,7 +146,7 @@ namespace JgMaschineAspWeb.Controllers
                 return View();
             }
 
-            return StatusCode(500);
+            return StatusCode(StatusCodes.Status404NotFound);
         }
 
         public async Task<ActionResult> IndexBauteileProMaschinePartial(Guid IdMaschine, DateTime TxtDatumVon, DateTime TxtDatumBis)

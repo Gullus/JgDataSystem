@@ -1,0 +1,47 @@
+﻿@model IEnumerable<BenutzerRollenAnzeigen>
+
+@{
+    ViewData["Title"] = "RollenEintragen";
+}
+
+<br />
+<h2>RollenEintragen</h2>
+<br />
+
+<form method="post">
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Ist Admin</th>
+                <th>ist Anwender</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BenutzerName)
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.IstAdmin" name=@("IdAdm" + item.Id) />
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@item.IstAuswertung" name=@("IdAus" + item.Id) />
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Eintragen</button>
+    </div>
+
+</form>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using JgMaschineAspCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JgMaschineAspCore.Controllers
 {
@@ -15,6 +16,7 @@ namespace JgMaschineAspCore.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
