@@ -148,6 +148,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Wichtige Informationen.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IWcfService.cs" />

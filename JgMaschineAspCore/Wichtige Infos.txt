@@ -1,0 +1,9 @@
+﻿
+Infovideo und Anleitung zur Einrichtung des IIS
+
+https://www.youtube.com/watch?v=ZZfRlBMHds8
+https://docs.microsoft.com/de-de/aspnet/core/host-and-deploy/iis/index?tabs=aspnetcore2xEinrichtung 
+
+Zusatzbemerkung bei alleinstellung
+
+https://docs.microsoft.com/de-de/dotnet/core/deploying/deploy-with-vs

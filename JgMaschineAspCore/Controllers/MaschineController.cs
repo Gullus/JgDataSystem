@@ -17,7 +17,7 @@ namespace JgMaschineAspWeb.Controllers
     {
         private JgMaschineDb db = new JgMaschineDb();
 
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> Index()
         {
             var maschine = db.TabMaschineSet.Include(i => i.EStandort).OrderBy(o => o.EStandort.StandortName).OrderBy(o => o.MaschineName);

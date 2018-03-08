@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <UserSecretsId>aspnet-JgMaschineAspCore-06EE468D-E87B-4A6E-87A0-C06657072FF9</UserSecretsId>
+    <!--<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>-->
+    <!--<UserSecretsId>aspnet-JgMaschineAspCore-06EE468D-E87B-4A6E-87A0-C06657072FF9</UserSecretsId>-->
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="4.0.0" />

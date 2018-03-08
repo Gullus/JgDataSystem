@@ -1,0 +1,25 @@
+﻿HTTP Fehler 404.3 – Nicht gefunden. Die angeforderte Seite kann aufgrund einer Konfigurationserweiterung nicht angezeigt werden. 
+Wenn es sich bei der Seite um ein Skript handelt, müssen Sie einen Handler hinzufügen. Wenn die Datei heruntergeladen werden 
+soll, müssen Sie eine MIME-Zuordnung hinzufügen. Detaillierte Fehlerinformationen finden Sie unter dem Modul StaticFileModule.
+
+Dieser Fehler tritt auf, wenn "Windows Communication Foundation-HTTP-Aktivierung" nicht explizit in der Systemsteuerung 
+festgelegt ist. Um diese Einstellung festzulegen, wechseln Sie zur Systemsteuerung, und klicken Sie in der linken unteren
+Ecke des Fensters auf "Programme". Klicken Sie auf "Windows-Funktionen ein- oder ausschalten". Erweitern 
+Sie "Microsoft .NET Framework 3.5.1", und wählen Sie "Windows Communication Foundation-Http-Aktivierung" aus.
+
+--> Danach aus der Adminconsole
+
+Schien ein Klacks zu sein; Der WCF-Dienst sollte Programs and 
+Features -> Turn Windows features on or offin der Systemsteuerung aktiviert werden . 
+Gehe zu .NET Framework Advanced Services -> WCF Servicesund aktiviere HTTP Activationwie in 
+diesem Blogbeitrag auf mdsn beschrieben .
+
+Über die Eingabeaufforderung (als Admin) können Sie Folgendes ausführen:
+
+C:\> DISM /Online /Enable-Feature /FeatureName:WCF-HTTP-Activation
+C:\> DISM /Online /Enable-Feature /FeatureName:WCF-HTTP-Activation45
+
+Wenn Sie einen Fehler erhalten, verwenden Sie den folgenden Befehl
+
+C:\> DISM /Online /Enable-Feature /all /FeatureName:WCF-HTTP-Activation
+C:\> DISM /Online /Enable-Feature /all /FeatureName:WCF-HTTP-Activation45
