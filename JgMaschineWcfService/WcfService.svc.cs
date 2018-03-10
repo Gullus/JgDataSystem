@@ -12,13 +12,13 @@ namespace JgWcfServiceServer
 {
     public class WcfService : IWcfService
     {
-        public JgCopyProperty<IJgBauteil> _KopieBauteil = new JgCopyProperty<IJgBauteil>();
-        public JgCopyProperty<IJgMeldung> _KopieMeldung = new JgCopyProperty<IJgMeldung>();
+        private JgCopyProperty<IJgBauteil> _KopieBauteil = new JgCopyProperty<IJgBauteil>();
+        private JgCopyProperty<IJgMeldung> _KopieMeldung = new JgCopyProperty<IJgMeldung>();
+
+        private string _SqlVerbindung = ConfigurationManager.AppSettings["SqlVerbindung"];
 
         public WcfService()
         { }
-
-        private string _SqlVerbindung = ConfigurationManager.AppSettings["SqlVerbindung"];
 
         public async Task<List<JgWcfMaschine>> GetMaschinen(Guid IdStandort)
         {
@@ -63,7 +63,7 @@ namespace JgWcfServiceServer
         {
             try
             {
-                using (var db = new JgMaschineDb())
+                using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
                 {
                     var bauteil = await db.TabBauteilSet.FindAsync(Bauteil.Id);
                     if (bauteil != null)
@@ -101,7 +101,7 @@ namespace JgWcfServiceServer
         {
             try
             {
-                using (var db = new JgMaschineDb())
+                using (var db = new JgMaschineDb() { SqlVerbindung = _SqlVerbindung })
                 {
                     if (Meldung.Meldung == ScannerMeldung.BAUT_ENDE)
                     {

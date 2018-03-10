@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;
+using System.Threading.Tasks;
 
 namespace JgDienstScannerMaschine
 {
@@ -13,13 +14,12 @@ namespace JgDienstScannerMaschine
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Scanner Gestartet");
-
             Logger.SetLogWriter(new LogWriterFactory().Create());
             ExceptionPolicy.SetExceptionManager(new ExceptionPolicyFactory().CreateManager(), false);
             // Bsp.: ExceptionPolicy.HandleException(ex, "Policy");
 
-            JgLog.Set(null, "Programm gestartet.", JgLog.LogArt.Info);
+            Console.WriteLine("Scanner Gestartet");
+            JgLog.Set(null, "Programm wird gestartet!", JgLog.LogArt.Info);
 
             var pr = Properties.Settings.Default;
 
@@ -28,20 +28,36 @@ namespace JgDienstScannerMaschine
                 IdStandort = pr.IdStandort,
             };
 
-            // Bediener local laden, danach mit Server abgeleichen
+            // Bediener und Maschine local laden, danach mit Server abgeleichen
 
             var init = new JgInit(jgOpt);
             init.BedienerLocalLaden();
-            if (init.BedienerVonServer())
-                init.BedienerLocalSpeichern();
-
-            // Maschinen local laden, danach mit Server abgeleichen
-
             init.MaschinenLocalLaden();
-            if (init.MaschinenVonServer())
-                init.MaschinenLocalSpeichern();
 
-            // Status Maschine laden, wenn vorhanden
+            try
+            {
+                using (var dienst = new ServiceRef.WcfServiceClient())
+                {
+                    var tt = dienst.WcfTest("OK?");
+
+                    if (tt == "OK?")
+                    {
+                        JgLog.Set(null, "Verbindung Server OK!", JgLog.LogArt.Info);
+
+                        if (init.BedienerVonServer(dienst))
+                            init.BedienerLocalSpeichern();
+
+                        if (init.MaschinenVonServer(dienst))
+                            init.MaschinenLocalSpeichern();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionPolicy.HandleException(ex, "Policy");
+            }
+
+            // Status Maschinen laden, wenn vorhanden
 
             foreach (var maStatus in jgOpt.ListeMaschinen.Values)
                JgMaschinenStatus.LoadStatusMaschineLocal(maStatus, jgOpt.PfadDaten);
@@ -74,6 +90,7 @@ namespace JgDienstScannerMaschine
 
             Console.WriteLine("Fertig");
             Console.ReadKey();
+
 
 #else
 

@@ -4,24 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgTestConsole", "JgTestConsole\JgTestConsole.csproj", "{7D191063-7B5B-40B0-A113-39F043B6D6DA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{75A66014-5EE9-4692-A1F3-BE30FB23D796} = {75A66014-5EE9-4692-A1F3-BE30FB23D796}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgLibDataModel", "JgLibDataModel\JgLibDataModel.csproj", "{19EC84D6-9A1C-455B-B28B-1D5F7B629C33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgLibHelper", "JgLibHelper\JgLibHelper.csproj", "{EAAEDEF9-1E5A-4627-A1EE-E2C5FE2BFA80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgWcfServiceServer", "JgWcfServiceServer\JgWcfServiceServer.csproj", "{75A66014-5EE9-4692-A1F3-BE30FB23D796}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgDienstScannerMaschine", "JgDienstScannerMaschine\JgDienstScannerMaschine.csproj", "{A40519E9-CF2D-4C2B-8568-FF9493C3F03A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{75A66014-5EE9-4692-A1F3-BE30FB23D796} = {75A66014-5EE9-4692-A1F3-BE30FB23D796}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMonitor", "JgMonitor\JgMonitor.csproj", "{D209DC79-42CD-44B4-B11C-EECE0D49B245}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JgMaschineAspCore", "JgMaschineAspCore\JgMaschineAspCore.csproj", "{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMaschineWcfService", "JgMaschineWcfService\JgMaschineWcfService.csproj", "{C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +35,6 @@ Global
 		{EAAEDEF9-1E5A-4627-A1EE-E2C5FE2BFA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAAEDEF9-1E5A-4627-A1EE-E2C5FE2BFA80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAAEDEF9-1E5A-4627-A1EE-E2C5FE2BFA80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75A66014-5EE9-4692-A1F3-BE30FB23D796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75A66014-5EE9-4692-A1F3-BE30FB23D796}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75A66014-5EE9-4692-A1F3-BE30FB23D796}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75A66014-5EE9-4692-A1F3-BE30FB23D796}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A40519E9-CF2D-4C2B-8568-FF9493C3F03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A40519E9-CF2D-4C2B-8568-FF9493C3F03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A40519E9-CF2D-4C2B-8568-FF9493C3F03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +47,10 @@ Global
 		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECD055CC-E0B7-4465-90B9-1BE04108ABE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

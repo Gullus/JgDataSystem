@@ -1,7 +1,12 @@
 ﻿using JgLibDataModel;
+using JgLibHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JgMaschineAspWeb.Controllers
@@ -94,6 +99,44 @@ namespace JgMaschineAspWeb.Controllers
             db.TabBedienerSet.Remove(bediener);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+
+        public async Task<IActionResult> IndexMeldungen()
+        {
+            ViewBag.ListeMaschinen = new SelectList(await db.TabMaschineSet.Where(w => w.IstAktiv).Select(s => new { s.Id, s.MaschineName }).ToListAsync(), "Id" , "MaschineName");
+            return View();
+        }
+
+
+        public async Task<IActionResult> IndexMeldungenPartial(IFormCollection Erg)
+        {
+            var datVon = Convert.ToDateTime(Erg["TxtDatumVon"]);
+            var datBis = Convert.ToDateTime(Erg["TxtDatumBis"]).AddDays(1);
+
+            var lMeldungen = new List<ScannerMeldung>();
+            if (Erg.Keys.Contains("CbAnmeldung"))
+                lMeldungen.Add(ScannerMeldung.ANMELDUNG);
+            if (Erg.Keys.Contains("CbReparatur"))
+                lMeldungen.Add(ScannerMeldung.REPASTART);
+            if (Erg.Keys.Contains("CbWartung"))
+                lMeldungen.Add(ScannerMeldung.WARTSTART);
+            if (Erg.Keys.Contains("CbCoilwechsel"))
+                lMeldungen.Add(ScannerMeldung.COILSTART);
+
+            var anmeldungen = db.TabMeldungSet.Include(i => i.EBediener).Include(e => e.EMaschine)
+                .Where(w => (w.ZeitMeldung >= datVon) && (w.ZeitMeldung < datBis));
+
+            if (lMeldungen.Count != 0)
+                anmeldungen = anmeldungen.Where(w => lMeldungen.Contains(w.Meldung));
+
+            if (Erg["IdMaschine"] != "-- Alle Maschinen --")
+            {
+                var idMaschine = Guid.Parse(Erg["IdMaschine"]);
+                anmeldungen = anmeldungen.Where(w => w.IdMaschine == idMaschine);
+            }
+
+            return PartialView(await anmeldungen.OrderBy(o => o.ZeitMeldung).ToListAsync()); 
         }
 
         protected override void Dispose(bool disposing)

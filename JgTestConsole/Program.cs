@@ -12,16 +12,16 @@ namespace JgTestConsole
     {
         static void Main(string[] args)
         {
-            var test = "Hallo\n\rBallo";
+            using (var db = new JgLibDataModel.JgMaschineDb())
+            {
+                var ll = db.TabBedienerSet.ToList();
 
-            test = test.Replace("\n", string.Empty).Replace("\r", string.Empty);
+                foreach(var ds in ll)
+                {
+                    Console.WriteLine(ds.AnzeigeName);
+                }
 
-            Console.WriteLine(test + "\a");
-
-
-            
-
-            Console.ReadKey();
+            }
             
         }
     }

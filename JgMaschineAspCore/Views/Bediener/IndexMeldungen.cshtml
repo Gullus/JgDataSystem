@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Index Bauteile";
+}
+
+<br />
+<h2>Übersicht Meldungen</h2>
+
+<form id="FormMeldungen">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Maschine</label>
+                    <select name="IdMaschine" class="form-control" asp-items="@((SelectList)ViewBag.ListeMaschinen)">
+                        <option selected>-- Alle Maschinen --</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="col-form-label">Datum von</label>
+                    <input type="date" class="form-control" name="TxtDatumVon" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <label class="col-form-label">bis</label>
+                    <input type="date" class="form-control" name="TxtDatumBis" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+
+                <div class="col-md-2">
+                    <input type="checkbox" name="CbAnmeldung" />
+                    <label>Anmeldung</label><br />
+
+                    <input type="checkbox" name="CbReparatur" />
+                    <label>Reparatur</label><br />
+
+                    <input type="checkbox" name="CbWartung" />
+                    <label>Wartung</label><br />
+
+                    <input type="checkbox" name="CbCoilwechsel" />
+                    <label>Coilwechsel</label><br />
+                </div>
+
+                <div class="col-md-2">
+                        <button class="btn btn-primary btn-block" type="button" id="BtnAnzeige" onclick="BtAktualisieren()"> Anzeigen </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<br />
+
+<div id="anzeigeMeldungen" />
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script type="text/javascript">
+
+     function BtAktualisieren() {
+
+        var url = '@Url.Action("IndexMeldungenPartial")';
+
+        $.post(url, $('#FormMeldungen').serialize(), function (data) {
+            $('#anzeigeMeldungen').html(data);
+        });
+     };
+
+    BtAktualisieren();
+
+</script>

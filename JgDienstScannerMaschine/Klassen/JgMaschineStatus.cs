@@ -69,7 +69,7 @@ namespace JgDienstScannerMaschine
                     }
                     catch (Exception ex)
                     {
-                        JgLog.Set(null, $"Fehler Reader Load Maschinenstatus ausgelöst.\nGrund: {ex.Message}", JgLog.LogArt.Info);
+                        JgLog.Set(null, $"Fehler Writer Save Maschinenstatus ausgelöst.\nGrund: {ex.Message}", JgLog.LogArt.Info);
                     }
 
                 }, new OptUebergabe() { StatusMaschine = this, DateiAusgabe = _DateiAusgabe });

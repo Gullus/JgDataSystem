@@ -94,7 +94,7 @@ namespace JgTestConsole.ServiceReference1 {
         private System.Guid IdMaschineField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private JgLibHelper.ScannerMeldung ProgramField;
+        private JgTestConsole.ServiceReference1.ScannerProgram ProgramField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime ZeitMeldungField;
@@ -139,7 +139,7 @@ namespace JgTestConsole.ServiceReference1 {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public JgLibHelper.ScannerMeldung Program {
+        public JgTestConsole.ServiceReference1.ScannerProgram Program {
             get {
                 return this.ProgramField;
             }
@@ -504,6 +504,41 @@ namespace JgTestConsole.ServiceReference1 {
                 }
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ScannerProgram", Namespace="http://schemas.datacontract.org/2004/07/JgLibHelper")]
+    public enum ScannerProgram : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SCVORGANG = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ANMELDUNG = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ABMELDUNG = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        COILSTART = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        COIL_ENDE = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        REPASTART = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        REPA_ENDE = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WARTSTART = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WART_ENDE = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SCHALTER = 9,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

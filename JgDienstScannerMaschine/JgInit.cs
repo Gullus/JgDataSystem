@@ -3,6 +3,7 @@ using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace JgDienstScannerMaschine
 {
@@ -18,35 +19,32 @@ namespace JgDienstScannerMaschine
             _JgOpt = MyOptionen;
         }
 
-        public bool BedienerVonServer()
+        public bool BedienerVonServer(ServiceRef.WcfServiceClient dienst)
         {
             var speichern = false;
             var copyBenutzer = new JgLibHelper.JgCopyProperty<ServiceRef.JgWcfBediener>();
 
             try
             {
-                using (var dienst = new ServiceRef.WcfServiceClient())
+                var lWcfBediener = dienst.GetBediener();
+
+                foreach (var bedWcf in lWcfBediener)
                 {
-                    var lWcfBediener = dienst.GetBediener();
+                    JgBediener bedMaschine = null;
 
-                    foreach (var bedWcf in lWcfBediener)
+                    if (_JgOpt.ListeBediener.ContainsKey(bedWcf.Id))
+                        bedMaschine = _JgOpt.ListeBediener[bedWcf.Id];
+                    else
                     {
-                        JgBediener bedMaschine = null;
-
-                        if (_JgOpt.ListeBediener.ContainsKey(bedWcf.Id))
-                            bedMaschine = _JgOpt.ListeBediener[bedWcf.Id];
-                        else
-                        {
-                            bedMaschine = new JgBediener() { Id = bedWcf.Id, Aenderung = DateTime.Now };
-                            _JgOpt.ListeBediener.Add(bedWcf.Id, bedMaschine);
-                        }
-
-                        if (bedMaschine.Aenderung != bedWcf.Aenderung)
-                        {
-                            speichern = true;
-                            copyBenutzer.CopyProperties(bedWcf, bedMaschine);
-                        };
+                        bedMaschine = new JgBediener() { Id = bedWcf.Id, Aenderung = DateTime.Now };
+                        _JgOpt.ListeBediener.Add(bedWcf.Id, bedMaschine);
                     }
+
+                    if (bedMaschine.Aenderung != bedWcf.Aenderung)
+                    {
+                        speichern = true;
+                        copyBenutzer.CopyProperties(bedWcf, bedMaschine);
+                    };
                 }
             }
             catch (Exception ex)
@@ -90,56 +88,53 @@ namespace JgDienstScannerMaschine
             }
         }
 
-        public bool MaschinenVonServer()
+        public bool MaschinenVonServer(ServiceRef.WcfServiceClient dienst)
         {
+            var speichern = false;
             var copyMaschine = new JgCopyProperty<ServiceRef.JgWcfMaschine>();
-            var speichern = true;
 
             try
             {
-
-                using (var dienst = new ServiceRef.WcfServiceClient())
+                var lWcfMaschinen = dienst.GetMaschinen(_JgOpt.IdStandort);
+                foreach (var maWcf in lWcfMaschinen)
                 {
-                    var lWcfMaschinen = dienst.GetMaschinen(_JgOpt.IdStandort);
-                    foreach (var maWcf in lWcfMaschinen)
+                    JgMaschineStamm maMaschine = null;
+
+                    if (_JgOpt.ListeMaschinen.ContainsKey(maWcf.Id))
                     {
-                        JgMaschineStamm maMaschine = null;
-
-                        if (_JgOpt.ListeMaschinen.ContainsKey(maWcf.Id))
-                        {
-                            maMaschine = _JgOpt.ListeMaschinen[maWcf.Id];
-                            if (maMaschine.Aenderung != maWcf.Aenderung)
-                            {
-                                speichern = true;
-                                copyMaschine.CopyProperties(maWcf, maMaschine);
-                            }
-
-                        }
-                        else
+                        maMaschine = _JgOpt.ListeMaschinen[maWcf.Id];
+                        if (maMaschine.Aenderung != maWcf.Aenderung)
                         {
                             speichern = true;
-
-                            switch (maWcf.MaschineArt)
-                            {
-                                case JgLibHelper.MaschinenArten.Hand:
-                                    maMaschine = new JgMaschineHand();
-                                    break;
-                                case JgLibHelper.MaschinenArten.Evg:
-                                    maMaschine = new JgMaschineEvg();
-                                    break;
-                                case JgLibHelper.MaschinenArten.Schnell:
-                                    maMaschine = new JgMaschineSchnell();
-                                    break;
-                                case JgLibHelper.MaschinenArten.Progress:
-                                    maMaschine = new JgMaschineProgress();
-                                    break;
-                            }
-
                             copyMaschine.CopyProperties(maWcf, maMaschine);
-                            _JgOpt.ListeMaschinen.Add(maWcf.Id, maMaschine);
                         }
 
                     }
+                    else
+                    {
+                        speichern = true;
+
+                        switch (maWcf.MaschineArt)
+                        {
+                            case JgLibHelper.MaschinenArten.Hand:
+                                maMaschine = new JgMaschineHand();
+                                break;
+                            case JgLibHelper.MaschinenArten.Evg:
+                                maMaschine = new JgMaschineEvg();
+                                break;
+                            case JgLibHelper.MaschinenArten.Schnell:
+                                maMaschine = new JgMaschineSchnell();
+                                break;
+                            case JgLibHelper.MaschinenArten.Progress:
+                                maMaschine = new JgMaschineProgress();
+                                break;
+                        }
+
+                        copyMaschine.CopyProperties(maWcf, maMaschine);
+                        _JgOpt.ListeMaschinen.Add(maWcf.Id, maMaschine);
+                    }
+
+
                 }
             }
             catch (Exception ex)

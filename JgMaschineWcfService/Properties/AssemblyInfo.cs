@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("JgWcfServiceServer")]
+[assembly: AssemblyTitle("JgMaschineWcfService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("JgWcfServiceServer")]
+[assembly: AssemblyProduct("JgMaschineWcfService")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("75a66014-5ee9-4692-a1f3-be30fb23d796")]
+[assembly: Guid("c8c54129-ac3c-4a4a-a9da-35cfb549beee")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

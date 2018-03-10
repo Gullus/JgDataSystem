@@ -27,140 +27,135 @@ namespace JgDienstScannerMaschine
                 {
                     var queue = new MessageQueue(optSenden.PathQueue, QueueAccessMode.Receive)
                     {
-                        Formatter = new XmlMessageFormatter(new Type[] { typeof(ServiceRef.JgWcfMeldung), typeof( ServiceRef.JgWcfBauteil) })
+                        Formatter = new XmlMessageFormatter(new Type[] { typeof(ServiceRef.JgWcfMeldung), typeof(ServiceRef.JgWcfBauteil) })
                     };
 
                     while (true)
                     {
-                        var queuHatDaten = false;
-
                         try
                         {
+                            MessageQueueTransaction myTransaction = null;
+
                             try
                             {
-                                var msg = queue.Peek(new TimeSpan(0, 0, 10));
-                                queuHatDaten = true;
-                            }
-                            catch (MessageQueueException ex)
-                            {
-                                if (ex.MessageQueueErrorCode != MessageQueueErrorCode.IOTimeout)
-                                    throw new Exception("Fehler bei Kontrolle auf Daten im Queue", ex);
-                            }
-
-                            if (queuHatDaten)
-                            {
-                                MessageQueueTransaction myTransaction = null;
-
-                                try
+                                using (var verb = new ServiceRef.WcfServiceClient())
                                 {
-                                    using (var verb = new ServiceRef.WcfServiceClient())
+                                    while (true)
                                     {
-                                        while (true)
+                                        object sendObj = null;
+                                        myTransaction = new MessageQueueTransaction();
+
+                                        try
                                         {
-                                            object sendObj = null;
-                                            myTransaction = new MessageQueueTransaction();
+                                            myTransaction.Begin();
+                                            var erg = queue.Receive(new TimeSpan(0, 0, 10), myTransaction);
+                                            sendObj = erg.Body;
+                                        }
+                                        catch (MessageQueueException ex)
+                                        {
+                                            myTransaction.Abort();
 
-                                            try
-                                            {
-                                                myTransaction.Begin();
-                                                var erg = queue.Receive(new TimeSpan(0, 0, 10), myTransaction);
-                                                sendObj = erg.Body;
-                                            }
-                                            catch (MessageQueueException ex)
-                                            {
-                                                myTransaction.Abort();
+                                            if (ex.MessageQueueErrorCode != MessageQueueErrorCode.IOTimeout)
+                                                throw new Exception($"Fehler lesen Meldung aus MessageQueue!", ex);
+                                        }
 
-                                                if (ex.MessageQueueErrorCode != MessageQueueErrorCode.IOTimeout)
-                                                    throw new Exception($"Fehler lesen Meldung aus MessageQueue!", ex);
-                                            }
+                                        // Wenn nach 1 Minute keine Aktion vorhanden ist, wird die Verbindung für 10 Minuten 
+                                        // geschlossen und danach wieder neu gestartet.
 
-                                            if (sendObj != null)
+                                        if (sendObj == null) 
+                                        {
+                                            JgLog.Set(null, $"Verbindung wird wegen Inaktivität für 10 Minuten geschlossen !", JgLog.LogArt.Info);
+                                            //todo Verbindungsauszeit eintragen
+                                            Thread.Sleep(new TimeSpan(0, 0, 10));
+                                        }
+                                        else
+                                        {
+                                            if (sendObj is ServiceRef.JgWcfMeldung wcfMeldung)
                                             {
-                                                if (sendObj is ServiceRef.JgWcfMeldung wcfMeldung)
+                                                var maschine = JgInit.GetMaschine(optSenden.ListeMaschinen, wcfMeldung.IdMaschine);
+                                                var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
+                                                maStatus.SaveStatusMaschineLocal();
+
+                                                var antwortServer = verb.SendeMeldung(wcfMeldung, maStatus.GetStatusAsXmlByte());
+
+                                                if (antwortServer.Substring(0, 2) == "OK")
                                                 {
-                                                    var maschine = JgInit.GetMaschine(optSenden.ListeMaschinen, wcfMeldung.IdMaschine);
-                                                    var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
-                                                    maStatus.SaveStatusMaschineLocal();
-
-                                                    var antwortServer = verb.SendeMeldung(wcfMeldung, maStatus.GetStatusAsXmlByte());
-
-                                                    if (antwortServer.Substring(0, 2) == "OK")
-                                                    {
-                                                        myTransaction.Commit();
-                                                        if (antwortServer.Length > 2)
-                                                            JgLog.Set(null, antwortServer.Substring(2), JgLog.LogArt.Fehler);
-                                                        else
-                                                            JgLog.Set(null, $"Wcf Meldung {wcfMeldung.Meldung} mit Id {wcfMeldung.Id} gesendet", JgLog.LogArt.Info);
-                                                    }
+                                                    myTransaction.Commit();
+                                                    if (antwortServer.Length > 2)
+                                                        JgLog.Set(null, antwortServer.Substring(2), JgLog.LogArt.Fehler);
                                                     else
-                                                    {
-                                                        myTransaction.Abort();
-                                                        JgLog.Set(null, $"Wpf 'Meldung' Fehler durch Server!\nGrund: {antwortServer}", JgLog.LogArt.Fehler);
-                                                    }
+                                                        JgLog.Set(null, $"Wcf Meldung {wcfMeldung.Meldung} mit Id {wcfMeldung.Id} gesendet", JgLog.LogArt.Info);
                                                 }
-                                                else if (sendObj is ServiceRef.JgWcfBauteil wcfBauteil)
+                                                else
                                                 {
-                                                    var maschine = JgInit.GetMaschine(optSenden.ListeMaschinen, wcfBauteil.IdMaschine);
-                                                    var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
-                                                    maStatus.SaveStatusMaschineLocal();
-
-                                                    var antwortServer = verb.SendeBauteil(wcfBauteil, maStatus.GetStatusAsXmlByte());
-
-                                                    if (antwortServer.Substring(0, 2) == "OK")
-                                                    {
-                                                        myTransaction.Commit();
-                                                        if (antwortServer.Length > 2)
-                                                            JgLog.Set(null, antwortServer.Substring(2), JgLog.LogArt.Fehler);
-                                                        else
-                                                            JgLog.Set(null, $"Wcf Bauteil mit Id {wcfBauteil.Id} gesendet", JgLog.LogArt.Info);
-                                                    }
-                                                    else
-                                                    {
-                                                        myTransaction.Abort();
-                                                        JgLog.Set(null, $"Wpf 'Bauteil' Fehler durch Server!\nGrund: {antwortServer}", JgLog.LogArt.Fehler);
-                                                    }
+                                                    myTransaction.Abort();
+                                                    JgLog.Set(null, $"Wpf 'Meldung' Fehler durch Server!\nGrund: {antwortServer}", JgLog.LogArt.Fehler);
                                                 }
-
                                             }
+                                            else if (sendObj is ServiceRef.JgWcfBauteil wcfBauteil)
+                                            {
+                                                var maschine = JgInit.GetMaschine(optSenden.ListeMaschinen, wcfBauteil.IdMaschine);
+                                                var maStatus = new JgMaschinenStatus(maschine, optSenden.PfadDaten);
+                                                maStatus.SaveStatusMaschineLocal();
+
+                                                var antwortServer = verb.SendeBauteil(wcfBauteil, maStatus.GetStatusAsXmlByte());
+
+                                                if (antwortServer.Substring(0, 2) == "OK")
+                                                {
+                                                    myTransaction.Commit();
+                                                    if (antwortServer.Length > 2)
+                                                        JgLog.Set(null, antwortServer.Substring(2), JgLog.LogArt.Fehler);
+                                                    else
+                                                        JgLog.Set(null, $"Wcf Bauteil mit Id {wcfBauteil.Id} gesendet", JgLog.LogArt.Info);
+                                                }
+                                                else
+                                                {
+                                                    myTransaction.Abort();
+                                                    JgLog.Set(null, $"Wpf 'Bauteil' Fehler durch Server!\nGrund: {antwortServer}", JgLog.LogArt.Fehler);
+                                                }
+                                            }
+
                                         }
                                     }
                                 }
-                                catch (TimeoutException ex)
+                            }
+                            catch (TimeoutException ex)
+                            {
+                                if (myTransaction != null)
+                                    myTransaction.Abort();
+
+                                throw new TimeoutException("Wpf Zeitüberschreitung", ex);
+                            }
+                            catch (FaultException faultEx)
+                            {
+                                if (myTransaction != null)
+                                    myTransaction.Abort();
+                                switch (faultEx.Code.Name)
                                 {
-                                    if (myTransaction != null)
-                                        myTransaction.Abort();
-            
-                                    throw new TimeoutException("Wpf Zeitüberschreitung", ex);
+                                    case "InternalServiceFault":
+                                        JgLog.Set(null, faultEx.Message, JgLog.LogArt.Info);
+                                        Thread.Sleep(10000);
+                                        break;
+                                    default:
+                                        var msg = (faultEx.Code.SubCode == null) ? "" : " -> Subcode: " + faultEx.Code.SubCode.Name;
+                                        msg = $"WCF Faultexeption -> {faultEx.Code.Name} Message: {faultEx.Message} {msg}";
+                                        JgLog.Set(null, msg, JgLog.LogArt.Info);
+                                        throw new Exception(msg, faultEx);
                                 }
-                                catch (FaultException faultEx)
-                                {
-                                    if (myTransaction != null)
-                                        myTransaction.Abort();
-                                    switch (faultEx.Code.Name)
-                                    {
-                                        case "InternalServiceFault":
-                                            JgLog.Set(null, faultEx.Message, JgLog.LogArt.Info);
-                                            Thread.Sleep(10000);
-                                            break;
-                                        default:
-                                            var msg = (faultEx.Code.SubCode == null) ? "" : " -> Subcode: " + faultEx.Code.SubCode.Name;
-                                            msg = $"WCF Faultexeption -> {faultEx.Code.Name} Message: {faultEx.Message} {msg}";
-                                            JgLog.Set(null, msg, JgLog.LogArt.Info);
-                                            throw new Exception(msg, faultEx);
-                                    }
-                                }
-                                catch (CommunicationException ex)
-                                {
-                                    if (myTransaction != null)
-                                        myTransaction.Abort();
-                                    throw new CommunicationException("WCF Kommunikationsproblem", ex);
-                                }
-                                catch (Exception ex)
-                                {
-                                    if (myTransaction != null)
-                                        myTransaction.Abort();
-                                    throw new Exception("WCF - Unbekannter Fehler", ex);
-                                }
+                            }
+                            catch (CommunicationException ex)
+                            {
+                                if (myTransaction != null)
+                                    myTransaction.Abort();
+
+                                JgLog.Set(null, $"Verbindung zum Server konnte nicht aufgebaut werden !\nGrund: {ex.Message}", JgLog.LogArt.Warnung);
+                                Thread.Sleep(10000);
+                            }
+                            catch (Exception ex)
+                            {
+                                if (myTransaction != null)
+                                    myTransaction.Abort();
+                                throw new Exception("WCF - Unbekannter Fehler", ex);
                             }
 
                         }

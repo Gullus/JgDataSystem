@@ -1,0 +1,43 @@
+﻿@model IEnumerable<JgLibDataModel.TabMeldung>
+
+<table class="table table-sm table-striped table-hover table-sm" style="border-top:hidden">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Beginn</th>
+            <th>Ende</th>
+            <th>Meldung</th>
+            <th>Anzahl</th>
+            <th>Maschine</th>
+            <th>Bediener</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZeitMeldung)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZeitAbmeldung)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Meldung)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Anzahl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMaschine.MaschineName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EBediener.AnzeigeName)
+        </td>
+    </tr>
+    }
+
+</table>

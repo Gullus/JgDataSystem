@@ -93,8 +93,8 @@ namespace JgDienstScannerMaschine
 
         internal override void EinlesenZeitenAusMaschine()
         {
-            int zaehler = 0;
-            string msg = "";
+            //int zaehler = 0;
+            //string msg = "";
             //_Ergebnisse.Clear();
 
             //var lZeilen = StringListenLaden(DateiName);
