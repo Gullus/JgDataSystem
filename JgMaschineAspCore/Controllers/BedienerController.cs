@@ -108,7 +108,6 @@ namespace JgMaschineAspWeb.Controllers
             return View();
         }
 
-
         public async Task<IActionResult> IndexMeldungenPartial(IFormCollection Erg)
         {
             var datVon = Convert.ToDateTime(Erg["TxtDatumVon"]);

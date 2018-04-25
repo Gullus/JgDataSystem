@@ -123,17 +123,17 @@
     <None Include="Connected Services\ServiceRef\JgDienstScannerMaschine.ServiceRef.JgWcfMaschine.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServiceRef\WcfService.wsdl" />
-    <None Include="Connected Services\ServiceRef\WcfService.xsd">
+    <None Include="Connected Services\ServiceRef\WcfService1.wsdl" />
+    <None Include="Connected Services\ServiceRef\WcfService4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServiceRef\WcfService1.xsd">
+    <None Include="Connected Services\ServiceRef\WcfService41.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServiceRef\WcfService2.xsd">
+    <None Include="Connected Services\ServiceRef\WcfService42.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServiceRef\WcfService3.xsd">
+    <None Include="Connected Services\ServiceRef\WcfService43.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
@@ -153,9 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServiceRef\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ServiceRef\WcfService.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\ServiceRef\configuration91.svcinfo" />
@@ -182,6 +179,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\ServiceRef\WcfService1.disco" />
     <Content Include="Fehlercode\FehlerCodeFirmaSchnell.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgLibHelper", "JgLibHelper\JgLibHelper.csproj", "{EAAEDEF9-1E5A-4627-A1EE-E2C5FE2BFA80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgDienstScannerMaschine", "JgDienstScannerMaschine\JgDienstScannerMaschine.csproj", "{A40519E9-CF2D-4C2B-8568-FF9493C3F03A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE} = {C8C54129-AC3C-4A4A-A9DA-35CFB549BEEE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JgMonitor", "JgMonitor\JgMonitor.csproj", "{D209DC79-42CD-44B4-B11C-EECE0D49B245}"
 EndProject
@@ -56,7 +59,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45
 		SolutionGuid = {88D3399A-BF1E-483B-9723-C6F9CDAC2F4D}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal

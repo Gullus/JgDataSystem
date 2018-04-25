@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="JVjE+J5lYvarGylG6dqOsrK6F3Q=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="MtFJClNNXdjQ6+JsQeK5PLbxLmk=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="wsHttpBinding" name="WSHttpBinding_IWcfService">
       <properties>
@@ -127,10 +127,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="WSHttpBinding_IWcfService" contract="ServiceRef.IWcfService" bindingType="wsHttpBinding" address="http://localhost:58115/WcfService.svc" bindingConfiguration="WSHttpBinding_IWcfService">
+    <endpoint name="WSHttpBinding_IWcfService" contract="ServiceRef.IWcfService" bindingType="wsHttpBinding" address="http://localhost:52296/WcfService.svc" bindingConfiguration="WSHttpBinding_IWcfService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:58115/WcfService.svc</serializedValue>
+          <serializedValue>http://localhost:52296/WcfService.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
