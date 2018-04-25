@@ -1,12 +1,14 @@
 ﻿@model IEnumerable<JgLibDataModel.TabBediener>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index Bediener";
 }
 
 <br />
-<h2>Übersicht Bediner</h2>
-<br />
+<h4>Übersicht Bediener</h4>
+<div class="form-group">
+    <a asp-action="Create" class="btn btn-primary"> Neuen Bediener erstellen </a>
+</div>
 
 <table class="table table-sm table-striped table-hover">
     <thead>
@@ -35,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.NummerAusweis)
             </td>
             <td>
-                <a class="btn btn-outline-primary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"> Bearbeiten </a>
+                <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id"> Bearbeiten </a>
         </tr>
     }
 

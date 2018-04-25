@@ -1,146 +1,138 @@
 ﻿@model JgLibDataModel.TabMaschine
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Maschinendaten Bearbeiten";
+    var formHelper = (TFormHelper)ViewBag.FormHelper;
 }
 
-<h2>Create</h2>
+<br />
+<h4>@(formHelper.IsCreate ? "Neue Maschine erstellen" : "Maschinendaten bearbeiten")</h4>
+<hr />
 
+<form method="post" asp-route-id="@Model.Id">
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>TabMaschine</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaschineName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaschineName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaschineName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    Maschinendaten
+                </div>
+                <div class="card-body">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaschineArt, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select asp-for="MaschineArt" asp-items="Html.GetEnumSelectList(typeof(JgLibHelper.MaschinenArten))" class="form-control"></select>
-                @Html.ValidationMessageFor(model => model.MaschineArt, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="text" class="form-control" disabled asp-for="@Model.Id" />
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaschineIp, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaschineIp, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaschineIp, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label>Maschinenname</label>
+                            @Html.EditorFor(model => model.MaschineName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MaschineName, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaschinePort, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaschinePort, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaschinePort, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                        <div class="form-group col-md-4">
+                            <label>Maschinenart</label>
+                            <select asp-for="MaschineArt" asp-items="Html.GetEnumSelectList(typeof(JgLibHelper.MaschinenArten))" class="form-control"></select>
+                            @Html.ValidationMessageFor(model => model.MaschineArt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.SammelScannung, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.SammelScannung)
-                    @Html.ValidationMessageFor(model => model.SammelScannung, "", new { @class = "text-danger" })
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label>Ip Adresse Maschine</label>
+                            @Html.EditorFor(model => model.MaschineIp, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MaschineIp, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>Port</label>
+                            @Html.EditorFor(model => model.MaschinePort, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MaschinePort, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Standort</label>
+                        @Html.DropDownListFor(model => model.IdStandort, (SelectList)ViewBag.Standort, htmlAttributes: new { @class = "form-control  mw-100" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.EditorFor(model => model.IstAktiv)
+                        <label class="form-check-label">Maschine ist aktiv</label>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.VorschubProMeterInSek, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.VorschubProMeterInSek, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.VorschubProMeterInSek, "", new { @class = "text-danger" })
+            <br />
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"> Speichern </button>
+                <a class="btn btn-outline-primary" href="@Url.Action("Index")"> Abbrechen </a>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ZeitProBiegungInSek, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ZeitProBiegungInSek, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ZeitProBiegungInSek, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    Scannerdaten
+                </div>
+                <div class="card-body">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ZeitProBauteilInSek, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ZeitProBauteilInSek, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ZeitProBauteilInSek, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label>Scannernummer</label>
+                        @Html.EditorFor(model => model.NummerScanner, new { htmlAttributes = new { @class = "form-control mw-100" } })
+                        @Html.ValidationMessageFor(model => model.NummerScanner, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ScannerMitDisplay, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.ScannerMitDisplay)
-                    @Html.ValidationMessageFor(model => model.ScannerMitDisplay, "", new { @class = "text-danger" })
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.SammelScannung)
+                                <label class="form-check-label">Sammelscan möglich</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            @Html.CheckBoxFor(model => model.ScannerMitDisplay)
+                            <label class="form-check-label">Scanner hat Display</label>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.NummerScanner, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.NummerScanner, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NummerScanner, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <br />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.IstAktiv, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IstAktiv)
-                    @Html.ValidationMessageFor(model => model.IstAktiv, "", new { @class = "text-danger" })
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Vorschub pro Meterccc [s]</label>
+                            @Html.EditorFor(model => model.VorschubProMeterInSek, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Zeit pro Biegung [s]</label>
+                            @Html.EditorFor(model => model.ZeitProBiegungInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Fixzeit pro Bauteil [s]</label>
+                            @Html.EditorFor(model => model.ZeitProBauteilInSekAnzeige, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <label>Bemerkung</label>
+                    <div class="form-group">
+                        @Html.TextAreaFor(model => model.Bemerkung, 3, 100, new { @class = "form-control mw-100" })
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Bemerkung, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Bemerkung, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Bemerkung, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IdStandort, "IdStandort", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("IdStandort", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.IdStandort, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Aenderung, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Aenderung, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Aenderung, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+</form>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

@@ -1,5 +1,6 @@
 ﻿using JgLibDataModel;
 using JgLibHelper;
+using JgMaschineAspCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,69 +21,70 @@ namespace JgMaschineAspWeb.Controllers
             return View(await db.TabBedienerSet.ToListAsync());
         }
 
-        //// GET: TabBediener/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: TabBediener/Create
-        //// Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
-        //// finden Sie unter https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Create([Bind(Include = "Id,Vorname,Nachname,NummerAusweis,Aenderung,Modifikation")] TabBediener tabBediener)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        tabBediener.Id = Guid.NewGuid();
-        //        db.TabBedieners.Add(tabBediener);
-        //        await db.SaveChangesAsync();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(tabBediener);
-        //}
-
-        public async Task<ActionResult> Edit(Guid? Id)
+        private void BedienerHelper(bool isCreate)
         {
-            if (Id != null)
-            {
-                var bediener = await db.TabBedienerSet.FindAsync(Id);
-
-                if (bediener != null)
-                    return View(bediener);
-            }
-
-            return StatusCode(500);
+            ViewBag.FormHelper = new TFormHelper() { IsCreate = isCreate };
         }
 
-        // [Bind(Include = "Id,Vorname,Nachname,NummerAusweis,Aenderung,Modifikation")] TabBediener tabBediener)
+        [HttpGet]
+        public ActionResult Create()
+        {
+            BedienerHelper(true);
+            return View(new TabBediener() { Id = Guid.NewGuid() });
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid Id)
+        public async Task<ActionResult> Create(TabBediener bediener)
         {
             if (ModelState.IsValid)
             {
-                var bediener = await db.TabBedienerSet.FindAsync(Id);
-                await TryUpdateModelAsync(bediener);
-                bediener.Aenderung = DateTime.Now;
-                await db.SaveChangesAsync();
+                await db.TabBedienerSet.AddAsync(bediener);
+                await db.DbSave(User, bediener);
                 return RedirectToAction("Index");
             }
 
-            var bed = new TabBediener();
-            await TryUpdateModelAsync(bed);
-            return View(bed);
+            BedienerHelper(true);
+            return View(bediener);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(Guid id)
+        {
+            var bediener = await db.TabBedienerSet.FindAsync(id);
+
+            if (bediener != null)
+            {
+                BedienerHelper(false);
+                return View("Create", bediener);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit1(Guid id)
+        {
+            var bediener = await db.TabBedienerSet.FindAsync(id);
+            await TryUpdateModelAsync(bediener);
+
+            if (ModelState.IsValid)
+            {
+                await db.DbSave(User, bediener);
+                return RedirectToAction("Index");
+            }
+
+            BedienerHelper(false);
+            return View("Create", bediener);
         }
 
         // GET: TabBediener/Delete/5
-        public async Task<ActionResult> Delete(Guid? Id)
+        public async Task<ActionResult> Delete(Guid? id)
         {
-            if (Id != null)
+            if (id != null)
             {
-                var bediener = await db.TabBedienerSet.FindAsync(Id);
+                var bediener = await db.TabBedienerSet.FindAsync(id);
                 if (bediener != null)
                     return View(bediener);
             }
@@ -93,9 +95,9 @@ namespace JgMaschineAspWeb.Controllers
         // POST: TabBediener/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(Guid Id)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            var bediener = await db.TabBedienerSet.FindAsync(Id);
+            var bediener = await db.TabBedienerSet.FindAsync(id);
             db.TabBedienerSet.Remove(bediener);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -104,7 +106,7 @@ namespace JgMaschineAspWeb.Controllers
 
         public async Task<IActionResult> IndexMeldungen()
         {
-            ViewBag.ListeMaschinen = new SelectList(await db.TabMaschineSet.Where(w => w.IstAktiv).Select(s => new { s.Id, s.MaschineName }).ToListAsync(), "Id" , "MaschineName");
+            ViewBag.ListeMaschinen = new SelectList(await db.TabMaschineSet.Where(w => w.IstAktiv).Select(s => new { s.Id, s.MaschineName }).ToListAsync(), "id", "MaschineName");
             return View();
         }
 
@@ -135,7 +137,7 @@ namespace JgMaschineAspWeb.Controllers
                 anmeldungen = anmeldungen.Where(w => w.IdMaschine == idMaschine);
             }
 
-            return PartialView(await anmeldungen.OrderBy(o => o.ZeitMeldung).ToListAsync()); 
+            return PartialView(await anmeldungen.OrderBy(o => o.ZeitMeldung).ToListAsync());
         }
 
         protected override void Dispose(bool disposing)

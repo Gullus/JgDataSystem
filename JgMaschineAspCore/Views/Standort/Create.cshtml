@@ -1,0 +1,46 @@
+﻿@model JgLibDataModel.TabStandort
+
+@{
+    ViewData["Title"] = "Standort erstellen";
+    var formHelper = (TFormHelper)ViewBag.FormHelper;
+}
+
+<br />
+<h4>@(formHelper.IsCreate ? "Neuen Standort erstellen" : "Standort bearbeiten")</h4>
+<hr />
+
+<form method="post" asp-route-id="@Model.Id">
+    <div class="row">
+        <div class="col-5">
+
+            <div class="card">
+                <div class="card-header">
+                    Standort
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="text" class="form-control" disabled asp-for="@Model.Id" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Standortname</label>
+                        <input type="text" class="form-control" asp-for="@Model.StandortName" />
+                        <span asp-validation-for="@Model.StandortName" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"> Speichern </button>
+                <a asp-action="Index" class="btn btn-outline-primary"> Abbrechen </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+

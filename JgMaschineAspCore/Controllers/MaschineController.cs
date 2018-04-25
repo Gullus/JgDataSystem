@@ -1,5 +1,6 @@
 ﻿using JgLibDataModel;
 using JgLibHelper;
+using JgMaschineAspCore;
 using JgMaschineAspCore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,53 +25,66 @@ namespace JgMaschineAspWeb.Controllers
             return View(await maschine.ToListAsync());
         }
 
-        [Authorize]
-        public async Task<ActionResult> Details(Guid? Id)
+        private async Task MaschineHelper(bool isCreate)
         {
-            if (Id != null)
-            {
-                var maschine = await db.TabMaschineSet.FindAsync(Id);
-
-                if (maschine != null)
-                    return View(maschine);
-            }
-
-            return StatusCode(500);
+            var standorte = db.TabStandortSet.Select(s => new { id = s.Id, Value = s.StandortName });
+            ViewBag.Standort = new SelectList(await standorte.ToListAsync(), "id", "Value");
+            ViewBag.FormHelper = new TFormHelper() { IsCreate = isCreate };
         }
 
         [Authorize]
-        public async Task<ActionResult> Edit(Guid? Id)
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            if (Id != null)
-            {
-                var maschine = await db.TabMaschineSet.FindAsync(Id);
-                if (maschine != null)
-                {
-                    ViewBag.Standort = new SelectList(await db.TabStandortSet.ToListAsync(), "Id", "StandortName", maschine.Id);
-                    return View(maschine);
-                }
-            }
-
-            return StatusCode(500);
+            await MaschineHelper(true);
+            return View(new TabMaschine() { Id = Guid.NewGuid() });
         }
 
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid Id)
+        public async Task<ActionResult> Create(TabMaschine maschine)
         {
             if (ModelState.IsValid)
             {
-                var maschine = await db.TabMaschineSet.FindAsync(Id);
-                await TryUpdateModelAsync(maschine);
-                maschine.Aenderung = DateTime.Now;
-                await db.SaveChangesAsync();
+                await db.TabMaschineSet.AddAsync(maschine);
+                await db.DbSave(User, maschine);
                 return RedirectToAction("Index");
             }
 
-            var ma = new TabMaschine();
-            await TryUpdateModelAsync(ma);
-            ViewBag.Standort = new SelectList(await db.TabStandortSet.ToListAsync(), "Id", "StandortName", ma.Id);
-            return View(ma);
+            await MaschineHelper(true);
+            return View(maschine);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> Edit(Guid id)
+        {
+            var maschine = await db.TabMaschineSet.FindAsync(id);
+
+            if (maschine != null)
+            {
+                await MaschineHelper(false);
+                return View("Create", maschine);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit1(Guid id)
+        {
+            var maschine = await db.TabMaschineSet.FindAsync(id);
+            await TryUpdateModelAsync(maschine);
+
+            if (ModelState.IsValid)
+            {
+                await db.DbSave(User, maschine);
+                return RedirectToAction("Index");
+            }
+
+            await MaschineHelper(false);
+            return View("Create", maschine);
         }
 
         [Authorize]
@@ -98,13 +112,13 @@ namespace JgMaschineAspWeb.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexMeldungProtokollEdit(Guid? Id, string Prog)
+        public async Task<ActionResult> IndexMeldungProtokollEdit(Guid? id, string Prog)
         {
-            if (Id != null)
+            if (id != null)
             {
                 var meldung = await db.TabMeldungSet.Include(i => i.EMaschine)
                     .Include(f => f.EMaschine.EStandort).Include(b => b.EBediener)
-                    .FirstOrDefaultAsync(f => f.Id == Id);
+                    .FirstOrDefaultAsync(f => f.Id == id);
 
                 if (meldung != null)
                 {
@@ -118,11 +132,11 @@ namespace JgMaschineAspWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> IndexMeldungProtokollEdit(Guid Id, string Prog)
+        public async Task<ActionResult> IndexMeldungProtokollEdit(Guid id, string Prog)
         {
             if (ModelState.IsValid)
             {
-                var meldung = await db.TabMeldungSet.FindAsync(Id);
+                var meldung = await db.TabMeldungSet.FindAsync(id);
                 await TryUpdateModelAsync(meldung);
                 await db.SaveChangesAsync();
 
@@ -135,14 +149,14 @@ namespace JgMaschineAspWeb.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexBauteileProMaschine(Guid? Id)
+        public async Task<ActionResult> IndexBauteileProMaschine(Guid? id)
         {
-            if (Id != null)
+            if (id != null)
             {
                 var listeMaschinen = db.TabMaschineSet.Where(w => w.IstAktiv)
                     .OrderBy(o => o.MaschineName);
 
-                ViewBag.ListeMaschinen = new SelectList(await listeMaschinen.ToListAsync(), "Id", "MaschineName", Id);
+                ViewBag.ListeMaschinen = new SelectList(await listeMaschinen.ToListAsync(), "id", "MaschineName", id);
                 return View();
             }
 
@@ -159,23 +173,23 @@ namespace JgMaschineAspWeb.Controllers
             return View(await bauteile.ToListAsync());
         }
 
-        public async Task<ActionResult> AnzeigeMaschineStatus(Guid? Id)
+        public async Task<ActionResult> AnzeigeMaschineStatus(Guid? id)
         {
-            if (Id != null)
+            if (id != null)
             {
                 var lMaschinen = await db.TabMaschineSet
                     .Where(w => w.IstAktiv)
                     .OrderBy(o => o.MaschineName).ToListAsync();
 
-                return View(new SelectList(lMaschinen, "Id", "MaschineName", Id));
+                return View(new SelectList(lMaschinen, "id", "MaschineName", id));
             }
 
             return StatusCode(500);
         }
 
-        public async Task<PartialViewResult> AnzeigeMaschineStatusPartial(Guid? Id, string DatumAenderung = null)
+        public async Task<PartialViewResult> AnzeigeMaschineStatusPartial(Guid? id, string DatumAenderung = null)
         {
-            var maschine = await db.TabMaschineSet.Include(i => i.EStandort).FirstOrDefaultAsync(f => f.Id == Id);
+            var maschine = await db.TabMaschineSet.Include(i => i.EStandort).FirstOrDefaultAsync(f => f.Id == id);
 
             if (DatumAenderung != null)
             {

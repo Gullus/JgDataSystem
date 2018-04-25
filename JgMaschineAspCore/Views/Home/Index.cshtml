@@ -4,17 +4,12 @@
 
 <div class="jumbotron" style="padding:20px 30px 10px 30px">
     <div class="row">
-
-        <div class="col-md-7">
-            <br />
-            <br />
+        <div class="col-md-10">
             <br />
             <h2>JgData - JgMaschine</h2>
             <p class="lead">Program zum Überwachen von Maschinen</p>
         </div>
-        <div class="col-md-3">
-            <img  src="~/images/SportLogo.JPG"  />
-        </div>
+
         <div class="col-md-2">
             <a class="btn btn-warning btn-block btn-sm" asp-action="About">Info</a>
             <a class="btn btn-warning btn-block btn-sm" style="margin:5px 0px 0px 0px" asp-action="Contact">Kontakt</a>
@@ -24,19 +19,19 @@
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Maschinen anzeigen</h2>
+        <h2>Maschinen</h2>
         <p>
             Zur Auswahl der im System vorhandenen Maschinen.
         </p>
-        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Maschine")">Index Maschinen &raquo;</a>
+        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Maschine")">Maschinen &raquo;</a>
     </div>
 
     <div class="col-md-4">
-        <h2>Bediener anzeigen</h2>
+        <h2>Bediener</h2>
         <p>
             Zur Auswahl der im System vorhandenen Bediener.
         </p>
-        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Bediener")">Index Bediener &raquo;</a>
+        <a class="btn btn-outline-primary" href="@Url.Action("Index", "Bediener")">Bediener &raquo;</a>
     </div>
 
     <div class="col-md-4">
@@ -52,11 +47,20 @@
 <br />
 
 <div class="row">
+
+    <div class="col-md-4">
+        <h2>Standorte</h2>
+        <p>
+            Standorte anzeigen und bearbeiten.
+        </p>
+        <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Standort">Standorte &raquo;</a>
+    </div>
+
     <div class="col-md-4">
         <h2>Auswertungen</h2>
         <p>
             Auswertungen anzeigen und bearbeiten.
         </p>
-        <a class="btn btn-outline-primary" href="@Url.Action("ReportIndex", "Auswertung")">Index Auswertungen &raquo;</a>
+        <a class="btn btn-outline-primary" href="@Url.Action("ReportIndex", "Auswertung")">Auswertungen &raquo;</a>
     </div>
 </div>

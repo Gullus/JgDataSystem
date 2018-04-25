@@ -24,7 +24,7 @@ namespace JgMaschineAspCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ConnectionUser")));
+                options.UseSqlServer(Configuration.GetConnectionString("ConnectionData")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

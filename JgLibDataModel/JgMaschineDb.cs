@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,23 +35,20 @@ namespace JgLibDataModel
             optionsBuilder.UseSqlServer(SqlVerbindung);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<int> DbSave(ClaimsPrincipal user, TabBase obj)
         {
-            //ChangeTracker.DetectChanges();
-
-            //var listeSpeichern = ChangeTracker
-            //  .Entries()
-            //  .Where(e => e.State == EntityState.Modified);
-
-            //foreach (var item in listeSpeichern)
+            //if (string.IsNullOrWhiteSpace(obj.Ersteller))
             //{
-            //    if (item.Entity is JgLibHelper.IJgBase tabBase)
-            //        tabBase.Aenderung = DateTime.Now;
+            //    obj.ErstelltDatum = DateTime.Now;
+            //    obj.Ersteller = user.Identity.Name.Length > 30 ? user.Identity.Name.Substring(0, 30) : user.Identity.Name;
+            //}
+            //else
+            //{
+            //    obj.GeaendertDatum = DateTime.Now;
+            //    obj.GeandertName = user.Identity.Name.Length > 30 ? user.Identity.Name.Substring(0, 30) : user.Identity.Name;
             //}
 
-            // http://www.bricelam.net/2016/12/13/validation-in-efcore.html
-
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            return await SaveChangesAsync();
         }
     }
 }
