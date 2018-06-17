@@ -1,4 +1,5 @@
-﻿
+﻿@model SelectList
+
 @{
     ViewBag.Title = "Index Bauteile";
 }
@@ -12,7 +13,7 @@
             <div class=" form-inline">
                 <div class="form-group">
                     <label class="col-form-label">Maschine</label>
-                    @Html.DropDownList("IdMaschine", (SelectList)ViewBag.ListeMaschinen, new { @class = "form-control mx-sm-3" })
+                    <select name="IdMaschine" class="form-control mx-sm-3" style="width:200px" asp-items="@Model"></select>
                 </div>
                 <div class="form-group">
                     <label class="col-form-label">Datum von</label>

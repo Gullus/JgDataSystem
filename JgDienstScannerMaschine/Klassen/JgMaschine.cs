@@ -284,6 +284,7 @@ namespace JgDienstScannerMaschine
                 JgLog.Set(this, $"Bei Maschine wurde keine Portnummer eingetragen!", JgLog.LogArt.Krittisch);
             else
             {
+                _DatenTask.BvbsString = BvBsCode;
 
                 Task.Factory.StartNew((SendDaten) =>
                 {

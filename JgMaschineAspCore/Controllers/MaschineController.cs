@@ -149,18 +149,13 @@ namespace JgMaschineAspWeb.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> IndexBauteileProMaschine(Guid? id)
+        public async Task<ActionResult> IndexBauteileProMaschine(Guid id)
         {
-            if (id != null)
-            {
-                var listeMaschinen = db.TabMaschineSet.Where(w => w.IstAktiv)
-                    .OrderBy(o => o.MaschineName);
+            var listeMaschinen = db.TabMaschineSet.Where(w => w.IstAktiv)
+                .Select(s => new { s.Id, Value = s.MaschineName })
+                .OrderBy(o => o.Value);
 
-                ViewBag.ListeMaschinen = new SelectList(await listeMaschinen.ToListAsync(), "id", "MaschineName", id);
-                return View();
-            }
-
-            return StatusCode(StatusCodes.Status404NotFound);
+            return View(new SelectList(await listeMaschinen.ToListAsync(), "Id", "Value", id));
         }
 
         public async Task<ActionResult> IndexBauteileProMaschinePartial(Guid IdMaschine, DateTime TxtDatumVon, DateTime TxtDatumBis)
@@ -179,9 +174,10 @@ namespace JgMaschineAspWeb.Controllers
             {
                 var lMaschinen = await db.TabMaschineSet
                     .Where(w => w.IstAktiv)
-                    .OrderBy(o => o.MaschineName).ToListAsync();
+                    .Select(s => new { s.Id, Value = s.MaschineName })
+                    .OrderBy(o => o.Value).ToListAsync();
 
-                return View(new SelectList(lMaschinen, "id", "MaschineName", id));
+                return View(new SelectList(lMaschinen, "Id", "Value", id));
             }
 
             return StatusCode(500);

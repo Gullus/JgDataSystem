@@ -25,8 +25,8 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=192.168.1.59;CraddlePort=51000;TextVerbinungOk=Welcome to Socket" +
-            " Channel")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CraddleIpAdresse=192.168.150.14;CraddlePort=51000;TextVerbinungOk=Welcome to Sock" +
+            "et Channel")]
         public string Craddel_0 {
             get {
                 return ((string)(this["Craddel_0"]));
@@ -98,7 +98,7 @@ namespace JgDienstScannerMaschine.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("69eb2a93-8bbf-4870-af12-40c65cd8032e")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6dc6b71d-00f7-4824-a9d9-4d8c4ff366e2")]
         public global::System.Guid IdStandort {
             get {
                 return ((global::System.Guid)(this["IdStandort"]));

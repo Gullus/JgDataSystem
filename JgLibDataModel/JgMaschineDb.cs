@@ -37,6 +37,8 @@ namespace JgLibDataModel
 
         public async Task<int> DbSave(ClaimsPrincipal user, TabBase obj)
         {
+            obj.Aenderung = DateTime.Now;
+
             //if (string.IsNullOrWhiteSpace(obj.Ersteller))
             //{
             //    obj.ErstelltDatum = DateTime.Now;

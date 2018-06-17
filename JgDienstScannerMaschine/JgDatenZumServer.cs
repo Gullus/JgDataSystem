@@ -48,7 +48,7 @@ namespace JgDienstScannerMaschine
                                         try
                                         {
                                             myTransaction.Begin();
-                                            var erg = queue.Receive(new TimeSpan(0, 0, 10), myTransaction);
+                                            var erg = queue.Receive(new TimeSpan(0, 10, 0), myTransaction);
                                             sendObj = erg.Body;
                                         }
                                         catch (MessageQueueException ex)
@@ -59,14 +59,14 @@ namespace JgDienstScannerMaschine
                                                 throw new Exception($"Fehler lesen Meldung aus MessageQueue!", ex);
                                         }
 
-                                        // Wenn nach 1 Minute keine Aktion vorhanden ist, wird die Verbindung für 10 Minuten 
+                                        // Wenn nach 10 Minute keine Aktion vorhanden ist, wird die Verbindung für 10 Minuten 
                                         // geschlossen und danach wieder neu gestartet.
 
                                         if (sendObj == null) 
                                         {
                                             JgLog.Set(null, $"Verbindung wird wegen Inaktivität für 10 Minuten geschlossen !", JgLog.LogArt.Info);
                                             //todo Verbindungsauszeit eintragen
-                                            Thread.Sleep(new TimeSpan(0, 0, 10));
+                                            Thread.Sleep(new TimeSpan(0, 10, 0));
                                         }
                                         else
                                         {

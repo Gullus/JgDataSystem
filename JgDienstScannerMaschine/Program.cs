@@ -91,7 +91,6 @@ namespace JgDienstScannerMaschine
             Console.WriteLine("Fertig");
             Console.ReadKey();
 
-
 #else
 
       var ServiceToRun = new ServiceBase[] { new JgMaschineServiceScanner(scOptionen) };

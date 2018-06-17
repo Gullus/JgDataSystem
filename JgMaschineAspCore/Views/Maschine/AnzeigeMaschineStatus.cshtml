@@ -6,7 +6,6 @@
 
 <br />
 <h2>Maschinenstatus</h2>
-<p>Hier werden Informationen zur Eingabe der Daten eingegeben</p>
 <br />
 
 <div class="row">
@@ -15,7 +14,7 @@
             <div class="card-header alert-primary">
                 Auswahl Maschine
             </div>
-            @Html.ListBox("LbMaschinen", Model, new { @class = "form-control" })
+            <select id="LbMaschinen" size="10" asp-items="@Model" class="form-control"></select>
         </div>
     </div>
     <div class="col-md-9">
